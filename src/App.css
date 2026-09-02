@@ -45,9 +45,33 @@
   transform: translateY(0);
 }
 
+/*Header*/
 .masthead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   border-bottom: 4px solid #17120d;
-  background: linear-gradient(180deg, #fef9ef 0%, #f2e7c9 100%);
+  background: #dca10d;
+}
+
+/*transiciones para la animación de compacidad del encabezado*/
+.masthead .top-bar,
+.masthead .edition,
+.masthead .tagline {
+  transition: opacity 0.25s ease, max-height 0.25s ease, padding 0.25s ease,
+    margin 0.25s ease, border-color 0.25s ease;
+}
+
+.masthead.is-compact .top-bar,
+.masthead.is-compact .edition,
+.masthead.is-compact .tagline {
+  max-height: 0px;
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-color: transparent;
+  opacity: 0;
+  overflow: hidden;
 }
 
 .top-bar {
@@ -65,6 +89,12 @@
 .masthead-main {
   padding: 22px 28px 18px;
   text-align: center;
+  transition: padding 0.25s ease;
+}
+
+/*transiciones para la animación de altura del encabezado*/
+.masthead.is-compact .masthead-main {
+  padding: 10px 28px;
 }
 
 .edition {
@@ -83,6 +113,21 @@
   font-weight: 900;
   text-transform: uppercase;
   color: #17120d;
+  transition: font-size 0.25s ease, margin 0.25s ease;
+}
+
+/*texto del header compactado*/
+.masthead.is-compact h1 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3.2rem);
+  transform: translateY(10px);
+}
+
+.masthead.is-compact h1:hover {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3.2rem);
+  scale: 1.05;
+  transition: all 0.2s ease-in-out;
 }
 
 .tagline {
@@ -126,6 +171,26 @@
   letter-spacing: -0.06em;
   text-transform: uppercase;
   color: #17120d;
+}
+
+.headline-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-align: center;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.headline-button:focus-visible {
+  outline: 3px solid #dca10d;
+  outline-offset: 6px;
 }
 
 .lead {
@@ -221,17 +286,35 @@
   font-weight: 800;
 }
 
+/*hace que se abran bien las noticias*/
 .highlights-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start; 
   gap: 20px;
   padding: 24px 28px 30px;
 }
 
 .story-card {
   background: #f2ead0;
+  min-height: 225px;
   border: 2px solid rgba(23, 18, 13, 0.8);
   padding: 18px 18px 20px;
+  cursor: pointer;
+}
+
+.story-card:hover {
+  border: 2px solid rgba(23, 18, 13, 0.8);
+  padding: 18px 18px 20px;
+  cursor: pointer;
+  background: #ddbd52;
+  scale: 1.02;
+  transition: all 0.2s ease-in-out;
+}
+
+.story-card:focus-visible {
+  outline: 3px solid #dca10d;
+  outline-offset: 4px;
 }
 
 .meta {
@@ -250,10 +333,35 @@
   color: #17120d;
 }
 
+/* Estilos de botones de historias que se expanden */
 .story-card p {
   margin: 0;
   line-height: 1.6;
   color: rgba(23, 18, 13, 0.8);
+}
+
+.story-details {
+  margin-top: 14px !important;
+  padding-top: 14px;
+  border-top: 1px solid rgba(23, 18, 13, 0.35);
+}
+
+.story-subtitle {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+/* Estilos de medios dentro de las historias */
+.story-media {
+  margin: 14px 0;
+}
+
+.story-media img {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border: 1px solid rgba(23, 18, 13, 0.45);
 }
 
 @media (max-width: 900px) {
