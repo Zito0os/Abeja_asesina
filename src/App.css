@@ -28,27 +28,57 @@
 }
 
 .newspaper-page {
-  width: min(1200px, calc(100% - 32px));
-  margin: 28px auto;
-  background: #f8f1df;
-  border: 3px solid #1a1a1a;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
-  color: #17120d;
-  font-family: Georgia, 'Times New Roman', serif;
+  min-height: 100vh;
+  position: relative;
+
+  background-image: url('/Paper.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* Hidden until animation finishes */
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.75s ease, transform 0.75s ease;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition: opacity 0.75s ease, visibility 0.75s ease;
 }
 
-.content-visible {
+.newspaper-page.content-visible {
   opacity: 1;
-  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .masthead {
-  border-bottom: 4px solid #17120d;
+  border-bottom: 4px solid #110f0c;
   background: linear-gradient(180deg, #fef9ef 0%, #f2e7c9 100%);
 }
+
+.masthead-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.masthead-image {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.masthead h1 {
+  margin: 8px 0 4px;
+  font-size: clamp(3rem, 6vw, 6.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.07em;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #17120d;
+}
+
 
 .top-bar {
   display: flex;
@@ -82,7 +112,7 @@
   letter-spacing: -0.07em;
   font-weight: 900;
   text-transform: uppercase;
-  color: #17120d;
+  color: #473b2f;
 }
 
 .tagline {
@@ -296,4 +326,141 @@
     width: 120px;
     height: 105px;
   }
+}
+
+.bee-fun-fact {
+  width: 350px;
+  min-height: 55px;
+
+  margin: 20px auto;
+
+  background: #f3c623;
+  border: 2px solid #171717;
+  box-shadow: 4px 4px 0 #171717;
+
+  color: #171717;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.3s ease;
+}
+
+/* =========================
+   CAJA CERRADA
+========================= */
+
+.bee-fun-fact.closed {
+  width: 65px;
+  height: 65px;
+  min-height: 65px;
+
+  border-radius: 50%;
+  padding: 0;
+}
+
+/* Abeja */
+.fun-fact-bee {
+  width: 100%;
+  height: 100%;
+
+  border: none;
+  background: transparent;
+
+  font-size: 35px;
+  cursor: pointer;
+
+  animation: beeVibrate 3s ease-in-out infinite;
+}
+
+@keyframes beeVibrate {
+  0%,
+  75%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  77% {
+    transform: translate(-1px, 0) rotate(-1deg);
+  }
+
+  79% {
+    transform: translate(1px, 0) rotate(1deg);
+  }
+
+  81% {
+    transform: translate(-1px, 0) rotate(-1deg);
+  }
+
+  83% {
+    transform: translate(1px, 0) rotate(1deg);
+  }
+
+  85% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* =========================
+   CAJA ABIERTA
+========================= */
+
+.bee-fun-fact.open {
+  position: relative;
+
+  padding: 14px 18px;
+
+  border-radius: 0;
+}
+
+.fun-fact-content {
+  position: relative;
+  width: 100%;
+}
+
+.fun-fact-label {
+  display: block;
+
+  margin-bottom: 3px;
+
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+}
+
+.fun-fact-content h3 {
+  margin: 0 25px 5px 0;
+
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 16px;
+  line-height: 1.15;
+}
+
+.fun-fact-content p {
+  margin: 0;
+
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+/* Botón cerrar */
+.fun-fact-close {
+  position: absolute;
+  top: -5px;
+  right: 0;
+
+  border: none;
+  background: transparent;
+
+  color: #171717;
+
+  font-size: 20px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.fun-fact-close:hover {
+  transform: scale(1.2);
 }
