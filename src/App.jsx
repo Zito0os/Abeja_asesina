@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { PaperUnfold } from './components/animation'
 import './App.css'
 
@@ -19,14 +19,19 @@ const highlights = [
 
 function App() {
   const [showIntro, setShowIntro] = useState(true)
+  const pageRef = useRef(null)
+  const finishIntro = () => {
+    setShowIntro(false)
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }
 
   return (
     <>
       <div className={`paper-intro ${showIntro ? 'visible' : 'hidden'}`} aria-hidden={!showIntro}>
-        {showIntro && <PaperUnfold onComplete={() => setShowIntro(false)} />}
+        {showIntro && <PaperUnfold targetRef={pageRef} onComplete={finishIntro} />}
       </div>
 
-      <div className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'}`}>
+      <div ref={pageRef} className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'}`}>
         <header className="masthead">
           <div className="top-bar">
             <span>Portada</span>
