@@ -7,11 +7,6 @@ import './App.css'
 
 function App() {
   return (
-<<<<<<< HEAD
-    <>
-      <PaperUnfold/>
-    </>
-=======
     <div className="newspaper-page">
       <header className="masthead">
         <div className="top-bar">
@@ -66,7 +61,6 @@ function App() {
         ))}
       </section>
     </div>
->>>>>>> origin/Zito_os
   )
 }
 
