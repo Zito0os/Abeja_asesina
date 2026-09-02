@@ -127,10 +127,10 @@ function App() {
   return (
     <>
       <div className={`paper-intro ${showIntro ? 'visible' : 'hidden'}`} aria-hidden={!showIntro}>
-        {showIntro && <PaperUnfold onComplete={() => setShowIntro(false)} />}
+        {showIntro && <PaperUnfold targetRef={pageRef} onComplete={finishIntro} />}
       </div>
 
-      <div className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'}`}>
+      <div ref={pageRef} className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'}`}>
         <header className="masthead">
           <div className="top-bar">
             <span>Portada</span>
