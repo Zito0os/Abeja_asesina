@@ -19,7 +19,7 @@ export function PaperUnfold({ onComplete }) {
 
         return current + 1
       })
-    }, 45)
+    }, 24)
 
     return () => window.clearInterval(interval)
   }, [onComplete])
