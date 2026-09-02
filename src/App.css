@@ -12,7 +12,6 @@
   pointer-events: none;
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.75s ease, visibility 0.75s ease;
 }
 
 .paper-intro.hidden {
