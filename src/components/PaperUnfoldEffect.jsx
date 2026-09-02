@@ -48,11 +48,20 @@ export function PaperUnfoldEffect({ targetRef, onComplete }) {
 
   useEffect(() => {
     const updateTarget = () => {
+      if (completed.current) {
+        return
+      }
+
       const animationDistance = Math.max(window.innerHeight * 0.9, 1)
-      targetProgress.current = clamp(window.scrollY / animationDistance, 0, 1)
+      const nextProgress = clamp(window.scrollY / animationDistance, 0, 1)
+      targetProgress.current = Math.max(targetProgress.current, nextProgress)
     }
 
     const updateFromWheel = (event) => {
+      if (completed.current) {
+        return
+      }
+
       const hasScrollRoom = document.documentElement.scrollHeight > window.innerHeight + 1
 
       if (hasScrollRoom) {
@@ -60,10 +69,9 @@ export function PaperUnfoldEffect({ targetRef, onComplete }) {
       }
 
       const animationDistance = Math.max(window.innerHeight * 1.5, 1)
-      targetProgress.current = clamp(
-        targetProgress.current + event.deltaY / animationDistance,
-        0,
-        1,
+      targetProgress.current = Math.max(
+        targetProgress.current,
+        clamp(targetProgress.current + event.deltaY / animationDistance, 0, 1),
       )
     }
 
