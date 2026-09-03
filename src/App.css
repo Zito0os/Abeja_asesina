@@ -274,7 +274,6 @@
   min-height: 420px;
   background: radial-gradient(circle at center, #fbf2d5 0%, #fae6a6 55%, #ecd278 100%);
   border: 2px solid rgba(23, 18, 13, 0.8);
-  overflow: hidden;
 }
 
 /* Panel estilo clásico */
