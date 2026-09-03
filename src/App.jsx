@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { PaperUnfold } from './components/animation'
 import Logo from './assets/Logo.png'
 import './App.css'
+import Carrusel from './components/Carrusel'
 
 const highlights = [
   {
@@ -84,40 +85,7 @@ function App() {
                 Investigación · Medio ambiente · Sociedad
               </span>
             </div>
-          </section>
-
-          <aside
-            className="bee-visual"
-            aria-label="Bee-themed illustration"
-          >
-            <div className="honeycomb honeycomb-large">
-              <span className="cell c1" />
-              <span className="cell c2" />
-              <span className="cell c3" />
-              <span className="cell c4" />
-              <span className="cell c5" />
-              <span className="cell c6" />
-            </div>
-          </aside>
-        </main>
-
-        {/* Highlights */}
-        <section className="highlights-grid">
-          {highlights.map((item) => (
-            <article
-              key={item.title}
-              className="story-card"
-            >
-              <p className="meta">Investigación</p>
-
-              <h3>{item.title}</h3>
-
-              <p>{item.text}</p>
-            </article>
-          ))}
-        </section>
-
-         {/* Fun Fact */}
+                     {/* Fun Fact */}
         <section
           className={`bee-fun-fact ${
             showFunFact ? 'open' : 'closed'
@@ -158,6 +126,40 @@ function App() {
             </div>
           )}
         </section>
+          </section>
+
+          <aside
+            className="bee-visual"
+            aria-label="Bee-themed illustration"
+          >
+            <div className="honeycomb honeycomb-large">
+              <span className="cell c1" />
+              <span className="cell c2" />
+              <span className="cell c3" />
+              <span className="cell c4" />
+              <span className="cell c5" />
+              <span className="cell c6" />
+            </div>
+          </aside>
+        </main>
+
+        {/* Highlights */}
+        <section className="highlights-grid">
+          {highlights.map((item) => (
+            <article
+              key={item.title}
+              className="story-card"
+            >
+              <p className="meta">Investigación</p>
+
+              <h3>{item.title}</h3>
+
+              <p>{item.text}</p>
+            </article>
+          ))}
+        </section>
+        <Carrusel />
+
       </div>
     </>
   )

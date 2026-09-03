@@ -15,6 +15,8 @@
   visibility: hidden;
 }
 
+
+
 .sprite-sheet {
   width: min(4000vw, 1400px);
   height: auto;
@@ -31,16 +33,42 @@
   min-height: 100vh;
   position: relative;
 
- background-image: url('./Paper.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  /* Papel base */
+  background-color: #eee4cc;
+
+  /* Textura sutil de papel */
+  background-image:
+    radial-gradient(
+      rgba(60, 45, 25, 0.08) 0.7px,
+      transparent 0.7px
+    ),
+    radial-gradient(
+      rgba(255, 255, 255, 0.35) 0.8px,
+      transparent 0.8px
+    ),
+    linear-gradient(
+      rgba(120, 90, 45, 0.025) 50%,
+      transparent 50%
+    );
+
+  background-size:
+    5px 5px,
+    8px 8px,
+    100% 4px;
+
+  background-position:
+    0 0,
+    3px 2px,
+    0 0;
+
   /* Hidden until animation finishes */
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 
-  transition: opacity 0.75s ease, visibility 0.75s ease;
+  transition:
+    opacity 0.75s ease,
+    visibility 0.75s ease;
 }
 
 .newspaper-page.content-visible {
@@ -51,8 +79,15 @@
 
 .masthead {
   border-bottom: 4px solid #110f0c;
-  background: linear-gradient(180deg, #fef9ef 0%, #f2e7c9 100%);
+
+  background:
+    radial-gradient(
+      rgba(60, 45, 25, 0.04) 0.7px,
+      transparent 0.7px
+    ),
+    #f7efd9;
 }
+
 
 .masthead-title {
   display: flex;
@@ -258,10 +293,20 @@
 }
 
 .story-card {
-  background: #f2ead0;
+  background:
+    radial-gradient(
+      rgba(60, 45, 25, 0.045) 0.7px,
+      transparent 0.7px
+    ),
+    #f2ead0;
+
+  background-size: 5px 5px;
+
   border: 2px solid rgba(23, 18, 13, 0.8);
+
   padding: 18px 18px 20px;
 }
+
 
 .meta {
   margin: 0 0 12px;
