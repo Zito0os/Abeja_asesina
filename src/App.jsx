@@ -136,7 +136,6 @@ const highlights = [
 
 function App() {
   const [showIntro, setShowIntro] = useState(true)
-    const [showFunFact, setShowFunFact] = useState(false)
   const [selectedCell, setSelectedCell] = useState(null)
   const [openHighlights, setOpenHighlights] = useState(new Set())
   const [isScrolled, setIsScrolled] = useState(false)
@@ -191,50 +190,7 @@ function App() {
               <button type="button">Leer noticia</button>
               <span>Investigación · Medio ambiente · Sociedad</span>
             </div>
-             {/* Fun Fact */}
-        <section
-          className={`bee-fun-fact ${
-            showFunFact ? 'open' : 'closed'
-          }`}
-        >
-          {!showFunFact ? (
-            <button
-              className="fun-fact-bee"
-              onClick={() => setShowFunFact(true)}
-              aria-label="Mostrar fun fact"
-            >
-              🐝
-            </button>
-          ) : (
-            <div className="fun-fact-content">
-              <button
-                className="fun-fact-close"
-                onClick={() => setShowFunFact(false)}
-                aria-label="Cerrar fun fact"
-              >
-                ×
-              </button>
-
-              <span className="fun-fact-label">
-                FUN FACT
-              </span>
-
-              <h3>
-                ¿Sabías que las abejas pueden reconocer rostros?
-              </h3>
-
-              <p>
-                Las abejas pueden aprender a distinguir patrones
-                que se parecen a rostros humanos. ¡Su pequeño
-                cerebro tiene una capacidad de reconocimiento
-                sorprendente!
-              </p>
-            </div>
-          )}
-        </section>
-
           </section>
-          
 
           <aside className="bee-visual" aria-label="Bee-themed illustration">
             <div className="honeycomb-cluster">
@@ -307,10 +263,8 @@ function App() {
             )
           })}
         </section>
-        
       </div>
 
-        
       <AnimatePresence>
         {selectedCell && (
           <div className="hex-modal-backdrop" onClick={() => setSelectedCell(null)}>
