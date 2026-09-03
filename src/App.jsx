@@ -5,6 +5,7 @@ import { PaperUnfold } from './components/animation'
 import invasiveBeeImage from './assets/Abeja Invasora.png'
 import invasiveBeeDraw from './assets/AbejaDibujo1.png'
 import './App.css'
+import Carrusel from './Carrusel'
 
 const honeycombData = [
   {
@@ -326,8 +327,9 @@ function App() {
             )
           })}
         </section>
-        
+        <Carrusel />
       </div>
+      
 
         
       <AnimatePresence>
@@ -388,12 +390,16 @@ function App() {
                       </div>
                     )}
                   </div>
+                  
                 )}
               </div>
             </motion.div>
           </div>
         )}
+        
       </AnimatePresence>
+
+
     </>
   )
 }
