@@ -275,7 +275,6 @@ function App() {
               ))}
             </div>
           </aside>
-
         </main>
 
         <section className="highlights-grid">
