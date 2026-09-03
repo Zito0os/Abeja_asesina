@@ -1,6 +1,109 @@
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import { PaperUnfold } from './components/animation'
 import './App.css'
+
+const honeycombData = [
+  {
+    id: 'center',
+    type: 'core',
+    role: 'Abejas Nativas vs Invasoras',
+    shortLabel: 'Panal Central',
+    title: 'Especies Nativas en Riesgo',
+    text: 'Las abejas melíferas introducidas compiten agresivamente por recursos florales y desplazan a las especies endémicas sin aguijón y solitarias.',
+    img: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=600&q=80',
+    stats: {
+      label: 'Desplazamiento Floral',
+      nativeShare: 18,
+      invasiveShare: 82,
+      unit: '% de visitas a flores locales'
+    }
+  },
+  {
+    id: 'c1',
+    type: 'native',
+    role: 'Nativa sin aguijón',
+    shortLabel: 'Meliponas',
+    title: 'Polinizadoras Ancestrales',
+    text: 'Vitales para la flora silvestre y cultivos especializados como vainilla o chile. No tienen aguijón y anidan en troncos huecos.',
+    img: 'https://images.unsplash.com/photo-1559827291-72ee739d0d9a?auto=format&fit=crop&w=600&q=80',
+    stats: {
+      label: 'Eficiencia en Plantas Endémicas',
+      value: 94,
+      unit: '% de efectividad'
+    }
+  },
+  {
+    id: 'c2',
+    type: 'invasive',
+    role: 'Especie introducida',
+    shortLabel: 'Apis Mellifera',
+    title: 'Monopolio del Polen',
+    text: 'Originarias de Europa y África. Su gran número por colonia agota el néctar en pocas horas, dejando sin alimento a las especies locales.',
+    img: 'https://images.unsplash.com/photo-1473081556163-2a17de81fc97?auto=format&fit=crop&w=600&q=80',
+    stats: {
+      label: 'Consumo Diario por Colmena',
+      value: 120,
+      unit: 'kg de polen al año'
+    }
+  },
+  {
+    id: 'c3',
+    type: 'threat',
+    role: 'Alerta biológica',
+    shortLabel: 'Transmisión Viral',
+    title: 'Propagación de Patógenos',
+    text: 'El comercio masivo de colmenas de miel disemina ácaros como Varroa y virus de deformación alar hacia abejas silvestres vulnerables.',
+    img: 'https://images.unsplash.com/photo-1568644396922-5c3bfae12521?auto=format&fit=crop&w=600&q=80',
+    stats: {
+      label: 'Riesgo de Contagio Silvestre',
+      value: 65,
+      unit: '% de colmenas silvestres afectadas'
+    }
+  },
+  {
+    id: 'c4',
+    type: 'native',
+    role: 'Nativa solitaria',
+    shortLabel: 'Abejas Solitarias',
+    title: 'Las Joyas Solitarias',
+    text: 'No viven en colmenas ni producen miel comercial; cada hembra cuida su propio nido en el suelo o madera. Son polinizadoras ultra-rápidas.',
+    img: 'https://images.unsplash.com/photo-1587049352851-8d4e89133924?auto=format&fit=crop&w=600&q=80',
+    stats: {
+      label: 'Diversidad en la Región',
+      value: 70,
+      unit: '% del total de especies de abejas'
+    }
+  },
+  {
+    id: 'c5',
+    type: 'invasive',
+    role: 'Híbrido dominante',
+    shortLabel: 'Africanizadas',
+    title: 'Alta Territorialidad',
+    text: 'Híbridos sumamente adaptables que expulsan a fauna nativa de oquedades naturales para establecer sus colonias masivas.',
+    img: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
+    stats: {
+      label: 'Velocidad de Expansión',
+      value: 300,
+      unit: 'km anuales de avance'
+    }
+  },
+  {
+    id: 'c6',
+    type: 'action',
+    role: 'Conservación',
+    shortLabel: 'Jardines Refugio',
+    title: 'Proteger a la Abeja Local',
+    text: 'Poner colmenas urbanas de miel no salva a las abejas: sembrar flores nativas y dejar tierra suelta para nidos sí lo hace.',
+    img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80',
+    stats: {
+      label: 'Impacto de Flora Nativa',
+      value: 40,
+      unit: '% de aumento en biodiversidad local'
+    }
+  }
+]
 
 const highlights = [
   {
@@ -19,6 +122,7 @@ const highlights = [
 
 function App() {
   const [showIntro, setShowIntro] = useState(true)
+  const [selectedCell, setSelectedCell] = useState(null)
 
   return (
     <>
@@ -44,7 +148,7 @@ function App() {
         <main className="hero-section">
           <section className="headline-panel">
             <div className="kicker">Nacional</div>
-            <h2>HEROE O AMENAZA</h2>
+            <h2>HÉROE O AMENAZA</h2>
             <p className="lead">
               Las abejas no solo producen miel: sostienen cultivos, ecosistemas y comunidades
               enteras. Pero su futuro depende de decisiones que hoy se toman en cada jardín,
@@ -58,13 +162,20 @@ function App() {
           </section>
 
           <aside className="bee-visual" aria-label="Bee-themed illustration">
-            <div className="honeycomb honeycomb-large">
-              <span className="cell c1" />
-              <span className="cell c2" />
-              <span className="cell c3" />
-              <span className="cell c4" />
-              <span className="cell c5" />
-              <span className="cell c6" />
+            <div className="honeycomb-cluster">
+              {honeycombData.map((item) => (
+                <motion.button
+                  key={item.id}
+                  layoutId={`hexagon-${item.id}`}
+                  className={`cell-node cell-${item.id}`}
+                  onClick={() => setSelectedCell(item)}
+                  whileHover={{ scale: 1.08, filter: 'brightness(1.15)' }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+                >
+                  <span className="cell-label">{item.shortLabel}</span>
+                </motion.button>
+              ))}
             </div>
           </aside>
         </main>
@@ -79,6 +190,73 @@ function App() {
           ))}
         </section>
       </div>
+
+      {/* Overlay */}
+      <AnimatePresence>
+        {selectedCell && (
+          <div className="hex-modal-backdrop" onClick={() => setSelectedCell(null)}>
+            <motion.div
+              layoutId={`hexagon-${selectedCell.id}`}
+              className="hex-modal-card"
+              onClick={(e) => e.stopPropagation()}
+              transition={{ type: 'spring', stiffness: 260, damping: 25 }}
+            >
+              <button
+                type="button"
+                className="hex-close-btn"
+                onClick={() => setSelectedCell(null)}
+                aria-label="Cerrar"
+              >
+                ✕
+              </button>
+
+              <div className="hex-modal-inner">
+                <h2>{selectedCell.title}</h2>
+                <p className="hex-desc">{selectedCell.text}</p>
+
+                {selectedCell.img && (
+                  <img
+                    src={selectedCell.img}
+                    alt={selectedCell.title}
+                    className="hex-image"
+                  />
+                )}
+
+
+                {selectedCell.stats && (
+                  <div className="hex-stat-box">
+                    <span className="stat-label">{selectedCell.stats.label}</span>
+                    
+                    {selectedCell.stats.nativeShare !== undefined ? (
+                      <div className="stat-bar-group">
+                        <div className="stat-bar-track">
+                          <div
+                            className="stat-bar-fill native"
+                            style={{ width: `${selectedCell.stats.nativeShare}%` }}
+                          />
+                          <div
+                            className="stat-bar-fill invasive"
+                            style={{ width: `${selectedCell.stats.invasiveShare}%` }}
+                          />
+                        </div>
+                        <div className="stat-legend">
+                          <span>Nativas: {selectedCell.stats.nativeShare}%</span>
+                          <span>Invasoras: {selectedCell.stats.invasiveShare}%</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="stat-metric">
+                        <span className="metric-number">{selectedCell.stats.value}</span>
+                        <span className="metric-unit">{selectedCell.stats.unit}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </>
   )
 }
