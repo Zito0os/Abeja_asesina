@@ -12,6 +12,7 @@
   pointer-events: none;
   opacity: 1;
   visibility: visible;
+  transition: opacity 0.75s ease, visibility 0.75s ease;
 }
 
 .paper-intro.hidden {
@@ -27,6 +28,18 @@
   filter: drop-shadow(0 22px 35px rgba(0, 0, 0, 0.2));
 }
 
+.sprite-sheet {
+  width: min(4000vw, 1400px);
+  height: auto;
+  aspect-ratio: 1.42;
+  max-height: 4000vh;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 400% 800%;
+  image-rendering: auto;
+  filter: drop-shadow(0 22px 35px rgba(0, 0, 0, 0.2));
+}
+
 .newspaper-page {
   position: relative;
   z-index: 1;
@@ -39,17 +52,24 @@
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
   color: #17120d;
   font-family: Georgia, 'Times New Roman', serif;
-  opacity: 1;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
 }
 
 .content-visible {
   opacity: 1;
+  transform: translateY(0);
 }
 
 .content-hidden {
   opacity: 0;
   pointer-events: none;
 }
+
+/* ==========================================
+   ENCABEZADO (MASTHEAD)
+   ========================================== */
 
 .masthead {
   position: sticky;
@@ -235,7 +255,10 @@
   color: rgba(23, 18, 13, 0.72);
 }
 
-/*estiloss*/
+/* ==========================================
+   PANEL VISUAL DE ABEJAS Y CELDAS
+   ========================================== */
+
 .bee-visual {
   position: relative;
   display: flex;
@@ -246,8 +269,44 @@
   min-height: 420px;
   background: radial-gradient(circle at center, #fbf2d5 0%, #fae6a6 55%, #ecd278 100%);
   border: 2px solid rgba(23, 18, 13, 0.8);
+  overflow: hidden;
 }
 
+/* Panel estilo clásico */
+.honeycomb {
+  position: relative;
+  width: 90%;
+  height: 82%;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.12));
+}
+
+.cell {
+  position: absolute;
+  width: 150px;
+  height: 130px;
+  background: linear-gradient(135deg, #f9c42a 0%, #f3b30f 100%);
+  clip-path: polygon(25% 6%, 75% 6%, 100% 50%, 75% 94%, 25% 94%, 0% 50%);
+  border: 4px solid #d89d0f;
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.15);
+}
+
+.cell::before {
+  content: "";
+  position: absolute;
+  inset: 20% 18%;
+  border-radius: 50%;
+  background: rgba(255, 245, 200, 0.35);
+  box-shadow: -32px 24px 0 -18px rgba(255, 255, 255, 0.18), 28px -22px 0 -18px rgba(255, 255, 255, 0.12);
+}
+
+.c1 { left: 4%; top: 6%; }
+.c2 { left: 42%; top: 2%; }
+.c3 { left: 32%; top: 38%; }
+.c4 { left: 4%; top: 60%; }
+.c5 { left: 42%; top: 54%; }
+.c6 { left: 72%; top: 38%; }
+
+/* Panel estilo Clúster */
 .honeycomb-cluster {
   position: relative;
   width: 320px;
@@ -256,7 +315,6 @@
   height: 320px;
 }
 
-/* Celda base pequeña */
 .cell-node {
 /* Celda base pequeña */
 .cell-node {
@@ -286,44 +344,32 @@
   pointer-events: none;
 }
 
-/* Coordenadas hexagonales (offset geométrico exacto) */
-.cell-center {
-  top: 105px;
-  left: 112px;
-  z-index: 2;
+.cell-center { top: 105px; left: 112px; z-index: 2; }
+.cell-c1     { top: 15px;  left: 112px; }
+.cell-c2     { top: 60px;  left: 190px; }
+.cell-c3     { top: 150px; left: 190px; }
+.cell-c4     { top: 195px; left: 112px; }
+.cell-c5     { top: 150px; left: 34px;  }
+.cell-c6     { top: 60px;  left: 34px;  }
+
+.bee-badge {
+  position: absolute;
+  right: 20px;
+  bottom: 18px;
+  background: #111;
+  color: #f9e39b;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 800;
 }
 
-.cell-c1 {
-  top: 15px;
-  left: 112px;
-}
+/* ==========================================
+   MODALES HEXAGONALES Y MÉTRICAS
+   ========================================== */
 
-.cell-c2 {
-  top: 60px;
-  left: 190px;
-}
-
-.cell-c3 {
-  top: 150px;
-  left: 190px;
-}
-
-.cell-c4 {
-  top: 195px;
-  left: 112px;
-}
-
-.cell-c5 {
-  top: 150px;
-  left: 34px;
-}
-
-.cell-c6 {
-  top: 60px;
-  left: 34px;
-}
-
-/* backdrop y hexagono */
 .hex-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -393,18 +439,6 @@
   max-width: 400px;
 }
 
-/*.hex-role-badge {
-  display: inline-block;
-  background: #dca10d;
-  color: #17120d;
-  padding: 4px 10px;
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-weight: 800;
-  margin-bottom: 8px;
-}*/
-
 .hex-modal-inner h2 {
   font-size: 1.5rem;
   margin: 4px 0 10px;
@@ -429,7 +463,6 @@
   border-radius: 4px;
 }
 
-/* Gráficas y Métricas */
 .hex-stat-box {
   width: 100%;
   background: #f1e6ca;
@@ -541,21 +574,9 @@
   color: rgba(23, 18, 13, 0.75);
 }
 
-
-
-.bee-badge {
-  position: absolute;
-  right: 20px;
-  bottom: 18px;
-  background: #111;
-  color: #f9e39b;
-  border-radius: 999px;
-  padding: 10px 18px;
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  font-weight: 800;
-}
+/* ==========================================
+   GRID DE NOTICIAS (HIGHLIGHTS)
+   ========================================== */
 
 /* ==========================================
    MODALES HEXAGONALES Y MÉTRICAS

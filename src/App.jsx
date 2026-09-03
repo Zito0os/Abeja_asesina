@@ -1,11 +1,10 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { PaperUnfold } from './components/animation'
 
 import invasiveBeeImage from './assets/Abeja Invasora.png'
 import invasiveBeeDraw from './assets/AbejaDibujo1.png'
 import './App.css'
-
 
 const honeycombData = [
   {
@@ -109,7 +108,6 @@ const honeycombData = [
   }
 ]
 
-
 const highlights = [
   {
     title: '¿De dónde viene la abeja africana?',
@@ -139,6 +137,8 @@ const highlights = [
 function App() {
   const [showIntro, setShowIntro] = useState(true)
   const [selectedCell, setSelectedCell] = useState(null)
+  const [openHighlights, setOpenHighlights] = useState(new Set())
+  const [isScrolled, setIsScrolled] = useState(false)
   const pageRef = useRef(null)
 
   const finishIntro = () => {
@@ -271,7 +271,6 @@ function App() {
               ))}
             </div>
           </aside>
-
         </main>
 
         <section className="highlights-grid">
@@ -358,7 +357,6 @@ function App() {
                     className="hex-image"
                   />
                 )}
-
 
                 {selectedCell.stats && (
                   <div className="hex-stat-box">
