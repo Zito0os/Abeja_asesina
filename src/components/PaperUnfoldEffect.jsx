@@ -47,14 +47,22 @@ export function PaperUnfoldEffect({ targetRef, onComplete }) {
   }, [onComplete])
 
   useEffect(() => {
+    const getScrollDistance = () => Math.max(
+      document.documentElement.scrollHeight - window.innerHeight,
+      0,
+    )
+
     const updateTarget = () => {
       if (completed.current) {
         return
       }
 
-      const animationDistance = Math.max(window.innerHeight * 0.9, 1)
-      const nextProgress = clamp(window.scrollY / animationDistance, 0, 1)
-      targetProgress.current = Math.max(targetProgress.current, nextProgress)
+      const scrollDistance = getScrollDistance()
+      const revealDistance = scrollDistance * 0.99
+      const nextProgress = scrollDistance > 0
+        ? clamp(window.scrollY / revealDistance, 0, 1)
+        : 0
+      targetProgress.current = nextProgress
     }
 
     const updateFromWheel = (event) => {
@@ -69,21 +77,24 @@ export function PaperUnfoldEffect({ targetRef, onComplete }) {
       }
 
       const animationDistance = Math.max(window.innerHeight * 1.5, 1)
-      targetProgress.current = Math.max(
-        targetProgress.current,
-        clamp(targetProgress.current + event.deltaY / animationDistance, 0, 1),
+      targetProgress.current = clamp(
+        targetProgress.current + event.deltaY / animationDistance,
+        0,
+        1,
       )
     }
 
     window.scrollTo(0, 0)
     updateTarget()
     window.addEventListener('scroll', updateTarget, { passive: true })
+    window.addEventListener('resize', updateTarget)
     window.addEventListener('wheel', updateFromWheel, { passive: true })
 
     let animationFrame
     const complete = () => {
       completed.current = true
       window.removeEventListener('scroll', updateTarget)
+      window.removeEventListener('resize', updateTarget)
       window.removeEventListener('wheel', updateFromWheel)
       window.cancelAnimationFrame(animationFrame)
       setProgress(1)
@@ -112,6 +123,7 @@ export function PaperUnfoldEffect({ targetRef, onComplete }) {
 
     return () => {
       window.removeEventListener('scroll', updateTarget)
+      window.removeEventListener('resize', updateTarget)
       window.removeEventListener('wheel', updateFromWheel)
       window.cancelAnimationFrame(animationFrame)
     }
