@@ -148,11 +148,16 @@ function App() {
   }
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 0)
+    const handleScroll = () => {
+      if (!showIntro) {
+        setIsScrolled(window.scrollY > 0)
+      }
+    }
+
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [showIntro])
 
   return (
     <>
