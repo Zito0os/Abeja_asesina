@@ -101,7 +101,23 @@ function App() {
           </aside>
         </main>
 
-        {/* Fun Fact */}
+        {/* Highlights */}
+        <section className="highlights-grid">
+          {highlights.map((item) => (
+            <article
+              key={item.title}
+              className="story-card"
+            >
+              <p className="meta">Investigación</p>
+
+              <h3>{item.title}</h3>
+
+              <p>{item.text}</p>
+            </article>
+          ))}
+        </section>
+
+         {/* Fun Fact */}
         <section
           className={`bee-fun-fact ${
             showFunFact ? 'open' : 'closed'
@@ -141,22 +157,6 @@ function App() {
               </p>
             </div>
           )}
-        </section>
-
-        {/* Highlights */}
-        <section className="highlights-grid">
-          {highlights.map((item) => (
-            <article
-              key={item.title}
-              className="story-card"
-            >
-              <p className="meta">Investigación</p>
-
-              <h3>{item.title}</h3>
-
-              <p>{item.text}</p>
-            </article>
-          ))}
         </section>
       </div>
     </>

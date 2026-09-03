@@ -31,11 +31,10 @@
   min-height: 100vh;
   position: relative;
 
-  background-image: url('/Paper.png');
+ background-image: url('./Paper.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-
   /* Hidden until animation finishes */
   opacity: 0;
   visibility: hidden;
@@ -332,7 +331,7 @@
   width: 350px;
   min-height: 55px;
 
-  margin: 20px auto;
+  margin: 20px 0 20px 20px;
 
   background: #f3c623;
   border: 2px solid #171717;
@@ -360,7 +359,6 @@
   padding: 0;
 }
 
-/* Abeja */
 .fun-fact-bee {
   width: 100%;
   height: 100%;
@@ -372,6 +370,8 @@
   cursor: pointer;
 
   animation: beeVibrate 3s ease-in-out infinite;
+
+  transform: translateX(-5px);
 }
 
 @keyframes beeVibrate {
