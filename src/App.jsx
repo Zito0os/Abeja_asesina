@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { PaperUnfold } from './components/animation'
 import './App.css'
-
+import Carrusel from './Carrusel'
 
 const honeycombData = [
   {
@@ -131,6 +131,18 @@ function App() {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
   }
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!showIntro) {
+        setIsScrolled(window.scrollY > 0)
+      }
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [showIntro])
+
   return (
     <>
       <div className={`paper-intro ${showIntro ? 'visible' : 'hidden'}`} aria-hidden={!showIntro}>
@@ -197,8 +209,11 @@ function App() {
             </article>
           ))}
         </section>
+        <Carrusel />
       </div>
+      
 
+        
       <AnimatePresence>
         {selectedCell && (
           <div className="hex-modal-backdrop" onClick={() => setSelectedCell(null)}>
@@ -258,12 +273,16 @@ function App() {
                       </div>
                     )}
                   </div>
+                  
                 )}
               </div>
             </motion.div>
           </div>
         )}
+        
       </AnimatePresence>
+
+
     </>
   )
 }
