@@ -11,10 +11,15 @@
   },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.19.16",
+<<<<<<< Updated upstream
     "@lottiefiles/dotlottie-react": "^0.19.16",
+=======
+    "html2canvas": "^1.4.1",
+>>>>>>> Stashed changes
     "lottie-react": "^3.1.1",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
