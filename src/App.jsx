@@ -136,6 +136,7 @@ const highlights = [
 
 function App() {
   const [showIntro, setShowIntro] = useState(true)
+    const [showFunFact, setShowFunFact] = useState(false)
   const [selectedCell, setSelectedCell] = useState(null)
   const [openHighlights, setOpenHighlights] = useState(new Set())
   const [isScrolled, setIsScrolled] = useState(false)
@@ -328,6 +329,7 @@ function App() {
         
       </div>
 
+        
       <AnimatePresence>
         {selectedCell && (
           <div className="hex-modal-backdrop" onClick={() => setSelectedCell(null)}>
