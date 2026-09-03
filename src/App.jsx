@@ -1,10 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { PaperUnfold } from './components/animation'
-
-import invasiveBeeImage from './assets/Abeja Invasora.png'
-import invasiveBeeDraw from './assets/AbejaDibujo1.png'
 import './App.css'
+
 
 const honeycombData = [
   {
@@ -108,50 +106,30 @@ const honeycombData = [
   }
 ]
 
+
 const highlights = [
   {
-    title: '¿De dónde viene la abeja africana?',
-    text: 'Comprenderás el origen de la abeja africana y de dónde viene esta especie colonizadora en nuestro continente.',
-    subtitulo: 'La abeja africana',
-    image: invasiveBeeImage,
-    details:
-      'Las abejas ajustan sus recorridos y horarios cuando cambian las temperaturas. Esta adaptación ayuda a mantener la producción, pero también aumenta el esfuerzo de toda la colonia.'
+    title: 'Miel de temporada',
+    text: 'La producción local se adapta a climas extremos y nuevas rutas de polinización.',
   },
   {
-    title: '¿Cómo se estableció la apicultura en América?',
-    text: 'Explorando la historia de la apicultura en el continente americano.',
-    subtitulo: 'Apis mellifera scutellata',
-    image: invasiveBeeDraw,
-    details:
-      'La pérdida de diversidad floral deja a las colonias con menos alimento durante el año. Recuperar plantas nativas y reducir el uso de pesticidas ofrece refugios más seguros.'
+    title: 'Colmena en alerta',
+    text: 'Especialistas alertan sobre cambios climáticos y la presión del monocultivo.',
   },
   {
-    title: '¿Cómo llegaron las abejas africanas a América?',
-    text: 'Entenderás cómo llegaron las abejas africanas a América.',
-    subtitulo: 'La llegada de las abejas africanas',
-    details:
-      'Cada abeja cumple una función distinta y la colonia responde como un sistema coordinado. Esa cooperación permite resolver cambios del entorno con rapidez y eficiencia.'
-  }
+    title: 'El secreto de la unión',
+    text: 'La convivencia de la colonia revela lecciones de trabajo colectivo y resiliencia.',
+  },
 ]
 
 function App() {
   const [showIntro, setShowIntro] = useState(true)
   const [selectedCell, setSelectedCell] = useState(null)
-  const [openHighlights, setOpenHighlights] = useState(new Set())
-  const [isScrolled, setIsScrolled] = useState(false)
   const pageRef = useRef(null)
-
   const finishIntro = () => {
     setShowIntro(false)
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
   }
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 0)
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   return (
     <>
@@ -160,18 +138,16 @@ function App() {
       </div>
 
       <div ref={pageRef} className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'}`}>
-        <header className={`masthead ${isScrolled ? 'is-compact' : ''}`}>
+        <header className="masthead">
+          <div className="top-bar">
+            <span>Portada</span>
+            <span>Fin de semana</span>
+            <span>Suplemento ecológico</span>
+          </div>
+
           <div className="masthead-main">
             <p className="edition">Edición especial · 01 de septiembre</p>
-            <h1>
-              <button
-                className="headline-button"
-                type="button"
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              >
-                ¿No verdad?
-              </button>
-            </h1>
+            <h1>¿No verdad?</h1>
             <div className="tagline">El periódico que escucha a la naturaleza</div>
           </div>
         </header>
@@ -179,7 +155,7 @@ function App() {
         <main className="hero-section">
           <section className="headline-panel">
             <div className="kicker">Nacional</div>
-            <h2>HÉROE O AMENAZA</h2>
+            <h2>HEROE O AMENAZA</h2>
             <p className="lead">
               Las abejas no solo producen miel: sostienen cultivos, ecosistemas y comunidades
               enteras. Pero su futuro depende de decisiones que hoy se toman en cada jardín,
@@ -209,59 +185,17 @@ function App() {
               ))}
             </div>
           </aside>
+
         </main>
 
         <section className="highlights-grid">
-          {highlights.map((item, index) => {
-            const isOpen = openHighlights.has(index)
-            const detailsId = `highlight-details-${index}`
-
-            const toggleHighlight = () => {
-              setOpenHighlights((current) => {
-                const next = new Set(current)
-                if (next.has(index)) {
-                  next.delete(index)
-                } else {
-                  next.add(index)
-                }
-                return next
-              })
-            }
-
-            return (
-              <article
-                key={item.title}
-                className={`story-card ${isOpen ? 'is-open' : ''}`}
-                role="button"
-                tabIndex="0"
-                aria-expanded={isOpen}
-                aria-controls={detailsId}
-                onClick={toggleHighlight}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault()
-                    toggleHighlight()
-                  }
-                }}
-              >
-                <p className="meta">Investigación</p>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-
-                {isOpen && (
-                  <div id={detailsId} className="story-details">
-                    <h4 className="story-subtitle">{item.subtitulo}</h4>
-                    {item.image && (
-                      <div className="story-media">
-                        <img src={item.image} alt={item.subtitulo} />
-                      </div>
-                    )}
-                    <p>{item.details}</p>
-                  </div>
-                )}
-              </article>
-            )
-          })}
+          {highlights.map((item) => (
+            <article key={item.title} className="story-card">
+              <p className="meta">Investigación</p>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </article>
+          ))}
         </section>
       </div>
 
@@ -294,6 +228,7 @@ function App() {
                     className="hex-image"
                   />
                 )}
+
 
                 {selectedCell.stats && (
                   <div className="hex-stat-box">
