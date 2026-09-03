@@ -1,3 +1,7 @@
+/* ==========================================
+   ESTRUCTURA GENERAL Y CONTENEDORES
+   ========================================== */
+
 .paper-intro {
   position: fixed;
   inset: 0;
@@ -7,6 +11,7 @@
   pointer-events: none;
   opacity: 1;
   visibility: visible;
+  transition: opacity 0.75s ease, visibility 0.75s ease;
 }
 
 .paper-intro.hidden {
@@ -22,6 +27,18 @@
   filter: drop-shadow(0 22px 35px rgba(0, 0, 0, 0.2));
 }
 
+.sprite-sheet {
+  width: min(4000vw, 1400px);
+  height: auto;
+  aspect-ratio: 1.42;
+  max-height: 4000vh;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 400% 800%;
+  image-rendering: auto;
+  filter: drop-shadow(0 22px 35px rgba(0, 0, 0, 0.2));
+}
+
 .newspaper-page {
   position: relative;
   z-index: 1;
@@ -32,11 +49,14 @@
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
   color: #17120d;
   font-family: Georgia, 'Times New Roman', serif;
-  opacity: 1;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
 }
 
 .content-visible {
   opacity: 1;
+  transform: translateY(0);
 }
 
 .content-hidden {
@@ -44,7 +64,14 @@
   pointer-events: none;
 }
 
+/* ==========================================
+   ENCABEZADO (MASTHEAD)
+   ========================================== */
+
 .masthead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   border-bottom: 4px solid #17120d;
   background: linear-gradient(180deg, #fef9ef 0%, #f2e7c9 100%);
 }
@@ -64,6 +91,7 @@
 .masthead-main {
   padding: 22px 28px 18px;
   text-align: center;
+  transition: padding 0.25s ease;
 }
 
 .edition {
@@ -82,6 +110,7 @@
   font-weight: 900;
   text-transform: uppercase;
   color: #17120d;
+  transition: font-size 0.25s ease, margin 0.25s ease;
 }
 
 .tagline {
@@ -93,6 +122,47 @@
   display: inline-block;
   padding: 8px 18px;
 }
+
+/* Transiciones para la animación de compacidad del encabezado */
+.masthead .top-bar,
+.masthead .edition,
+.masthead .tagline {
+  transition: opacity 0.25s ease, max-height 0.25s ease, padding 0.25s ease,
+    margin 0.25s ease, border-color 0.25s ease;
+}
+
+.masthead.is-compact .top-bar,
+.masthead.is-compact .edition,
+.masthead.is-compact .tagline {
+  max-height: 0px;
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-color: transparent;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.masthead.is-compact .masthead-main {
+  padding: 10px 28px;
+}
+
+.masthead.is-compact h1 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3.2rem);
+  transform: translateY(10px);
+}
+
+.masthead.is-compact h1:hover {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3.2rem);
+  scale: 1.05;
+  transition: all 0.2s ease-in-out;
+}
+
+/* ==========================================
+   SECCIÓN HERO Y TITULARES
+   ========================================== */
 
 .hero-section {
   display: grid;
@@ -125,6 +195,26 @@
   letter-spacing: -0.06em;
   text-transform: uppercase;
   color: #17120d;
+}
+
+.headline-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-align: center;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.headline-button:focus-visible {
+  outline: 3px solid #dca10d;
+  outline-offset: 6px;
 }
 
 .lead {
@@ -162,7 +252,10 @@
   color: rgba(23, 18, 13, 0.72);
 }
 
-/*estiloss*/
+/* ==========================================
+   PANEL VISUAL DE ABEJAS Y CELDAS
+   ========================================== */
+
 .bee-visual {
   position: relative;
   display: flex;
@@ -171,15 +264,50 @@
   min-height: 420px;
   background: radial-gradient(circle at center, #fbf2d5 0%, #fae6a6 55%, #ecd278 100%);
   border: 2px solid rgba(23, 18, 13, 0.8);
+  overflow: hidden;
 }
 
+/* Panel estilo clásico */
+.honeycomb {
+  position: relative;
+  width: 90%;
+  height: 82%;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.12));
+}
+
+.cell {
+  position: absolute;
+  width: 150px;
+  height: 130px;
+  background: linear-gradient(135deg, #f9c42a 0%, #f3b30f 100%);
+  clip-path: polygon(25% 6%, 75% 6%, 100% 50%, 75% 94%, 25% 94%, 0% 50%);
+  border: 4px solid #d89d0f;
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.15);
+}
+
+.cell::before {
+  content: "";
+  position: absolute;
+  inset: 20% 18%;
+  border-radius: 50%;
+  background: rgba(255, 245, 200, 0.35);
+  box-shadow: -32px 24px 0 -18px rgba(255, 255, 255, 0.18), 28px -22px 0 -18px rgba(255, 255, 255, 0.12);
+}
+
+.c1 { left: 4%; top: 6%; }
+.c2 { left: 42%; top: 2%; }
+.c3 { left: 32%; top: 38%; }
+.c4 { left: 4%; top: 60%; }
+.c5 { left: 42%; top: 54%; }
+.c6 { left: 72%; top: 38%; }
+
+/* Panel estilo Clúster */
 .honeycomb-cluster {
   position: relative;
   width: 320px;
   height: 320px;
 }
 
-/* Celda base pequeña */
 .cell-node {
   position: absolute;
   width: 96px;
@@ -207,44 +335,32 @@
   pointer-events: none;
 }
 
-/* Coordenadas hexagonales (offset geométrico exacto) */
-.cell-center {
-  top: 105px;
-  left: 112px;
-  z-index: 2;
+.cell-center { top: 105px; left: 112px; z-index: 2; }
+.cell-c1     { top: 15px;  left: 112px; }
+.cell-c2     { top: 60px;  left: 190px; }
+.cell-c3     { top: 150px; left: 190px; }
+.cell-c4     { top: 195px; left: 112px; }
+.cell-c5     { top: 150px; left: 34px;  }
+.cell-c6     { top: 60px;  left: 34px;  }
+
+.bee-badge {
+  position: absolute;
+  right: 20px;
+  bottom: 18px;
+  background: #111;
+  color: #f9e39b;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 800;
 }
 
-.cell-c1 {
-  top: 15px;
-  left: 112px;
-}
+/* ==========================================
+   MODALES HEXAGONALES Y MÉTRICAS
+   ========================================== */
 
-.cell-c2 {
-  top: 60px;
-  left: 190px;
-}
-
-.cell-c3 {
-  top: 150px;
-  left: 190px;
-}
-
-.cell-c4 {
-  top: 195px;
-  left: 112px;
-}
-
-.cell-c5 {
-  top: 150px;
-  left: 34px;
-}
-
-.cell-c6 {
-  top: 60px;
-  left: 34px;
-}
-
-/* backdrop y hexagono */
 .hex-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -294,18 +410,6 @@
   max-width: 400px;
 }
 
-/*.hex-role-badge {
-  display: inline-block;
-  background: #dca10d;
-  color: #17120d;
-  padding: 4px 10px;
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-weight: 800;
-  margin-bottom: 8px;
-}*/
-
 .hex-modal-inner h2 {
   font-size: 1.5rem;
   margin: 4px 0 10px;
@@ -330,7 +434,6 @@
   border-radius: 4px;
 }
 
-/* Gráficas y Métricas */
 .hex-stat-box {
   width: 100%;
   background: #f1e6ca;
@@ -385,33 +488,38 @@
   color: rgba(23, 18, 13, 0.75);
 }
 
-
-
-.bee-badge {
-  position: absolute;
-  right: 20px;
-  bottom: 18px;
-  background: #111;
-  color: #f9e39b;
-  border-radius: 999px;
-  padding: 10px 18px;
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  font-weight: 800;
-}
+/* ==========================================
+   GRID DE NOTICIAS (HIGHLIGHTS)
+   ========================================== */
 
 .highlights-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
   gap: 20px;
   padding: 24px 28px 30px;
 }
 
 .story-card {
   background: #f2ead0;
+  min-height: 225px;
   border: 2px solid rgba(23, 18, 13, 0.8);
   padding: 18px 18px 20px;
+  cursor: pointer;
+}
+
+.story-card:hover {
+  border: 2px solid rgba(23, 18, 13, 0.8);
+  padding: 18px 18px 20px;
+  cursor: pointer;
+  background: #ddbd52;
+  scale: 1.02;
+  transition: all 0.2s ease-in-out;
+}
+
+.story-card:focus-visible {
+  outline: 3px solid #dca10d;
+  outline-offset: 4px;
 }
 
 .meta {
@@ -435,6 +543,33 @@
   line-height: 1.6;
   color: rgba(23, 18, 13, 0.8);
 }
+
+.story-details {
+  margin-top: 14px !important;
+  padding-top: 14px;
+  border-top: 1px solid rgba(23, 18, 13, 0.35);
+}
+
+.story-subtitle {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+.story-media {
+  margin: 14px 0;
+}
+
+.story-media img {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border: 1px solid rgba(23, 18, 13, 0.45);
+}
+
+/* ==========================================
+   DISEÑO ADAPTATIVO (MEDIA QUERIES)
+   ========================================== */
 
 @media (max-width: 900px) {
   .hero-section {
