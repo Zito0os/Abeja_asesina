@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { PaperUnfold } from './components/animation'
 
 import invasiveBeeImage from './assets/Abeja Invasora.png'
 import invasiveBeeDraw from './assets/AbejaDibujo1.png'
 import './App.css'
+
 
 const honeycombData = [
   {
@@ -108,6 +109,7 @@ const honeycombData = [
   }
 ]
 
+
 const highlights = [
   {
     title: '¿De dónde viene la abeja africana?',
@@ -136,10 +138,7 @@ const highlights = [
 
 function App() {
   const [showIntro, setShowIntro] = useState(true)
-    const [showFunFact, setShowFunFact] = useState(false)
   const [selectedCell, setSelectedCell] = useState(null)
-  const [openHighlights, setOpenHighlights] = useState(new Set())
-  const [isScrolled, setIsScrolled] = useState(false)
   const pageRef = useRef(null)
 
   const finishIntro = () => {
@@ -256,8 +255,23 @@ function App() {
                   <span className="cell-label">{item.shortLabel}</span>
                 </motion.button>
               ))}
+            <div className="honeycomb-cluster">
+              {honeycombData.map((item) => (
+                <motion.button
+                  key={item.id}
+                  layoutId={`hexagon-${item.id}`}
+                  className={`cell-node cell-${item.id}`}
+                  onClick={() => setSelectedCell(item)}
+                  whileHover={{ scale: 1.08, filter: 'brightness(1.15)' }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+                >
+                  <span className="cell-label">{item.shortLabel}</span>
+                </motion.button>
+              ))}
             </div>
           </aside>
+
         </main>
 
         <section className="highlights-grid">
@@ -315,8 +329,6 @@ function App() {
         
       </div>
 
-        
-      {/* Overlay */}
       <AnimatePresence>
         {selectedCell && (
           <div className="hex-modal-backdrop" onClick={() => setSelectedCell(null)}>
@@ -347,10 +359,11 @@ function App() {
                   />
                 )}
 
+
                 {selectedCell.stats && (
                   <div className="hex-stat-box">
                     <span className="stat-label">{selectedCell.stats.label}</span>
-                    
+
                     {selectedCell.stats.nativeShare !== undefined ? (
                       <div className="stat-bar-group">
                         <div className="stat-bar-track">
