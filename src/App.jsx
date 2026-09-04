@@ -1,17 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { PaperUnfold } from './components/animation'
-
+import loneBee from './assets/lone.jpg'
 import invasiveBeeImage from './assets/Abeja Invasora.png'
 import invasiveBeeDraw from './assets/AbejaDibujo1.png'
-import AfricaImage from './assets/Africa.png'
-import loneBee from './assets/lone.jpg'
-import Logo from './assets/Logo.png'
-// 👇 IMPORTA TU GIF O FOTO AQUÍ
-import beeGif from './assets/beeGif.gif' // O .png / .jpg
 import './App.css'
 import Carrusel from './Carrusel'
-import Panal from './Panal_movil'
 
 const honeycombData = [
   {
@@ -130,13 +124,12 @@ const highlights = [
     subtitulo: '¿Sabias que hay una gran diversidad de abejas nativas en Nuevo León?',
     image: invasiveBeeDraw,
     details:
-      'Se han confirmado casi 400 especies nativas en la región (un cuarto del total de México).'
+      ' Se han confirmado casi 400 especies nativas en la región (un cuarto del total de México).'
   },
   {
     title: 'Conoce las fascinantes características de nuestras abejas nativas',
     text: 'Abejas sin aguijón',
     subtitulo: 'También llamadas abejas meliponas o meliponinos.',
-    image: AfricaImage,
     details:
       'Son abejas de menor tamaño comparadas con las abejas europeas, de colores oscuros con tonos rojizos o marrón, con anillos negros y amarillos en el abdomen y con vellos en el tórax; además tienen una menor cantidad de venas en las alas. A diferencia de las europeas, las obreras de las abejas meliponas poseen una cesta de polen en sus patas posteriores y carecen de aguijón.'
   }
@@ -144,9 +137,8 @@ const highlights = [
 
 function App() {
   const [showIntro, setShowIntro] = useState(true)
-  const [showFunFact, setShowFunFact] = useState(false)
+    const [showFunFact, setShowFunFact] = useState(false)
   const [selectedCell, setSelectedCell] = useState(null)
-  const [selectedBee, setSelectedBee] = useState(null)
   const [openHighlights, setOpenHighlights] = useState(new Set())
   const [isScrolled, setIsScrolled] = useState(false)
   const pageRef = useRef(null)
@@ -174,7 +166,7 @@ function App() {
         {showIntro && <PaperUnfold targetRef={pageRef} onComplete={finishIntro} />}
       </div>
 
-      <div ref={pageRef} className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'} ${selectedBee ? 'content-blurred' : ''}`}>
+      <div ref={pageRef} className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'}`}>
         <header className={`masthead ${isScrolled ? 'is-compact' : ''}`}>
           <div className="masthead-main">
             <p className="edition">Edición especial · 01 de septiembre</p>
@@ -191,26 +183,21 @@ function App() {
           </div>
         </header>
 
-        <main className="hero-section">
+       <main className="hero-section">
           <section className="headline-panel">
             <div className="kicker">Nacional</div>
             <h2>HÉROE O AMENAZA</h2>
+            <h1>    ¿Son las abejas melíferas originarias de Norteamérica?</h1>
             <p className="lead">
-              Las abejas no solo producen miel: sostienen cultivos, ecosistemas y comunidades
-              enteras. Pero su futuro depende de decisiones que hoy se toman en cada jardín,
-              campo y ciudad.
+         Las abejas melíferas no son originarias de Norteamérica. Fueron importadas de Europa en el siglo XVII. Actualmente, las abejas melíferas ayudan a polinizar muchos cultivos estadounidenses, como frutas y frutos secos. En un solo año, una colonia de abejas puede recolectar alrededor de 18 kilogramos de polen y 120 kilogramos de néctar. Las abejas melíferas incrementan el valor de los cultivos de nuestro país en más de 15 mil millones de dólares cada año.
             </p>
 
-            <div className="cta-row">
-              <button type="button">Leer noticia</button>
-              <span>Investigación · Medio ambiente · Sociedad</span>
-            </div>
+
              {/* Fun Fact */}
         <section
           className={`bee-fun-fact ${
             showFunFact ? 'open' : 'closed'
           }`}
-          style={{ '--fun-fact-gif': `url("${beeGif}")` }}
         >
           {!showFunFact ? (
             <button
@@ -291,7 +278,6 @@ function App() {
               <article
                 key={item.title}
                 className={`story-card ${isOpen ? 'is-open' : ''}`}
-                style={{ '--story-image': `url("${item.image}")` }}
                 role="button"
                 tabIndex="0"
                 aria-expanded={isOpen}
@@ -323,7 +309,31 @@ function App() {
             )
           })}
         </section>
-        <Carrusel onBeeSelect={setSelectedBee} />
+        <Carrusel />
+
+         {/* PUBLICIDAD */}
+        <aside className="bee-ad">
+          <span className="bee-ad-label">PUBLICIDAD</span>
+
+          <img
+            src={loneBee}
+            alt="Abeja"
+          />
+
+          <h3>PROTEJAMOS A LAS ABEJAS</h3>
+
+          <p>
+          ¡PROTEGE A NUESTROS POLINIZADORES!
+      Planta flores nativas.
+      Evita productos químicos dañinos.
+      Cada jardín cuenta.
+          </p>
+
+          <button onClick={() => window.location.href = "https://www.gob.mx/conabio/prensa/mexico-es-el-segundo-hogar-de-la-mayor-diversidad-de-abejas-nativas-del-planeta-con-2-100-especies?idiom=es"}>
+        CONOCE MÁS
+      </button>
+        </aside>
+
       </div>
       
 
@@ -393,12 +403,6 @@ function App() {
           </div>
         )}
         
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {selectedBee && (
-          <Panal bee={selectedBee} onClose={() => setSelectedBee(null)} />
-        )}
       </AnimatePresence>
 
 

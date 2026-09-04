@@ -4,28 +4,23 @@ import './Carrusel.css'
 const bees = [
   {
     id: 1,
-    title: 'La abeja obrera',
-    text: 'Las abejas obreras realizan distintas tareas dentro de la colmena.',
+    image: 'src/assets/AbejadelasOrquIdeas.png',
   },
   {
     id: 2,
-    title: 'La polinización',
-    text: 'Las abejas ayudan a polinizar una gran cantidad de plantas y cultivos.',
+ image: 'src/assets/AbejaCarpinteradelSur.png',
   },
   {
     id: 3,
-    title: 'La colmena',
-    text: 'Una colonia puede trabajar de forma coordinada como una enorme comunidad.',
+   image: 'src/assets/AbejadelasOrquIdeas.png',
   },
   {
     id: 4,
-    title: 'La reina',
-    text: 'La abeja reina es fundamental para mantener la colonia.',
+    image: 'src/assets/AbejadelSuelodeNoreste.png',
   },
   {
     id: 5,
-    title: 'La miel',
-    text: 'La miel es el resultado del trabajo colectivo de miles de abejas.',
+    image: 'src/assets/AbejaVerdeMetalizada.png',
   },
 ]
 
@@ -56,13 +51,17 @@ function Carrusel({ onBeeSelect }) {
               aria-label={`Abrir ${bee.title}`}
             >
               <div className="bee-hex-inner">
-                <span className="bee-icon">🐝</span>
+                  <img
+                    src={bee.image}
+                    alt={bee.title}
+                    className="bee-image"
+                  />
 
                 <h3>{bee.title}</h3>
 
                 <p>{bee.text}</p>
 
-                <span className="bee-next">→</span>
+                <span className="bee-next"></span>
               </div>
             </article>
           )
