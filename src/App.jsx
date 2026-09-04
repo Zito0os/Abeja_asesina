@@ -138,7 +138,7 @@ const highlights = [
 
 function App() {
   const [showIntro, setShowIntro] = useState(true)
-    const [showFunFact, setShowFunFact] = useState(false)
+  const [showFunFact, setShowFunFact] = useState(false)
   const [selectedCell, setSelectedCell] = useState(null)
   const [selectedBee, setSelectedBee] = useState(null)
   const [openHighlights, setOpenHighlights] = useState(new Set())
@@ -199,66 +199,85 @@ function App() {
               <button type="button">Leer noticia</button>
               <span>Investigación · Medio ambiente · Sociedad</span>
             </div>
-             {/* Fun Fact */}
-        <section
-          className={`bee-fun-fact ${
-            showFunFact ? 'open' : 'closed'
-          }`}
-        >
-          {!showFunFact ? (
-            <button
-              className="fun-fact-bee"
-              onClick={() => setShowFunFact(true)}
-              aria-label="Mostrar fun fact"
+            {/* Fun Fact */}
+            <section
+              className={`bee-fun-fact ${showFunFact ? 'open' : 'closed'
+                }`}
             >
-              🐝
-            </button>
-          ) : (
-            <div className="fun-fact-content">
-              <button
-                className="fun-fact-close"
-                onClick={() => setShowFunFact(false)}
-                aria-label="Cerrar fun fact"
-              >
-                ×
-              </button>
+              {!showFunFact ? (
+                <button
+                  className="fun-fact-bee"
+                  onClick={() => setShowFunFact(true)}
+                  aria-label="Mostrar fun fact"
+                >
+                  🐝
+                </button>
+              ) : (
+                <div className="fun-fact-content">
+                  <button
+                    className="fun-fact-close"
+                    onClick={() => setShowFunFact(false)}
+                    aria-label="Cerrar fun fact"
+                  >
+                    ×
+                  </button>
 
-              <span className="fun-fact-label">
-                FUN FACT
-              </span>
+                  <span className="fun-fact-label">
+                    FUN FACT
+                  </span>
 
-              <h3>
-                ¿Sabías que las abejas pueden reconocer rostros?
-              </h3>
+                  <h3>
+                    ¿Sabías que las abejas pueden reconocer rostros?
+                  </h3>
 
-              <p>
-                Las abejas pueden aprender a distinguir patrones
-                que se parecen a rostros humanos. ¡Su pequeño
-                cerebro tiene una capacidad de reconocimiento
-                sorprendente!
-              </p>
-            </div>
-          )}
-        </section>
+                  <p>
+                    Las abejas pueden aprender a distinguir patrones
+                    que se parecen a rostros humanos. ¡Su pequeño
+                    cerebro tiene una capacidad de reconocimiento
+                    sorprendente!
+                  </p>
+                </div>
+              )}
+            </section>
 
           </section>
-          
+
 
           <aside className="bee-visual" aria-label="Bee-themed illustration">
             <div className="honeycomb-cluster">
-              {honeycombData.map((item) => (
-                <motion.button
-                  key={item.id}
-                  layoutId={`hexagon-${item.id}`}
-                  className={`cell-node cell-${item.id}`}
-                  onClick={() => setSelectedCell(item)}
-                  whileHover={{ scale: 1.08, filter: 'brightness(1.15)' }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ type: 'spring', stiffness: 320, damping: 28 }}
-                >
-                  <span className="cell-label">{item.shortLabel}</span>
-                </motion.button>
+              {/* Central static panel */}
+              {honeycombData.filter(item => item.id === 'center').map((item) => (
+                <div key={item.id} className={`cell-wrapper cell-${item.id}`}>
+                  <motion.button
+                    layoutId={`hexagon-${item.id}`}
+                    className="cell-node"
+                    onClick={() => setSelectedCell(item)}
+                    whileHover={{ scale: 1.08, filter: 'brightness(1.15)' }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+                  >
+                    <span className="cell-label">{item.shortLabel}</span>
+                  </motion.button>
+                </div>
               ))}
+
+              {/* Orbiting panels */}
+              <div className="orbit-ring">
+                {honeycombData.filter(item => item.id !== 'center').map((item) => (
+                  <div key={item.id} className={`cell-wrapper cell-${item.id} counter-orbit`}>
+                    <motion.button
+                      layoutId={`hexagon-${item.id}`}
+                      className="cell-node"
+                      onClick={() => setSelectedCell(item)}
+                      whileHover={{ scale: 1.08, filter: 'brightness(1.15)' }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+                    >
+                      <span className="cell-label">{item.shortLabel}</span>
+                    </motion.button>
+                  </div>
+                ))}
+              </div>
             </div>
           </aside>
         </main>
@@ -317,9 +336,9 @@ function App() {
         </section>
         <Carrusel onBeeSelect={setSelectedBee} />
       </div>
-      
 
-        
+
+
       <AnimatePresence>
         {selectedCell && (
           <div className="hex-modal-backdrop" onClick={() => setSelectedCell(null)}>
@@ -378,13 +397,13 @@ function App() {
                       </div>
                     )}
                   </div>
-                  
+
                 )}
               </div>
             </motion.div>
           </div>
         )}
-        
+
       </AnimatePresence>
 
       <AnimatePresence>

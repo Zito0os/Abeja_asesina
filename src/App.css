@@ -299,12 +299,6 @@
   box-shadow: -32px 24px 0 -18px rgba(255, 255, 255, 0.18), 28px -22px 0 -18px rgba(255, 255, 255, 0.12);
 }
 
-.c1 { left: 4%; top: 6%; }
-.c2 { left: 42%; top: 2%; }
-.c3 { left: 32%; top: 38%; }
-.c4 { left: 4%; top: 60%; }
-.c5 { left: 42%; top: 54%; }
-.c6 { left: 72%; top: 38%; }
 
 /* Panel estilo Clúster */
 .honeycomb-cluster {
@@ -313,20 +307,48 @@
   height: 320px;
 }
 
-.cell-node {
+/* Container for the spinning elements */
+.orbit-ring {
   position: absolute;
-  width: 96px;
+  inset: 0;
+  animation: spin 35s linear infinite;
+}
+
+/* Pause the rotation when hovering so users can read and click easily */
+.orbit-ring:hover,
+.orbit-ring:hover .counter-orbit {
+  animation-play-state: paused;
+}
+
+/* Wrappers handle exact absolute positioning and counter-rotation */
+.cell-wrapper {
+  position: absolute;
+  width: 110px;
   height: 110px;
-  background: linear-gradient(145deg, #f9c42a 0%, #e8a509 100%);
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  z-index: 2;
+}
+
+.counter-orbit {
+  /* Counter-spins the elements so the text remains horizontal */
+  animation: counter-spin 35s linear infinite;
+}
+
+/* The actual button inside the wrapper uses the image */
+.cell-node {
+  width: 100%;
+  height: 100%;
+  background-image: url('./assets/HexagonoPanalMiel.png'); /* Adjust path as needed */
+  background-size: 100% 100%;
+  background-position: center;
+  background-color: transparent;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 8px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
-  transform-origin: center center;
+  /* Use drop-shadow instead of box-shadow for PNG/JPG shapes with transparency */
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.2)); 
 }
 
 .cell-label {
@@ -338,15 +360,26 @@
   text-align: center;
   line-height: 1.15;
   pointer-events: none;
+  z-index: 2; 
 }
 
-.cell-center { top: 105px; left: 112px; z-index: 2; }
-.cell-c1     { top: 15px;  left: 112px; }
-.cell-c2     { top: 60px;  left: 190px; }
-.cell-c3     { top: 150px; left: 190px; }
-.cell-c4     { top: 195px; left: 112px; }
-.cell-c5     { top: 150px; left: 34px;  }
-.cell-c6     { top: 60px;  left: 34px;  }
+/* Animation Keyframes */
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes counter-spin {
+  100% { transform: rotate(-360deg); }
+}
+
+/* Geometrical offset coordinates applied to the wrappers */
+.cell-center { top: 105px; left: 112px; z-index: 5; }
+.cell-c1 { top: 15px;  left: 112px; }
+.cell-c2 { top: 60px;  left: 190px; }
+.cell-c3 { top: 150px; left: 190px; }
+.cell-c4 { top: 195px; left: 112px; }
+.cell-c5 { top: 150px; left: 34px; }
+.cell-c6 { top: 60px;  left: 34px; }
 
 .bee-badge {
   position: absolute;
