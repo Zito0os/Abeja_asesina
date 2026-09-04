@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import './Panal_movil.css'
+import { panalPorCapas } from './panalPorCapas'
 
 const bees = [
   { id: 1, title: 'La abeja obrera', text: 'Las abejas obreras realizan distintas tareas dentro de la colmena.' },
@@ -10,13 +11,15 @@ const bees = [
   { id: 5, title: 'La miel', text: 'La miel es el resultado del trabajo colectivo de miles de abejas.' },
 ]
 
-const cells = Array.from({ length: 19 }, (_, index) => bees[index % bees.length])
-const cellRows = [3, 4, 5, 4, 3]
+const cells = panalPorCapas(35)
 
 function Panal({ bee, onClose }) {
   const [selectedCell, setSelectedCell] = useState(bee)
   const [offset, setOffset] = useState({ x: 0, y: 0 })
+  const [isDragging, setIsDragging] = useState(false)
   const panalRef = useRef(null)
+  const gridRef = useRef(null)
+  const dragRef = useRef({ x: 0, y: 0, offsetX: 0, offsetY: 0, pressed: false, dragging: false, moved: false })
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -27,14 +30,79 @@ function Panal({ bee, onClose }) {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [onClose])
 
+  const handlePointerDown = (event) => {
+    if (event.button !== 0 && event.pointerType === 'mouse') return
+
+    event.currentTarget.setPointerCapture(event.pointerId)
+    dragRef.current = {
+      x: event.clientX,
+      y: event.clientY,
+      offsetX: offset.x,
+      offsetY: offset.y,
+      pressed: true,
+      dragging: false,
+      moved: false,
+    }
+    setIsDragging(false)
+  }
+
   const handlePointerMove = (event) => {
-    const bounds = panalRef.current?.getBoundingClientRect()
-    if (!bounds) return
+    const gridWidth = gridRef.current?.scrollWidth ?? 0
+    const gridHeight = gridRef.current?.scrollHeight ?? 0
+    const panLimit = Math.max(
+      0,
+      (Math.max(gridWidth - window.innerWidth, gridHeight - window.innerHeight)) / 2,
+    )
+
+    if (!dragRef.current.pressed) {
+      const horizontalDirection = (window.innerWidth / 2 - event.clientX) / (window.innerWidth / 2)
+      const verticalDirection = (window.innerHeight / 2 - event.clientY) / (window.innerHeight / 2)
+      const nextX = horizontalDirection * panLimit
+      const nextY = verticalDirection * panLimit
+
+      setOffset({
+        x: Math.max(-panLimit, Math.min(panLimit, nextX)),
+        y: Math.max(-panLimit, Math.min(panLimit, nextY)),
+      })
+      return
+    }
+
+    const distanceX = event.clientX - dragRef.current.x
+    const distanceY = event.clientY - dragRef.current.y
+
+    if (!dragRef.current.dragging && Math.hypot(distanceX, distanceY) > 5) {
+      dragRef.current.dragging = true
+      dragRef.current.moved = true
+      setIsDragging(true)
+    }
+
+    if (!dragRef.current.dragging) return
+
+    const nextX = dragRef.current.offsetX + event.clientX - dragRef.current.x
+    const nextY = dragRef.current.offsetY + event.clientY - dragRef.current.y
 
     setOffset({
-      x: (bounds.width / 2 - (event.clientX - bounds.left)) * 0.18,
-      y: (bounds.height / 2 - (event.clientY - bounds.top)) * 0.18,
+      x: Math.max(-panLimit, Math.min(panLimit, nextX)),
+      y: Math.max(-panLimit, Math.min(panLimit, nextY)),
     })
+  }
+
+  const handlePointerUp = (event) => {
+    if (panalRef.current?.hasPointerCapture(event.pointerId)) {
+      panalRef.current.releasePointerCapture(event.pointerId)
+    }
+    dragRef.current.pressed = false
+    dragRef.current.dragging = false
+    setIsDragging(false)
+  }
+
+  const handleCellClick = (cell) => {
+    if (dragRef.current.moved) {
+      dragRef.current.moved = false
+      return
+    }
+
+    setSelectedCell(cell)
   }
 
 
@@ -46,26 +114,32 @@ function Panal({ bee, onClose }) {
         <h2>{selectedCell.title}</h2>
         <p>{selectedCell.text}</p>
       </header>
-      <div className="Panal-visor" ref={panalRef} onPointerMove={handlePointerMove}>
-        <motion.div className="Panal-grid" animate={{ x: offset.x, y: offset.y }} transition={{ type: 'spring', stiffness: 100, damping: 24, mass: 0.7 }}>
-          {cellRows.map((rowSize, rowIndex) => {
-            const rowStart = cellRows.slice(0, rowIndex).reduce((total, size) => total + size, 0)
+      <div className={`Panal-visor ${isDragging ? 'arrastrando' : ''}`} ref={panalRef} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerCancel={handlePointerUp}>
+        <div className="Panal-centro">
+          <motion.div ref={gridRef} className="Panal-grid" animate={{ x: offset.x, y: offset.y }} transition={isDragging ? { duration: 0 } : { type: 'spring', stiffness: 100, damping: 24, mass: 0.7 }}>
+            {cells.map((cell, index) => {
+              const number = index === 0 ? 1 : index + 1
+              const beeData = bees[(number - 1) % bees.length]
 
-            return (
-              <div className="Panal-fila" key={`${rowSize}-${rowIndex}`}>
-                {cells.slice(rowStart, rowStart + rowSize).map((cell, rowOffset) => {
-                  const index = rowStart + rowOffset
-
-                  return (
-                    <button className={`Panal-celda ${index === 9 ? 'activa' : ''}`} key={`${cell.id}-${index}`} type="button" onClick={() => setSelectedCell(cell)} aria-label={`Panal número ${index + 1}: ${cell.title}`}>
-                      <span>{index === 9 ? '1' : index + 1}</span>
-                    </button>
-                  )
-                })}
-              </div>
-            )
-          })}
-        </motion.div>
+              return (
+                <button className={`Panal-celda ${index === 0 ? 'activa' : ''}`} key={`${cell.layer}-${index}`} type="button" style={{ '--x': `${cell.x}vw`, '--y': `${cell.y}vw` }} onClick={() => handleCellClick(beeData)} aria-label={`Panal número ${number}: ${beeData.title}`}>
+                        <svg className="Panal-geometria" viewBox="0 0 100 100" aria-hidden="true">
+                          <g className="Panal-apotemas">
+                            <line x1="50" y1="50" x2="50" y2="0" />
+                            <line x1="50" y1="50" x2="87.5" y2="25" />
+                            <line x1="50" y1="50" x2="87.5" y2="75" />
+                            <line x1="50" y1="50" x2="50" y2="100" />
+                            <line x1="50" y1="50" x2="12.5" y2="75" />
+                            <line x1="50" y1="50" x2="12.5" y2="25" />
+                          </g>
+                          <circle className="Panal-punto-centro" cx="50" cy="50" r="2.3" />
+                        </svg>
+                  <span>{number}</span>
+                </button>
+              )
+            })}
+          </motion.div>
+        </div>
       </div>
       <div className="Panal-pista">Mueve el puntero para recorrer la colonia</div>
     </motion.section>
