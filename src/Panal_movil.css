@@ -25,8 +25,8 @@
 	position: absolute;
 	top: 50%;
 	left: 50%;
-    width: calc(35vw - 5vw);
-    height: calc(35vw - 5vw);
+	width: calc(35vw - 5vw);
+	height: calc(35vw - 5vw);
 	margin: 0;
 	transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y)));
     /*porcentaje de la pantalla sobre el panel*/
@@ -50,5 +50,5 @@
 	.Panal-movil { padding: 28px 16px 20px; }
 	.Panal-encabezado { width: 78vw; }
 	.Panal-grid { width: 100vw; height: 100vh; }
-	.Panal-celda { width: calc(35vw - 8px); height: calc(35vw - 8px); }
+	.Panal-celda { width: calc(35vw - 1vw); height: calc(35vw - 1vw); }
 }
