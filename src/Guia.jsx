@@ -58,24 +58,32 @@ const beeGuides = [
   }
 ]
 
-function Guia() {
+function Guia({ activeBeeId = 3 }) {
+  const carouselGuideIds = {
+    1: 5,
+    2: 3,
+    3: 1,
+    4: 2,
+    5: 4,
+  }
+  const activeGuideId = carouselGuideIds[activeBeeId] ?? 1
+  const activeBee = beeGuides.find((bee) => bee.id === activeGuideId) ?? beeGuides[0]
+
   return (
     <section className="bee-guide" aria-live="polite">
       <p className="bee-guide-kicker">Qué hacer si te encuentras con una abeja</p>
       <div className="bee-guide-list">
-        {beeGuides.map((bee) => (
-          <article className="bee-guide-item" key={bee.id}>
+        <article className="bee-guide-item" key={activeBee.id}>
             <h2>
-              {bee.name} <em>({bee.species})</em>
+              {activeBee.name} <em>({activeBee.species})</em>
             </h2>
-            <p className="bee-guide-behavior">{bee.behavior}</p>
+            <p className="bee-guide-behavior">{activeBee.behavior}</p>
             <ul>
-              {bee.actions.map((action) => (
+              {activeBee.actions.map((action) => (
                 <li key={action}>{action}</li>
               ))}
             </ul>
-          </article>
-        ))}
+        </article>
       </div>
     </section>
   )
