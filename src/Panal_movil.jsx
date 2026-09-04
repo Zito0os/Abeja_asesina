@@ -3,17 +3,53 @@ import { motion } from 'motion/react'
 import './Panal_movil.css'
 import { panalPorCapas } from './panalPorCapas'
 
-const bees = [
-  { id: 1, title: 'La abeja obrera', text: 'Las abejas obreras realizan distintas tareas dentro de la colmena.' },
-  { id: 2, title: 'La polinización', text: 'Las abejas ayudan a polinizar una gran cantidad de plantas y cultivos.' },
-  { id: 3, title: 'La colmena', text: 'Una colonia puede trabajar de forma coordinada como una enorme comunidad.' },
-  { id: 4, title: 'La reina', text: 'La abeja reina es fundamental para mantener la colonia.' },
-  { id: 5, title: 'La miel', text: 'La miel es el resultado del trabajo colectivo de miles de abejas.' },
-]
-
 const cells = panalPorCapas(35)
 
+const beeInformation = {
+  1: {
+    commonName: 'Abeja de las orquídeas',
+    scientificName: 'Tribu científica Euglossini',
+    where: 'Principalmente regiones tropicales de América',
+    habitat: 'Bosques y zonas donde crecen orquídeas y otras plantas tropicales',
+    characteristics: 'Los machos recolectan compuestos aromáticos de orquídeas, hongos y cortezas, y los almacenan en estructuras especiales de sus patas traseras.',
+    importance: 'Los machos utilizan estas fragancias para atraer a las hembras. Alrededor de 600 especies de orquídeas dependen de estas abejas para su polinización.',
+  },
+  2: {
+    commonName: 'Abeja carpintera del sur',
+    scientificName: 'Xylocopa micans',
+    where: 'Sur de Estados Unidos y regiones de México',
+    habitat: 'Ramas secas y material vegetal leñoso donde construye sus nidos',
+    characteristics: 'Utiliza sus fuertes mandíbulas para excavar túneles en la madera. Es de gran tamaño y produce un zumbido fuerte al volar.',
+    importance: 'Es una abeja solitaria y poco agresiva. Casi nunca daña la madera estructural de casas o edificios.',
+  },
+  3: {
+    commonName: 'Abeja melipona',
+    scientificName: 'Melipona beecheii',
+    where: 'Regiones tropicales de México y Centroamérica',
+    habitat: 'Vive en colmenas dentro de troncos huecos llamados jobones',
+    characteristics: 'Tiene el aguijón atrofiado y no puede picar a los humanos. Si se siente amenazada puede dar un pequeño mordisco inofensivo. Produce entre 1 y 2 litros de miel al año por colmena.',
+    importance: 'Es una abeja nativa importante para la polinización y para la producción tradicional de miel.',
+  },
+  4: {
+    commonName: 'Abeja del suelo / abeja minera',
+    scientificName: 'Familia Andrenidae',
+    where: 'Noreste de México y noreste de Norteamérica',
+    habitat: 'Construye sus nidos bajo tierra',
+    characteristics: 'No corresponde a una sola especie, sino a un gran grupo de abejas nativas solitarias.',
+    importance: 'Cerca del 70 % de las especies de abejas nativas de estas regiones construyen sus nidos bajo tierra. Son importantes polinizadoras.',
+  },
+  5: {
+    commonName: 'Abeja Agapostemon',
+    scientificName: 'Agapostemon, familia Halictidae',
+    where: 'América del Norte y otras regiones del continente americano',
+    habitat: 'Zonas con plantas silvestres y cultivos agrícolas',
+    characteristics: 'Son polinizadoras generalistas y visitan plantas como girasol, tomate y alfalfa.',
+    importance: 'Realizan polinización por zumbido, haciendo vibrar sus músculos de vuelo para liberar el polen de determinadas flores.',
+  },
+}
+
 function Panal({ bee, onClose }) {
+  const currentBee = { ...(beeInformation[bee.id] ?? beeInformation[1]), image: bee.image }
   const [selectedCell, setSelectedCell] = useState(bee)
   const [offset, setOffset] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
@@ -111,37 +147,35 @@ function Panal({ bee, onClose }) {
       <button className="Panal-cerrar" type="button" onClick={onClose} aria-label="Cerrar panal">×</button>
       <header className="Panal-encabezado">
         <span className="Panal-indicador">EXPLORACIÓN {String(bee.id).padStart(2, '0')}</span>
-        <h2>{selectedCell.title}</h2>
-        <p>{selectedCell.text}</p>
+        <h2>{currentBee.commonName}</h2>
+        <p>{selectedCell.text ?? currentBee.importance}</p>
       </header>
       <div className={`Panal-visor ${isDragging ? 'arrastrando' : ''}`} ref={panalRef} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerCancel={handlePointerUp}>
         <div className="Panal-centro">
           <motion.div ref={gridRef} className="Panal-grid" animate={{ x: offset.x, y: offset.y }} transition={isDragging ? { duration: 0 } : { type: 'spring', stiffness: 100, damping: 24, mass: 0.7 }}>
             {cells.map((cell, index) => {
               const number = index === 0 ? 1 : index + 1
-              const beeData = bees[(number - 1) % bees.length]
+              const beeData = currentBee
+              const cellContent = {
+                1: { label: 'Imagen', value: 'image' },
+                2: { label: 'Hábitat', value: currentBee.habitat },
+                3: { label: 'Nombre científico', value: currentBee.scientificName },
+                4: { label: 'Importancia', value: currentBee.importance },
+                5: { label: 'Características', value: currentBee.characteristics },
+                6: { label: 'Nombre común', value: currentBee.commonName },
+                7: { label: 'Dónde es', value: currentBee.where },
+              }[number]
 
               return (
                 <button className={`Panal-celda ${index === 0 ? 'activa' : ''}`} key={`${cell.layer}-${index}`} type="button" style={{ '--x': `${cell.x}vw`, '--y': `${cell.y}vw` }} onClick={() => handleCellClick(beeData)} aria-label={`Panal número ${number}: ${beeData.title}`}>
-                        <svg className="Panal-geometria" viewBox="0 0 100 100" aria-hidden="true">
-                          <g className="Panal-apotemas">
-                            <line x1="50" y1="50" x2="50" y2="0" />
-                            <line x1="50" y1="50" x2="87.5" y2="25" />
-                            <line x1="50" y1="50" x2="87.5" y2="75" />
-                            <line x1="50" y1="50" x2="50" y2="100" />
-                            <line x1="50" y1="50" x2="12.5" y2="75" />
-                            <line x1="50" y1="50" x2="12.5" y2="25" />
-                          </g>
-                          <circle className="Panal-punto-centro" cx="50" cy="50" r="2.3" />
-                        </svg>
-                  <span>{number}</span>
+                  {number === 1 ? <img className="Panal-imagen" src={beeData.image} alt={currentBee.commonName} /> : number <= 7 ? <><span className="Panal-texto">{cellContent.label}</span><small>{cellContent.value}</small></> : <span className="Panal-numero">{number}</span>}
                 </button>
               )
             })}
           </motion.div>
         </div>
       </div>
-      <div className="Panal-pista">Mueve el puntero para recorrer la colonia</div>
+      <div className="Panal-pista"></div>
     </motion.section>
   )
 }

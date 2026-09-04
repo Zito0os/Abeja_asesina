@@ -1,26 +1,31 @@
 import { useEffect, useState } from 'react'
 import './Carrusel.css'
+import orchidBeeImage from './assets/AbejadelasOrquIdeas.png'
+import carpenterBeeImage from './assets/AbejaCarpinteradelSur.png'
+import meliponaBeeImage from './assets/AbejaRealMelipona.png'
+import groundBeeImage from './assets/AbejadelSuelodeNoreste.png'
+import agapostemonBeeImage from './assets/AbejaVerdeMetalizada.png'
 
 const bees = [
   {
     id: 1,
-    image: 'src/assets/AbejadelasOrquIdeas.png',
+    image: orchidBeeImage,
   },
   {
     id: 2,
-    image: 'src/assets/AbejaCarpinteradelSur.png',
+    image: carpenterBeeImage,
   },
   {
     id: 3,
-    image: 'src/assets/AbejaRealMelipona.png',
+    image: meliponaBeeImage,
   },
   {
     id: 4,
-    image: 'src/assets/AbejadelSuelodeNoreste.png',
+    image: groundBeeImage,
   },
   {
     id: 5,
-    image: 'src/assets/AbejaVerdeMetalizada.png',
+    image: agapostemonBeeImage,
   },
 ]
 

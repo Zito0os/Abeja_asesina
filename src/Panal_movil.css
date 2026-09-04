@@ -1,4 +1,6 @@
 .Panal-movil {
+	--tamano-titulo-hexagono: 1.2vw;
+	--tamano-info-hexagono: 1vw;
 	position: fixed;
 	inset: 0;
 	z-index: 100;
@@ -28,6 +30,12 @@
 	width: calc(35vw - 5vw);
 	height: calc(35vw - 5vw);
 	margin: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 4%;
+	text-align: center;
 	transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y)));
     /*porcentaje de la pantalla sobre el panel*/
     border: 0; clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0 50%); 
@@ -40,9 +48,15 @@
 
 .Panal-celda:nth-child(odd) { background: #efbd37; }
 .Panal-celda:hover, .Panal-celda.activa { filter: brightness(1.25); transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.08); }
-.Panal-geometria { position: absolute; inset: 10%; width: 80%; height: 80%; overflow: visible; pointer-events: none; }
-.Panal-apotemas line { stroke: rgba(23, 35, 31, .62); stroke-width: 1.1; vector-effect: non-scaling-stroke; }
-.Panal-punto-centro { fill: #17231f; stroke: rgba(248, 240, 216, .8); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.Panal-imagen { width: 72%; height: 58%; object-fit: contain; border-radius: 6px; }
+.Panal-celda .Panal-texto { display: block; align-self: center; width: 90%; max-width: 90%; font: 1000 var(--tamano-titulo-hexagono)/1.1 Arial, sans-serif; text-align: center; text-transform: uppercase; }
+.Panal-celda small { display: block; align-self: center; width: 90%; max-width: 90%; max-height: 60%; overflow: hidden; margin-top: 5px; font: var(--tamano-info-hexagono)/1.2 Arial, sans-serif; text-align: center; }
+.Panal-numero { font: 500 4vw Georgia, serif; }
+.Panal-texto,
+.Panal-celda small,
+.Panal-numero { width: 100%; text-align: center; }
+.Panal-celda .Panal-texto { line-height: 1; }
+.Panal-celda small { margin-top: 4%; }
 .Panal-celda span { font: 500 4vw Georgia, serif; }
 .Panal-pista { justify-self: center; padding-top: 16px; color: rgba(248, 240, 216, .48); font: 11px/1 Arial, sans-serif; letter-spacing: 1.5px; text-transform: uppercase; }
 
