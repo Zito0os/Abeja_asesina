@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import hexImage from './assets/HexagonoPanalMiel.png';
 import './App.css';
 
@@ -16,10 +16,10 @@ export function HoneycombCluster({ data, onSelectCell }) {
               layoutId={`hexagon-${centerNode.id}`}
               className="cell-node"
               onClick={() => onSelectCell(centerNode)}
-              whileHover={{ scale: 1.08, filter: 'brightness(1.15)' }}
+              whileHover={{ scale: 1.08, filter: 'brightness(1.15) drop-shadow(0 6px 10px rgba(0, 0, 0, 0.2))' }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: 'spring', stiffness: 320, damping: 28 }}
-              style={{ backgroundImage: `url(${hexImage})` }} /* FIX ADDED HERE */
+              style={{ backgroundImage: `url(${hexImage})` }}
             >
               <span className="cell-label">{centerNode.shortLabel}</span>
             </motion.button>
