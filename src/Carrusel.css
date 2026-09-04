@@ -170,18 +170,18 @@
   color: #171717;
 }
 
-.bee-icon {
-  font-size: 48px;
-
-  line-height: 1;
-
+.bee-image {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 50%;
   margin-bottom: 12px;
-
   transition: transform .4s ease;
 }
 
-.bee-position-0 .bee-icon {
-  font-size: 65px;
+.bee-position-0 .bee-image {
+  width: 125px;
+  height: 125px;
 }
 
 .bee-hex h3 {
