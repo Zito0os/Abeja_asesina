@@ -114,7 +114,7 @@ const honeycombData = [
 
 const highlights = [
   {
-    title: 'Disminución de las Abejas Melíferas',
+    title: 'Disminución de las Abejas Melíferas en America del Norte durante los últimos años.',
     text: 'Las poblaciones críticas de abejas melíferas en Estados Unidos han disminuido en los últimos años debido a diversos factores, lo que genera preocupación sobre la seguridad futura de los servicios de polinización en el país. Investigadores del USGS están estudiando los efectos de factores como el cambio de uso del suelo y el uso de productos químicos en el hábitat de las abejas melíferas para comprender mejor cómo conservarlas en el territorio.',
     subtitulo: 'Abejas Melíferas',
     image: invasiveBeeImage,
@@ -122,16 +122,16 @@ const highlights = [
       'Si bien son importantes para la polinización de algunos cultivos, las abejas melíferas también son importantes competidoras de las abejas autóctonas y no deben introducirse en áreas de conservación, parques o zonas donde se desee fomentar la conservación de plantas y abejas autóctonas.'
   },
   {
-    title: 'México es el segundo hogar de la mayor diversidad de abejas nativas del planeta, ¡con 2,100 especies!',
+    title: 'México es el segundo hogar de la mayor diversidad de abejas nativas del planeta.',
     text: 'Proteger a las abejas es invertir en nuestro propio bienestar y en el futuro de nuestro planeta.',
     subtitulo: '¿Sabias que hay una gran diversidad de abejas nativas en Nuevo León?',
     image: invasiveBeeDraw,
     details:
-      ' Se han confirmado casi 400 especies nativas en la región (un cuarto del total de México).'
+      ' Se han confirmado casi 400 especies nativas en la región, un cuarto del total de México, ¡con 2,100 especies en total!.'
   },
   {
-    title: 'Conoce las fascinantes características de nuestras abejas nativas',
-    text: 'Abejas sin aguijón',
+    title: 'Conoce las fascinantes características de nuestras abejas nativas.',
+    text: 'Sabias que muchas de nuestras abejas nativas son sin aguijón',
     subtitulo: 'También llamadas abejas meliponas o meliponinos.',
     image: africa,
     details:
@@ -299,11 +299,11 @@ function App() {
               >
                 <p className="meta">Investigación</p>
                 <h3>{item.title}</h3>
-                <p>{item.text}</p>
 
                 {isOpen && (
                   <div id={detailsId} className="story-details">
                     <h4 className="story-subtitle">{item.subtitulo}</h4>
+                    <p>{item.text}</p>
                     {item.image && (
                       <div className="story-media">
                         <img src={item.image} alt={item.subtitulo} />
