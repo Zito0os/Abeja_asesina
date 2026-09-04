@@ -358,30 +358,13 @@
 .c5 { left: 42%; top: 54%; }
 .c6 { left: 72%; top: 38%; }
 
-/* Panel estilo Clúster */
-.honeycomb-cluster {
-  position: relative;
-  width: 320px;
-  height: 320px;
-}
-
 /* Container for the spinning elements */
 .orbit-ring {
   position: absolute;
   inset: 0;
-  animation: spin 35s linear infinite;
 }
 
-.orbit-ring:hover,
-.orbit-ring:hover .counter-orbit {
-  animation-play-state: paused;
-}
-
-
-.counter-orbit {
-  animation: counter-spin 35s linear infinite;
-}
-
+/* Wrappers handle layering and transitions */
 .cell-wrapper {
   position: absolute;
   width: 110px;
@@ -390,6 +373,7 @@
   will-change: transform;
 }
 
+/* The actual button inside the wrapper uses the image */
 .cell-node {
   width: 100%;
   height: 100%;
@@ -404,7 +388,6 @@
   padding: 8px;
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.2)); 
   transform: translateZ(0);
-  backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -420,23 +403,31 @@
   z-index: 2; 
 }
 
-/* Animation Keyframes */
-@keyframes spin {
-  100% { transform: rotate(360deg); }
+/* Central anchor position */
+.cell-center { 
+  top: 105px; 
+  left: 112px; 
+  z-index: 5; 
+}
+/* Panel estilo Clúster */
+.honeycomb-cluster {
+  position: relative;
+  width: 320px;
+  height: 320px;
 }
 
-@keyframes counter-spin {
-  100% { transform: rotate(-360deg); }
+.orbit-ring:hover,
+.orbit-ring:hover .counter-orbit {
+  animation-play-state: paused;
 }
 
-/* Geometrical offset coordinates applied to the wrappers */
-.cell-center { top: 105px; left: 112px; z-index: 5; }
-.cell-c1 { top: 15px;  left: 112px; }
-.cell-c2 { top: 60px;  left: 190px; }
-.cell-c3 { top: 150px; left: 190px; }
-.cell-c4 { top: 195px; left: 112px; }
-.cell-c5 { top: 150px; left: 34px; }
-.cell-c6 { top: 60px;  left: 34px; }
+
+.counter-orbit {
+  animation: counter-spin 35s linear infinite;
+}
+
+
+
 
 /* ==========================================
    MODALES HEXAGONALES Y MÉTRICAS

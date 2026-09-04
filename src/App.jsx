@@ -251,7 +251,11 @@ function App() {
             </section>
 
           </section>
-          <HoneycombCluster data={honeycombData} onSelectCell={setSelectedCell} />
+          <HoneycombCluster
+            data={honeycombData}
+            onSelectCell={setSelectedCell}
+            selectedCellId={selectedCell?.id}
+          />
         </main>
 
         <section className="highlights-grid">
