@@ -1,0 +1,34 @@
+.Panal-movil {
+	position: fixed;
+	inset: 0;
+	z-index: 100;
+	overflow: hidden;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	padding: clamp(24px, 5vw, 64px);
+	color: #f8f0d8;
+	background: rgba(13, 20, 17, .18);
+	backdrop-filter: blur(2px);
+}
+
+.Panal-cerrar { position: absolute; top: 22px; right: 28px; z-index: 2; width: 42px; height: 42px; border: 1px solid rgba(248, 240, 216, .35); border-radius: 50%; color: #f8f0d8; background: transparent; font-size: 28px; line-height: 1; cursor: pointer; }
+.Panal-encabezado { position: relative; z-index: 1; width: min(430px, 75vw); align-self: center; pointer-events: none; }
+.Panal-indicador { color: #efbd37; font: 700 11px/1.2 Arial, sans-serif; letter-spacing: 2px; }
+.Panal-encabezado h2 { margin: 8px 0 6px; font: 500 clamp(25px, 4vw, 44px)/1 Georgia, serif; }
+.Panal-encabezado p { max-width: 390px; margin: 0; color: rgba(248, 240, 216, .72); font: 14px/1.45 Arial, sans-serif; }
+.Panal-visor { position: fixed; inset: 0; z-index: 0; display: grid; place-items: center; overflow: hidden; cursor: crosshair; mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent); }
+.Panal-grid { display: flex; flex-direction: column; width: min(700px, 94vw); }
+.Panal-fila { display: flex; justify-content: center; gap: clamp(0px, .7vw, 10px); height: clamp(108px, 13vw, 145px); }
+.Panal-celda { flex: 0 0 clamp(110px, 17vw, 180px); height: clamp(126px, 19vw, 205px); border: 0; clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0 50%); color: #17231f; background: #d99e25; cursor: pointer; transition: filter .2s ease, transform .2s ease; }
+.Panal-celda:nth-child(odd) { background: #efbd37; }
+.Panal-celda:hover, .Panal-celda.activa { filter: brightness(1.25); transform: scale(1.08); }
+.Panal-celda span { font: 500 clamp(22px, 4vw, 42px) Georgia, serif; }
+.Panal-pista { justify-self: center; padding-top: 16px; color: rgba(248, 240, 216, .48); font: 11px/1 Arial, sans-serif; letter-spacing: 1.5px; text-transform: uppercase; }
+
+@media (max-width: 600px) {
+	.Panal-movil { padding: 28px 16px 20px; }
+	.Panal-encabezado { width: 78vw; }
+	.Panal-grid { width: 650px; }
+	.Panal-fila { height: 100px; gap: 0; }
+	.Panal-celda { flex-basis: 106px; height: 122px; }
+}
