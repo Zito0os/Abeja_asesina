@@ -57,7 +57,7 @@ const fragmentShader = `
   }
 `
 
-export function PaperScene({ progress, textureCanvas }) {
+export function PaperScene({ progress, textureCanvas, paperSize }) {
   const canvasRef = useRef(null)
   const progressRef = useRef(progress)
   const textureRef = useRef(textureCanvas)
@@ -140,6 +140,7 @@ export function PaperScene({ progress, textureCanvas }) {
     <canvas
       ref={canvasRef}
       className="paper-canvas"
+      style={paperSize ? { width: `${paperSize.width}px`, height: `${paperSize.height}px` } : undefined}
       aria-hidden="true"
     />
   )

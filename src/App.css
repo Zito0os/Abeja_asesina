@@ -20,11 +20,15 @@
 }
 
 .paper-canvas {
+  position: fixed;
+  top: 50%;
+  left: 50%;
   width: 100%;
   height: 100%;
   display: block;
-  background: #121212;
+  background: transparent;
   filter: drop-shadow(0 22px 35px rgba(0, 0, 0, 0.2));
+  transform: translate(-50%, -50%);
 }
 
 .sprite-sheet {
@@ -856,4 +860,12 @@
 .story-card:hover .meta,
 .story-card:hover .story-subtitle {
   color: #fffaf0;
+}
+
+.page-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
 }
