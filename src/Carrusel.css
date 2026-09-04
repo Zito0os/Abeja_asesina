@@ -170,19 +170,6 @@
   color: #171717;
 }
 
-.bee-icon {
-  font-size: 48px;
-
-  line-height: 1;
-
-  margin-bottom: 12px;
-
-  transition: transform .4s ease;
-}
-
-.bee-position-0 .bee-icon {
-  font-size: 65px;
-}
 
 .bee-hex h3 {
   width: 100%;
@@ -214,4 +201,18 @@
 
 .bee-position-0 p {
   font-size: 12px;
+}
+
+.bee-image {
+  width: auto;
+  height: auto;
+  object-fit: cover;
+  border-radius: 5%;
+  margin-bottom: 12px;
+  transition: transform .4s ease;
+}
+
+.bee-position-0 .bee-image {
+  width: auto;
+  height: auto;
 }

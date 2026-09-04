@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { PaperUnfold } from './components/animation'
-
+import loneBee from './assets/lone.jpg'
 import invasiveBeeImage from './assets/Abeja Invasora.png'
 import invasiveBeeDraw from './assets/AbejaDibujo1.png'
 import './App.css'
@@ -111,27 +111,27 @@ const honeycombData = [
 
 const highlights = [
   {
-    title: '¿De dónde viene la abeja africana?',
-    text: 'Comprenderás el origen de la abeja africana y de dónde viene esta especie colonizadora en nuestro continente.',
-    subtitulo: 'La abeja africana',
+    title: 'Disminución de las Abejas Melíferas',
+    text: 'Las poblaciones críticas de abejas melíferas en Estados Unidos han disminuido en los últimos años debido a diversos factores, lo que genera preocupación sobre la seguridad futura de los servicios de polinización en el país. Investigadores del USGS están estudiando los efectos de factores como el cambio de uso del suelo y el uso de productos químicos en el hábitat de las abejas melíferas para comprender mejor cómo conservarlas en el territorio.',
+    subtitulo: 'Abejas Melíferas',
     image: invasiveBeeImage,
     details:
-      'Las abejas ajustan sus recorridos y horarios cuando cambian las temperaturas. Esta adaptación ayuda a mantener la producción, pero también aumenta el esfuerzo de toda la colonia.'
+      'Si bien son importantes para la polinización de algunos cultivos, las abejas melíferas también son importantes competidoras de las abejas autóctonas y no deben introducirse en áreas de conservación, parques o zonas donde se desee fomentar la conservación de plantas y abejas autóctonas.'
   },
   {
-    title: '¿Cómo se estableció la apicultura en América?',
-    text: 'Explorando la historia de la apicultura en el continente americano.',
-    subtitulo: 'Apis mellifera scutellata',
+    title: 'México es el segundo hogar de la mayor diversidad de abejas nativas del planeta, ¡con 2,100 especies!',
+    text: 'Proteger a las abejas es invertir en nuestro propio bienestar y en el futuro de nuestro planeta.',
+    subtitulo: '¿Sabias que hay una gran diversidad de abejas nativas en Nuevo León?',
     image: invasiveBeeDraw,
     details:
-      'La pérdida de diversidad floral deja a las colonias con menos alimento durante el año. Recuperar plantas nativas y reducir el uso de pesticidas ofrece refugios más seguros.'
+      ' Se han confirmado casi 400 especies nativas en la región (un cuarto del total de México).'
   },
   {
-    title: '¿Cómo llegaron las abejas africanas a América?',
-    text: 'Entenderás cómo llegaron las abejas africanas a América.',
-    subtitulo: 'La llegada de las abejas africanas',
+    title: 'Conoce las fascinantes características de nuestras abejas nativas',
+    text: 'Abejas sin aguijón',
+    subtitulo: 'También llamadas abejas meliponas o meliponinos.',
     details:
-      'Cada abeja cumple una función distinta y la colonia responde como un sistema coordinado. Esa cooperación permite resolver cambios del entorno con rapidez y eficiencia.'
+      'Son abejas de menor tamaño comparadas con las abejas europeas, de colores oscuros con tonos rojizos o marrón, con anillos negros y amarillos en el abdomen y con vellos en el tórax; además tienen una menor cantidad de venas en las alas. A diferencia de las europeas, las obreras de las abejas meliponas poseen una cesta de polen en sus patas posteriores y carecen de aguijón.'
   }
 ]
 
@@ -183,20 +183,16 @@ function App() {
           </div>
         </header>
 
-        <main className="hero-section">
+       <main className="hero-section">
           <section className="headline-panel">
             <div className="kicker">Nacional</div>
             <h2>HÉROE O AMENAZA</h2>
+            <h1>    ¿Son las abejas melíferas originarias de Norteamérica?</h1>
             <p className="lead">
-              Las abejas no solo producen miel: sostienen cultivos, ecosistemas y comunidades
-              enteras. Pero su futuro depende de decisiones que hoy se toman en cada jardín,
-              campo y ciudad.
+         Las abejas melíferas no son originarias de Norteamérica. Fueron importadas de Europa en el siglo XVII. Actualmente, las abejas melíferas ayudan a polinizar muchos cultivos estadounidenses, como frutas y frutos secos. En un solo año, una colonia de abejas puede recolectar alrededor de 18 kilogramos de polen y 120 kilogramos de néctar. Las abejas melíferas incrementan el valor de los cultivos de nuestro país en más de 15 mil millones de dólares cada año.
             </p>
 
-            <div className="cta-row">
-              <button type="button">Leer noticia</button>
-              <span>Investigación · Medio ambiente · Sociedad</span>
-            </div>
+
              {/* Fun Fact */}
         <section
           className={`bee-fun-fact ${
@@ -314,6 +310,30 @@ function App() {
           })}
         </section>
         <Carrusel />
+
+         {/* PUBLICIDAD */}
+        <aside className="bee-ad">
+          <span className="bee-ad-label">PUBLICIDAD</span>
+
+          <img
+            src={loneBee}
+            alt="Abeja"
+          />
+
+          <h3>PROTEJAMOS A LAS ABEJAS</h3>
+
+          <p>
+          ¡PROTEGE A NUESTROS POLINIZADORES!
+      Planta flores nativas.
+      Evita productos químicos dañinos.
+      Cada jardín cuenta.
+          </p>
+
+          <button onClick={() => window.location.href = "https://www.gob.mx/conabio/prensa/mexico-es-el-segundo-hogar-de-la-mayor-diversidad-de-abejas-nativas-del-planeta-con-2-100-especies?idiom=es"}>
+        CONOCE MÁS
+      </button>
+        </aside>
+
       </div>
       
 
