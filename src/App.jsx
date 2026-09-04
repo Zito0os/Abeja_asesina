@@ -4,8 +4,11 @@ import { PaperUnfold } from './components/animation'
 import loneBee from './assets/lone.jpg'
 import invasiveBeeImage from './assets/Abeja Invasora.png'
 import invasiveBeeDraw from './assets/AbejaDibujo1.png'
+import africa from './assets/africa.png'
+import beeGif from './assets/beeGif.gif'
 import './App.css'
 import Carrusel from './Carrusel'
+import Panal from './Panal_movil'
 
 const honeycombData = [
   {
@@ -130,6 +133,7 @@ const highlights = [
     title: 'Conoce las fascinantes características de nuestras abejas nativas',
     text: 'Abejas sin aguijón',
     subtitulo: 'También llamadas abejas meliponas o meliponinos.',
+    image: africa,
     details:
       'Son abejas de menor tamaño comparadas con las abejas europeas, de colores oscuros con tonos rojizos o marrón, con anillos negros y amarillos en el abdomen y con vellos en el tórax; además tienen una menor cantidad de venas en las alas. A diferencia de las europeas, las obreras de las abejas meliponas poseen una cesta de polen en sus patas posteriores y carecen de aguijón.'
   }
@@ -137,8 +141,9 @@ const highlights = [
 
 function App() {
   const [showIntro, setShowIntro] = useState(true)
-    const [showFunFact, setShowFunFact] = useState(false)
+  const [showFunFact, setShowFunFact] = useState(false)
   const [selectedCell, setSelectedCell] = useState(null)
+  const [selectedBee, setSelectedBee] = useState(null)
   const [openHighlights, setOpenHighlights] = useState(new Set())
   const [isScrolled, setIsScrolled] = useState(false)
   const pageRef = useRef(null)
@@ -198,6 +203,7 @@ function App() {
           className={`bee-fun-fact ${
             showFunFact ? 'open' : 'closed'
           }`}
+          style={{ '--fun-fact-gif': `url("${beeGif}")` }}
         >
           {!showFunFact ? (
             <button
@@ -278,6 +284,7 @@ function App() {
               <article
                 key={item.title}
                 className={`story-card ${isOpen ? 'is-open' : ''}`}
+                style={{ '--story-image': `url("${item.image}")` }}
                 role="button"
                 tabIndex="0"
                 aria-expanded={isOpen}
@@ -329,9 +336,12 @@ function App() {
       Cada jardín cuenta.
           </p>
 
-          <button onClick={() => window.location.href = "https://www.gob.mx/conabio/prensa/mexico-es-el-segundo-hogar-de-la-mayor-diversidad-de-abejas-nativas-del-planeta-con-2-100-especies?idiom=es"}>
+        <button 
+        type="button" 
+        onClick={() => window.open("https://www.gob.mx/conabio/prensa/mexico-es-el-segundo-hogar-de-la-mayor-diversidad-de-abejas-nativas-del-planeta-con-2-100-especies?idiom=es", "_blank", "noopener,noreferrer")}
+        >
         CONOCE MÁS
-      </button>
+        </button>
         </aside>
 
       </div>

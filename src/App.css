@@ -802,3 +802,58 @@
 .fun-fact-close:hover {
   transform: scale(1.2);
 }
+
+/* Fondos añadidos para el fun fact y las tarjetas de noticias */
+.bee-fun-fact.open {
+  overflow: hidden;
+}
+
+.bee-fun-fact.open::before {
+  position: absolute;
+  height: 230%;
+  inset: 0;
+  z-index: 0;
+  content: '';
+  background: linear-gradient(rgba(243, 198, 35, 0.48), rgba(243, 198, 35, 0.48)),
+    var(--fun-fact-gif) center / cover no-repeat;
+}
+
+.bee-fun-fact.open .fun-fact-content {
+  z-index: 1;
+}
+
+.story-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.story-card::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: '';
+  background: linear-gradient(rgba(23, 18, 13, 0.72), rgba(23, 18, 13, 0.8)),
+    var(--story-image) center / cover no-repeat;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.story-card > * {
+  position: relative;
+}
+
+.story-card:hover {
+  background: transparent;
+}
+
+.story-card:hover::before {
+  opacity: 1;
+}
+
+.story-card:hover h3,
+.story-card:hover p,
+.story-card:hover .meta,
+.story-card:hover .story-subtitle {
+  color: #fffaf0;
+}
