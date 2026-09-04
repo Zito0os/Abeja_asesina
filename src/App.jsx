@@ -149,8 +149,14 @@ function App() {
   const pageRef = useRef(null)
 
   const finishIntro = () => {
+    const root = document.documentElement
+    const previousScrollBehavior = root.style.scrollBehavior
+    const startLink = document.querySelector('a[href="#pagina-inicio"]')
+
+    root.style.scrollBehavior = 'auto'
+    startLink?.click()
+    root.style.scrollBehavior = previousScrollBehavior
     setShowIntro(false)
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
   }
 
   useEffect(() => {
@@ -167,6 +173,7 @@ function App() {
 
   return (
     <>
+      <a id="pagina-inicio" className="page-anchor" href="#pagina-inicio" aria-hidden="true" tabIndex={-1} />
       <div className={`paper-intro ${showIntro ? 'visible' : 'hidden'}`} aria-hidden={!showIntro}>
         {showIntro && <PaperUnfold targetRef={pageRef} onComplete={finishIntro} />}
       </div>

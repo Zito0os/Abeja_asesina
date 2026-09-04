@@ -168,7 +168,7 @@ function Panal({ bee, onClose }) {
 
               return (
                 <button className={`Panal-celda ${index === 0 ? 'activa' : ''}`} key={`${cell.layer}-${index}`} type="button" style={{ '--x': `${cell.x}vw`, '--y': `${cell.y}vw` }} onClick={() => handleCellClick(beeData)} aria-label={`Panal número ${number}: ${beeData.title}`}>
-                  {number === 1 ? <img className="Panal-imagen" src={beeData.image} alt={currentBee.commonName} /> : number <= 7 ? <><span className="Panal-texto">{cellContent.label}</span><small>{cellContent.value}</small></> : <span className="Panal-numero">{number}</span>}
+                  {number === 1 ? <img className="Panal-imagen" src={beeData.image} alt={currentBee.commonName} /> : number <= 7 ? <><span className="Panal-texto">{cellContent.label}</span><small>{cellContent.value}</small></> : null}
                 </button>
               )
             })}
