@@ -8,6 +8,7 @@ import africa from './assets/africa.png'
 import beeGif from './assets/beeGif.gif'
 import './App.css'
 import Carrusel from './Carrusel'
+import Guia from './Guia'
 import Panal from './Panal_movil'
 
 const honeycombData = [
@@ -326,6 +327,7 @@ function App() {
         </section>
         
         <Carrusel onBeeSelect={setSelectedBee} />
+        <Guia />
 
          {/* PUBLICIDAD */}
         <aside className="bee-ad">
