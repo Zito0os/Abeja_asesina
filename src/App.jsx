@@ -171,7 +171,7 @@ function App() {
         {showIntro && <PaperUnfold targetRef={pageRef} onComplete={finishIntro} />}
       </div>
 
-      <div ref={pageRef} className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'}`}>
+      <div ref={pageRef} className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'} ${selectedBee ? 'content-blurred' : ''}`}>
         <header className={`masthead ${isScrolled ? 'is-compact' : ''}`}>
           <div className="masthead-main">
             <p className="edition">Edición especial · 01 de septiembre</p>
@@ -316,7 +316,8 @@ function App() {
             )
           })}
         </section>
-        <Carrusel />
+        
+        <Carrusel onBeeSelect={setSelectedBee} />
 
          {/* PUBLICIDAD */}
         <aside className="bee-ad">
@@ -413,6 +414,12 @@ function App() {
           </div>
         )}
         
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {selectedBee && (
+          <Panal bee={selectedBee} onClose={() => setSelectedBee(null)} />
+        )}
       </AnimatePresence>
 
 
