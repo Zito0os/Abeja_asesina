@@ -4,6 +4,11 @@ import { PaperUnfold } from './components/animation'
 
 import invasiveBeeImage from './assets/Abeja Invasora.png'
 import invasiveBeeDraw from './assets/AbejaDibujo1.png'
+import AfricaImage from './assets/Africa.png'
+import loneBee from './assets/lone.jpg'
+import Logo from './assets/Logo.png'
+// 👇 IMPORTA TU GIF O FOTO AQUÍ
+import beeGif from './assets/beeGif.gif' // O .png / .jpg
 import './App.css'
 import Carrusel from './Carrusel'
 import Panal from './Panal_movil'
@@ -112,33 +117,34 @@ const honeycombData = [
 
 const highlights = [
   {
-    title: '¿De dónde viene la abeja africana?',
-    text: 'Comprenderás el origen de la abeja africana y de dónde viene esta especie colonizadora en nuestro continente.',
-    subtitulo: 'La abeja africana',
+    title: 'Disminución de las Abejas Melíferas',
+    text: 'Las poblaciones críticas de abejas melíferas en Estados Unidos han disminuido en los últimos años debido a diversos factores, lo que genera preocupación sobre la seguridad futura de los servicios de polinización en el país. Investigadores del USGS están estudiando los efectos de factores como el cambio de uso del suelo y el uso de productos químicos en el hábitat de las abejas melíferas para comprender mejor cómo conservarlas en el territorio.',
+    subtitulo: 'Abejas Melíferas',
     image: invasiveBeeImage,
     details:
-      'Las abejas ajustan sus recorridos y horarios cuando cambian las temperaturas. Esta adaptación ayuda a mantener la producción, pero también aumenta el esfuerzo de toda la colonia.'
+      'Si bien son importantes para la polinización de algunos cultivos, las abejas melíferas también son importantes competidoras de las abejas autóctonas y no deben introducirse en áreas de conservación, parques o zonas donde se desee fomentar la conservación de plantas y abejas autóctonas.'
   },
   {
-    title: '¿Cómo se estableció la apicultura en América?',
-    text: 'Explorando la historia de la apicultura en el continente americano.',
-    subtitulo: 'Apis mellifera scutellata',
+    title: 'México es el segundo hogar de la mayor diversidad de abejas nativas del planeta, ¡con 2,100 especies!',
+    text: 'Proteger a las abejas es invertir en nuestro propio bienestar y en el futuro de nuestro planeta.',
+    subtitulo: '¿Sabias que hay una gran diversidad de abejas nativas en Nuevo León?',
     image: invasiveBeeDraw,
     details:
-      'La pérdida de diversidad floral deja a las colonias con menos alimento durante el año. Recuperar plantas nativas y reducir el uso de pesticidas ofrece refugios más seguros.'
+      'Se han confirmado casi 400 especies nativas en la región (un cuarto del total de México).'
   },
   {
-    title: '¿Cómo llegaron las abejas africanas a América?',
-    text: 'Entenderás cómo llegaron las abejas africanas a América.',
-    subtitulo: 'La llegada de las abejas africanas',
+    title: 'Conoce las fascinantes características de nuestras abejas nativas',
+    text: 'Abejas sin aguijón',
+    subtitulo: 'También llamadas abejas meliponas o meliponinos.',
+    image: AfricaImage,
     details:
-      'Cada abeja cumple una función distinta y la colonia responde como un sistema coordinado. Esa cooperación permite resolver cambios del entorno con rapidez y eficiencia.'
+      'Son abejas de menor tamaño comparadas con las abejas europeas, de colores oscuros con tonos rojizos o marrón, con anillos negros y amarillos en el abdomen y con vellos en el tórax; además tienen una menor cantidad de venas en las alas. A diferencia de las europeas, las obreras de las abejas meliponas poseen una cesta de polen en sus patas posteriores y carecen de aguijón.'
   }
 ]
 
 function App() {
   const [showIntro, setShowIntro] = useState(true)
-    const [showFunFact, setShowFunFact] = useState(false)
+  const [showFunFact, setShowFunFact] = useState(false)
   const [selectedCell, setSelectedCell] = useState(null)
   const [selectedBee, setSelectedBee] = useState(null)
   const [openHighlights, setOpenHighlights] = useState(new Set())
@@ -204,6 +210,7 @@ function App() {
           className={`bee-fun-fact ${
             showFunFact ? 'open' : 'closed'
           }`}
+          style={{ '--fun-fact-gif': `url("${beeGif}")` }}
         >
           {!showFunFact ? (
             <button
@@ -284,6 +291,7 @@ function App() {
               <article
                 key={item.title}
                 className={`story-card ${isOpen ? 'is-open' : ''}`}
+                style={{ '--story-image': `url("${item.image}")` }}
                 role="button"
                 tabIndex="0"
                 aria-expanded={isOpen}
