@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { PaperUnfold } from './components/animation'
 import './App.css'
@@ -125,7 +125,9 @@ const highlights = [
 function App() {
   const [showIntro, setShowIntro] = useState(true)
   const [selectedCell, setSelectedCell] = useState(null)
+  const [isScrolled, setIsScrolled] = useState(false)
   const pageRef = useRef(null)
+
   const finishIntro = () => {
     setShowIntro(false)
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
