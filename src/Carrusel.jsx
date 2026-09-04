@@ -29,7 +29,7 @@ const bees = [
   },
 ]
 
-function Carrusel() {
+function Carrusel({ onBeeSelect }) {
   const [activeBee, setActiveBee] = useState(2)
 
   return (
@@ -44,6 +44,16 @@ function Carrusel() {
               key={bee.id}
               className={`bee-hex bee-position-${position}`}
               onMouseEnter={() => setActiveBee(index)}
+              onClick={() => onBeeSelect(bee)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault()
+                  onBeeSelect(bee)
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label={`Abrir ${bee.title}`}
             >
               <div className="bee-hex-inner">
                 <span className="bee-icon">🐝</span>
