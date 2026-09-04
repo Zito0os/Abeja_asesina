@@ -64,6 +64,11 @@
   pointer-events: none;
 }
 
+.content-blurred {
+  filter: blur(8px);
+  transition: filter 0.35s ease;
+}
+
 /* ==========================================
    ENCABEZADO (MASTHEAD)
    ========================================== */
