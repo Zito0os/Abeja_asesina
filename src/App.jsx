@@ -145,6 +145,7 @@ function App() {
   const [showFunFact, setShowFunFact] = useState(false)
   const [selectedCell, setSelectedCell] = useState(null)
   const [selectedBee, setSelectedBee] = useState(null)
+  const [activeBeeId, setActiveBeeId] = useState(3)
   const [openHighlights, setOpenHighlights] = useState(new Set())
   const [isScrolled, setIsScrolled] = useState(false)
   const pageRef = useRef(null)
@@ -326,8 +327,8 @@ function App() {
           })}
         </section>
         
-        <Carrusel onBeeSelect={setSelectedBee} />
-        <Guia />
+        <Carrusel onBeeSelect={setSelectedBee} onActiveBeeChange={setActiveBeeId} />
+        <Guia activeBeeId={activeBeeId} />
 
          {/* PUBLICIDAD */}
         <aside className="bee-ad">

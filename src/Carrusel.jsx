@@ -29,8 +29,12 @@ const bees = [
   },
 ]
 
-function Carrusel({ onBeeSelect }) {
+function Carrusel({ onBeeSelect, onActiveBeeChange }) {
   const [activeBee, setActiveBee] = useState(2)
+
+  useEffect(() => {
+    onActiveBeeChange?.(bees[activeBee].id)
+  }, [activeBee, onActiveBeeChange])
 
   useEffect(() => {
     const carouselTimer = window.setInterval(() => {
