@@ -6,6 +6,7 @@ import invasiveBeeImage from './assets/Abeja Invasora.png'
 import invasiveBeeDraw from './assets/AbejaDibujo1.png'
 import './App.css'
 import Carrusel from './Carrusel'
+import Panal from './Panal_movil'
 
 const honeycombData = [
   {
@@ -139,6 +140,7 @@ function App() {
   const [showIntro, setShowIntro] = useState(true)
     const [showFunFact, setShowFunFact] = useState(false)
   const [selectedCell, setSelectedCell] = useState(null)
+  const [selectedBee, setSelectedBee] = useState(null)
   const [openHighlights, setOpenHighlights] = useState(new Set())
   const [isScrolled, setIsScrolled] = useState(false)
   const pageRef = useRef(null)
@@ -166,7 +168,7 @@ function App() {
         {showIntro && <PaperUnfold targetRef={pageRef} onComplete={finishIntro} />}
       </div>
 
-      <div ref={pageRef} className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'}`}>
+      <div ref={pageRef} className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'} ${selectedBee ? 'content-blurred' : ''}`}>
         <header className={`masthead ${isScrolled ? 'is-compact' : ''}`}>
           <div className="masthead-main">
             <p className="edition">Edición especial · 01 de septiembre</p>
@@ -327,7 +329,7 @@ function App() {
             )
           })}
         </section>
-        <Carrusel />
+        <Carrusel onBeeSelect={setSelectedBee} />
       </div>
       
 
@@ -397,6 +399,12 @@ function App() {
           </div>
         )}
         
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {selectedBee && (
+          <Panal bee={selectedBee} onClose={() => setSelectedBee(null)} />
+        )}
       </AnimatePresence>
 
 
