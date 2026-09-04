@@ -311,6 +311,7 @@ function App() {
                 {isOpen && (
                   <div id={detailsId} className="story-details">
                     <h4 className="story-subtitle">{item.subtitulo}</h4>
+                    <p>{item.text}</p>
                     {item.image && (
                       <div className="story-media">
                         <img src={item.image} alt={item.subtitulo} />
