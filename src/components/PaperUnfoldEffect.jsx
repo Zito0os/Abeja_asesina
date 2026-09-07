@@ -7,6 +7,7 @@ const clamp = (value, minimum, maximum) => Math.min(Math.max(value, minimum), ma
 export function PaperUnfoldEffect({ targetRef, onComplete }) {
   const [progress, setProgress] = useState(0)
   const [textureCanvas, setTextureCanvas] = useState(null)
+  const [paperSize, setPaperSize] = useState(null)
   const targetProgress = useRef(0)
   const currentProgress = useRef(0)
   const completed = useRef(false)
@@ -20,8 +21,21 @@ export function PaperUnfoldEffect({ targetRef, onComplete }) {
         return
       }
 
+      const targetBounds = targetRef.current.getBoundingClientRect()
+      const visibleHeight = Math.min(
+        targetRef.current.scrollHeight,
+        Math.max(window.innerHeight - Math.max(targetBounds.top, 0), 0),
+      )
+
+      setPaperSize({
+        width: targetRef.current.offsetWidth,
+        height: visibleHeight,
+      })
+
       const capturedCanvas = await html2canvas(targetRef.current, {
         backgroundColor: null,
+        width: targetRef.current.offsetWidth,
+        height: visibleHeight,
         scale: Math.min(window.devicePixelRatio, 2),
         useCORS: true,
         onclone: (clonedDocument) => {
@@ -47,7 +61,8 @@ export function PaperUnfoldEffect({ targetRef, onComplete }) {
   }, [onComplete])
 
   useEffect(() => {
-    window.scrollTo(0, 0)
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
 
     const baseViewportHeight = window.innerHeight
     const baseScrollDistance = Math.max(
@@ -124,5 +139,5 @@ export function PaperUnfoldEffect({ targetRef, onComplete }) {
     }
   }, [])
 
-  return <PaperScene progress={progress} textureCanvas={textureCanvas} />
+  return <PaperScene progress={progress} textureCanvas={textureCanvas} paperSize={paperSize} />
 }

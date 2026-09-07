@@ -1,31 +1,70 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './Carrusel.css'
+import orchidBeeImage from './assets/AbejadelasOrquIdeas.png'
+import carpenterBeeImage from './assets/AbejaCarpinteradelSur.png'
+import meliponaBeeImage from './assets/AbejaRealMelipona.png'
+import groundBeeImage from './assets/AbejadelSuelodeNoreste.png'
+import agapostemonBeeImage from './assets/AbejaVerdeMetalizada.png'
 
 const bees = [
   {
     id: 1,
-    image: 'src/assets/AbejadelasOrquIdeas.png',
+    image: orchidBeeImage,
   },
   {
     id: 2,
- image: 'src/assets/AbejaCarpinteradelSur.png',
+    image: carpenterBeeImage,
   },
   {
     id: 3,
-   image: 'src/assets/AbejadelasOrquIdeas.png',
+    image: meliponaBeeImage,
   },
   {
     id: 4,
-    image: 'src/assets/AbejadelSuelodeNoreste.png',
+    image: groundBeeImage,
   },
   {
     id: 5,
-    image: 'src/assets/AbejaVerdeMetalizada.png',
+    image: agapostemonBeeImage,
   },
 ]
 
-function Carrusel({ onBeeSelect }) {
+function Carrusel({ onBeeSelect, onActiveBeeChange }) {
   const [activeBee, setActiveBee] = useState(2)
+
+  useEffect(() => {
+    onActiveBeeChange?.(bees[activeBee].id)
+  }, [activeBee, onActiveBeeChange])
+
+  useEffect(() => {
+    const carouselTimer = window.setInterval(() => {
+      setActiveBee((current) => (current + 1) % bees.length)
+    }, 5000)
+
+    return () => window.clearInterval(carouselTimer)
+  }, [])
+
+  const handleBeeClick = (bee, position) => {
+    if (position === 0) {
+      onBeeSelect(bee)
+      return
+    }
+
+    if (position === 1) {
+      setActiveBee((current) => (current + 1) % bees.length)
+    }
+
+    if (position === 4) {
+      setActiveBee((current) => (current - 1 + bees.length) % bees.length)
+    }
+  }
+
+  const handleBeeKeyDown = (event, bee, position) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return
+
+    event.preventDefault()
+    handleBeeClick(bee, position)
+  }
 
   return (
     <section className="bee-carousel">
@@ -38,17 +77,11 @@ function Carrusel({ onBeeSelect }) {
             <article
               key={bee.id}
               className={`bee-hex bee-position-${position}`}
-              onMouseEnter={() => setActiveBee(index)}
-              onClick={() => onBeeSelect(bee)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault()
-                  onBeeSelect(bee)
-                }
-              }}
+              onClick={() => handleBeeClick(bee, position)}
+              onKeyDown={(event) => handleBeeKeyDown(event, bee, position)}
               role="button"
               tabIndex={0}
-              aria-label={`Abrir ${bee.title}`}
+              aria-label={position === 0 ? `Abrir ${bee.title}` : position === 1 ? 'Mover carrusel a la derecha' : position === 4 ? 'Mover carrusel a la izquierda' : bee.title}
             >
               <div className="bee-hex-inner">
                   <img

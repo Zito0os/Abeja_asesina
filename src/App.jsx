@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { PaperUnfold } from './components/animation'
+import { HoneycombCluster } from './HoneycombCluster'
 import loneBee from './assets/lone.jpg'
 import invasiveBeeImage from './assets/Abeja Invasora.png'
 import invasiveBeeDraw from './assets/AbejaDibujo1.png'
-import africa from './assets/africa.png'
+import africa from './assets/Africa.png'
 import beeGif from './assets/beeGif.gif'
 import './App.css'
 import Carrusel from './Carrusel'
@@ -128,10 +129,10 @@ const highlights = [
     subtitulo: '¿Sabias que hay una gran diversidad de abejas nativas en Nuevo León?',
     image: invasiveBeeDraw,
     details:
-      ' Se han confirmado casi 400 especies nativas en la región, un cuarto del total de México, ¡con 2,100 especies en total!.'
+      ' Se han confirmado casi 400 especies nativas en la región (un cuarto del total de México), ¡con 2,100 especies en total!.'
   },
   {
-    title: 'Conoce las fascinantes características de nuestras abejas nativas.',
+    title: 'Conoce las fascinantes características de nuestras abejas nativas',
     text: 'Sabias que muchas de nuestras abejas nativas son sin aguijón',
     subtitulo: 'También llamadas abejas meliponas o meliponinos.',
     image: africa,
@@ -145,13 +146,20 @@ function App() {
   const [showFunFact, setShowFunFact] = useState(false)
   const [selectedCell, setSelectedCell] = useState(null)
   const [selectedBee, setSelectedBee] = useState(null)
+  const [activeBeeId, setActiveBeeId] = useState(3)
   const [openHighlights, setOpenHighlights] = useState(new Set())
   const [isScrolled, setIsScrolled] = useState(false)
   const pageRef = useRef(null)
 
   const finishIntro = () => {
+    const root = document.documentElement
+    const previousScrollBehavior = root.style.scrollBehavior
+    const startLink = document.querySelector('a[href="#pagina-inicio"]')
+
+    root.style.scrollBehavior = 'auto'
+    startLink?.click()
+    root.style.scrollBehavior = previousScrollBehavior
     setShowIntro(false)
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
   }
 
   useEffect(() => {
@@ -168,6 +176,7 @@ function App() {
 
   return (
     <>
+      <a id="pagina-inicio" className="page-anchor" href="#pagina-inicio" aria-hidden="true" tabIndex={-1} />
       <div className={`paper-intro ${showIntro ? 'visible' : 'hidden'}`} aria-hidden={!showIntro}>
         {showIntro && <PaperUnfold targetRef={pageRef} onComplete={finishIntro} />}
       </div>
@@ -189,79 +198,64 @@ function App() {
           </div>
         </header>
 
-       <main className="hero-section">
+        <main className="hero-section">
           <section className="headline-panel">
             <div className="kicker">Nacional</div>
             <h2>HÉROE O AMENAZA</h2>
             <h1>    ¿Son las abejas melíferas originarias de Norteamérica?</h1>
             <p className="lead">
-         Las abejas melíferas no son originarias de Norteamérica. Fueron importadas de Europa en el siglo XVII. Actualmente, las abejas melíferas ayudan a polinizar muchos cultivos estadounidenses, como frutas y frutos secos. En un solo año, una colonia de abejas puede recolectar alrededor de 18 kilogramos de polen y 120 kilogramos de néctar. Las abejas melíferas incrementan el valor de los cultivos de nuestro país en más de 15 mil millones de dólares cada año.
+              Las abejas melíferas no son originarias de Norteamérica. Fueron importadas de Europa en el siglo XVII. Actualmente, las abejas melíferas ayudan a polinizar muchos cultivos estadounidenses, como frutas y frutos secos. En un solo año, una colonia de abejas puede recolectar alrededor de 18 kilogramos de polen y 120 kilogramos de néctar. Las abejas melíferas incrementan el valor de los cultivos de nuestro país en más de 15 mil millones de dólares cada año.
             </p>
 
 
-             {/* Fun Fact */}
-        <section
-          className={`bee-fun-fact ${
-            showFunFact ? 'open' : 'closed'
-          }`}
-          style={{ '--fun-fact-gif': `url("${beeGif}")` }}
-        >
-          {!showFunFact ? (
-            <button
-              className="fun-fact-bee"
-              onClick={() => setShowFunFact(true)}
-              aria-label="Mostrar fun fact"
+            {/* Fun Fact */}
+            <section
+              className={`bee-fun-fact ${showFunFact ? 'open' : 'closed'
+                }`}
+              style={{ '--fun-fact-gif': `url("${beeGif}")` }}
             >
-              🐝
-            </button>
-          ) : (
-            <div className="fun-fact-content">
-              <button
-                className="fun-fact-close"
-                onClick={() => setShowFunFact(false)}
-                aria-label="Cerrar fun fact"
-              >
-                ×
-              </button>
+              {!showFunFact ? (
+                <button
+                  className="fun-fact-bee"
+                  onClick={() => setShowFunFact(true)}
+                  aria-label="Mostrar fun fact"
+                >
+                  🐝
+                </button>
+              ) : (
+                <div className="fun-fact-content">
+                  <button
+                    className="fun-fact-close"
+                    onClick={() => setShowFunFact(false)}
+                    aria-label="Cerrar fun fact"
+                  >
+                    ×
+                  </button>
 
-              <span className="fun-fact-label">
-                FUN FACT
-              </span>
+                  <span className="fun-fact-label">
+                    FUN FACT
+                  </span>
 
-              <h3>
-                ¿Sabías que las abejas pueden reconocer rostros?
-              </h3>
+                  <h3>
+                    ¿Sabías que las abejas pueden reconocer rostros?
+                  </h3>
 
-              <p>
-                Las abejas pueden aprender a distinguir patrones
-                que se parecen a rostros humanos. ¡Su pequeño
-                cerebro tiene una capacidad de reconocimiento
-                sorprendente!
-              </p>
-            </div>
-          )}
-        </section>
+                  <p>
+                    Las abejas pueden aprender a distinguir patrones
+                    que se parecen a rostros humanos. ¡Su pequeño
+                    cerebro tiene una capacidad de reconocimiento
+                    sorprendente!
+                  </p>
+                </div>
+              )}
+            </section>
 
           </section>
-          
-
-          <aside className="bee-visual" aria-label="Bee-themed illustration">
-            <div className="honeycomb-cluster">
-              {honeycombData.map((item) => (
-                <motion.button
-                  key={item.id}
-                  layoutId={`hexagon-${item.id}`}
-                  className={`cell-node cell-${item.id}`}
-                  onClick={() => setSelectedCell(item)}
-                  whileHover={{ scale: 1.08, filter: 'brightness(1.15)' }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ type: 'spring', stiffness: 320, damping: 28 }}
-                >
-                  <span className="cell-label">{item.shortLabel}</span>
-                </motion.button>
-              ))}
-            </div>
-          </aside>
+          <HoneycombCluster
+            data={honeycombData}
+            onSelectCell={setSelectedCell}
+            selectedCellId={selectedCell?.id}
+          />
         </main>
 
         <section className="highlights-grid">
@@ -301,6 +295,7 @@ function App() {
                 <p className="meta">Investigación</p>
                 <h3>{item.title}</h3>
 
+
                 {isOpen && (
                   <div id={detailsId} className="story-details">
                     <h4 className="story-subtitle">{item.subtitulo}</h4>
@@ -308,6 +303,7 @@ function App() {
                     {item.image && (
                       <div className="story-media">
                         <img src={item.image} alt={item.subtitulo} />
+                        <p>{item.text}</p>
                       </div>
                     )}
                     <p>{item.details}</p>
@@ -317,11 +313,11 @@ function App() {
             )
           })}
         </section>
-        
-        <Carrusel onBeeSelect={setSelectedBee} />
-        <Guia />
 
-         {/* PUBLICIDAD */}
+        <Carrusel onBeeSelect={setSelectedBee} onActiveBeeChange={setActiveBeeId} />
+        <Guia activeBeeId={activeBeeId} />
+
+        {/* PUBLICIDAD */}
         <aside className="bee-ad">
           <span className="bee-ad-label">PUBLICIDAD</span>
 
@@ -333,24 +329,24 @@ function App() {
           <h3>PROTEJAMOS A LAS ABEJAS</h3>
 
           <p>
-          ¡PROTEGE A NUESTROS POLINIZADORES!
-      Planta flores nativas.
-      Evita productos químicos dañinos.
-      Cada jardín cuenta.
+            ¡PROTEGE A NUESTROS POLINIZADORES!
+            Planta flores nativas.
+            Evita productos químicos dañinos.
+            Cada jardín cuenta.
           </p>
 
-        <button 
-        type="button" 
-        onClick={() => window.open("https://www.gob.mx/conabio/prensa/mexico-es-el-segundo-hogar-de-la-mayor-diversidad-de-abejas-nativas-del-planeta-con-2-100-especies?idiom=es", "_blank", "noopener,noreferrer")}
-        >
-        CONOCE MÁS
-        </button>
+          <button
+            type="button"
+            onClick={() => window.open("https://www.gob.mx/conabio/prensa/mexico-es-el-segundo-hogar-de-la-mayor-diversidad-de-abejas-nativas-del-planeta-con-2-100-especies?idiom=es", "_blank", "noopener,noreferrer")}
+          >
+            CONOCE MÁS
+          </button>
         </aside>
 
       </div>
-      
 
-        
+
+
       <AnimatePresence>
         {selectedCell && (
           <div className="hex-modal-backdrop" onClick={() => setSelectedCell(null)}>
@@ -409,13 +405,13 @@ function App() {
                       </div>
                     )}
                   </div>
-                  
+
                 )}
               </div>
             </motion.div>
           </div>
         )}
-        
+
       </AnimatePresence>
 
       <AnimatePresence>

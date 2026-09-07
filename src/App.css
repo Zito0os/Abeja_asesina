@@ -20,11 +20,15 @@
 }
 
 .paper-canvas {
+  position: fixed;
+  top: 50%;
+  left: 50%;
   width: 100%;
   height: 100%;
   display: block;
-  background: #121212;
+  background: transparent;
   filter: drop-shadow(0 22px 35px rgba(0, 0, 0, 0.2));
+  transform: translate(-50%, -50%);
 }
 
 .sprite-sheet {
@@ -354,27 +358,37 @@
 .c5 { left: 42%; top: 54%; }
 .c6 { left: 72%; top: 38%; }
 
-/* Panel estilo Clúster */
-.honeycomb-cluster {
-  position: relative;
-  width: 320px;
-  height: 320px;
+/* Container for the spinning elements */
+.orbit-ring {
+  position: absolute;
+  inset: 0;
 }
 
-.cell-node {
+/* Wrappers handle layering and transitions */
+.cell-wrapper {
   position: absolute;
-  width: 96px;
+  width: 110px;
   height: 110px;
-  background: linear-gradient(145deg, #f9c42a 0%, #e8a509 100%);
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  z-index: 2;
+  will-change: transform;
+}
+
+/* The actual button inside the wrapper uses the image */
+.cell-node {
+  width: 100%;
+  height: 100%;
+  background-size: 100% 100%;
+  background-position: center;
+  background-color: transparent;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 8px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
-  transform-origin: center center;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.2)); 
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
 }
 
 .cell-label {
@@ -386,29 +400,34 @@
   text-align: center;
   line-height: 1.15;
   pointer-events: none;
+  z-index: 2; 
 }
 
-.cell-center { top: 105px; left: 112px; z-index: 2; }
-.cell-c1     { top: 15px;  left: 112px; }
-.cell-c2     { top: 60px;  left: 190px; }
-.cell-c3     { top: 150px; left: 190px; }
-.cell-c4     { top: 195px; left: 112px; }
-.cell-c5     { top: 150px; left: 34px;  }
-.cell-c6     { top: 60px;  left: 34px;  }
-
-.bee-badge {
-  position: absolute;
-  right: 20px;
-  bottom: 18px;
-  background: #111;
-  color: #f9e39b;
-  border-radius: 999px;
-  padding: 10px 18px;
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  font-weight: 800;
+/* Central anchor position */
+.cell-center { 
+  top: 105px; 
+  left: 112px; 
+  z-index: 5; 
 }
+/* Panel estilo Clúster */
+.honeycomb-cluster {
+  position: relative;
+  width: 320px;
+  height: 320px;
+}
+
+.orbit-ring:hover,
+.orbit-ring:hover .counter-orbit {
+  animation-play-state: paused;
+}
+
+
+.counter-orbit {
+  animation: counter-spin 35s linear infinite;
+}
+
+
+
 
 /* ==========================================
    MODALES HEXAGONALES Y MÉTRICAS
@@ -856,4 +875,12 @@
 .story-card:hover .meta,
 .story-card:hover .story-subtitle {
   color: #fffaf0;
+}
+
+.page-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
 }
