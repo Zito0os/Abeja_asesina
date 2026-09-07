@@ -2,12 +2,18 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import './Panal_movil.css'
 import { panalPorCapas } from './panalPorCapas'
+import orchidBeeImage from './assets/AbejadelasOrquIdeas.png'
+import carpenterBeeImage from './assets/AbejaCarpinteradelSur.png'
+import meliponaBeeImage from './assets/AbejaRealMelipona.png'
+import miningBeeImage from './assets/AbejadelSuelodeNoreste.png'
+import agapostemonBeeImage from './assets/AbejaVerdeMetalizada.png'
 
 const cells = panalPorCapas(35)
 
 const beeInformation = {
   1: {
     commonName: 'Abeja de las orquídeas',
+    image: orchidBeeImage,
     scientificName: 'Tribu científica Euglossini',
     where: 'Principalmente regiones tropicales de América',
     habitat: 'Bosques y zonas donde crecen orquídeas y otras plantas tropicales',
@@ -16,6 +22,7 @@ const beeInformation = {
   },
   2: {
     commonName: 'Abeja carpintera del sur',
+    image: carpenterBeeImage,
     scientificName: 'Xylocopa micans',
     where: 'Sur de Estados Unidos y regiones de México',
     habitat: 'Ramas secas y material vegetal leñoso donde construye sus nidos',
@@ -24,6 +31,7 @@ const beeInformation = {
   },
   3: {
     commonName: 'Abeja melipona',
+    image: meliponaBeeImage,
     scientificName: 'Melipona beecheii',
     where: 'Regiones tropicales de México y Centroamérica',
     habitat: 'Vive en colmenas dentro de troncos huecos llamados jobones',
@@ -32,6 +40,7 @@ const beeInformation = {
   },
   4: {
     commonName: 'Abeja del suelo / abeja minera',
+    image: miningBeeImage,
     scientificName: 'Familia Andrenidae',
     where: 'Noreste de México y noreste de Norteamérica',
     habitat: 'Construye sus nidos bajo tierra',
@@ -40,6 +49,7 @@ const beeInformation = {
   },
   5: {
     commonName: 'Abeja Agapostemon',
+    image: agapostemonBeeImage,
     scientificName: 'Agapostemon, familia Halictidae',
     where: 'América del Norte y otras regiones del continente americano',
     habitat: 'Zonas con plantas silvestres y cultivos agrícolas',
@@ -48,11 +58,14 @@ const beeInformation = {
   },
 }
 
+const beeIds = Object.keys(beeInformation).map(Number)
+
 function Panal({ bee, onClose }) {
-  const currentBee = { ...(beeInformation[bee.id] ?? beeInformation[1]), image: bee.image }
-  const [selectedCell, setSelectedCell] = useState(bee)
+  const initialBeeId = beeInformation[bee.id] ? Number(bee.id) : beeIds[0]
+  const [activeBeeId, setActiveBeeId] = useState(initialBeeId)
   const [offset, setOffset] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
+  const currentBee = { ...beeInformation[activeBeeId] }
   const panalRef = useRef(null)
   const gridRef = useRef(null)
   const dragRef = useRef({ x: 0, y: 0, offsetX: 0, offsetY: 0, pressed: false, dragging: false, moved: false })
@@ -132,13 +145,21 @@ function Panal({ bee, onClose }) {
     setIsDragging(false)
   }
 
-  const handleCellClick = (cell) => {
+  const handleCellClick = (number) => {
     if (dragRef.current.moved) {
       dragRef.current.moved = false
       return
     }
 
-    setSelectedCell(cell)
+    if (number !== 13 && number !== 19) {
+      return
+    }
+
+    setActiveBeeId((currentId) => {
+      const currentIndex = beeIds.indexOf(currentId)
+      const direction = number === 19 ? 1 : -1
+      return beeIds[(currentIndex + direction + beeIds.length) % beeIds.length]
+    })
   }
 
 
@@ -146,9 +167,9 @@ function Panal({ bee, onClose }) {
     <motion.section className="Panal-movil" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} role="dialog" aria-modal="true" aria-label="Explorador del panal">
       <button className="Panal-cerrar" type="button" onClick={onClose} aria-label="Cerrar panal">×</button>
       <header className="Panal-encabezado">
-        <span className="Panal-indicador">EXPLORACIÓN {String(bee.id).padStart(2, '0')}</span>
+        <span className="Panal-indicador">EXPLORACIÓN {String(activeBeeId).padStart(2, '0')}</span>
         <h2>{currentBee.commonName}</h2>
-        <p>{selectedCell.text ?? currentBee.importance}</p>
+        <p>{currentBee.importance}</p>
       </header>
       <div className={`Panal-visor ${isDragging ? 'arrastrando' : ''}`} ref={panalRef} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerCancel={handlePointerUp}>
         <div className="Panal-centro">
@@ -167,7 +188,7 @@ function Panal({ bee, onClose }) {
               }[number]
 
               return (
-                <button className={`Panal-celda ${index === 0 ? 'activa' : ''}`} key={`${cell.layer}-${index}`} type="button" style={{ '--x': `${cell.x}vw`, '--y': `${cell.y}vw` }} onClick={() => handleCellClick(beeData)} aria-label={`Panal número ${number}: ${beeData.title}`}>
+                <button className={`Panal-celda ${index === 0 ? 'activa' : ''} ${number === 13 || number === 19 ? 'navegacion' : ''}`} key={`${cell.layer}-${index}`} type="button" style={{ '--x': `${cell.x}vw`, '--y': `${cell.y}vw` }} onPointerDown={(event) => { if (number === 13 || number === 19) event.stopPropagation() }} onClick={(event) => { event.stopPropagation(); handleCellClick(number) }} aria-label={number === 19 ? 'Siguiente abeja' : number === 13 ? 'Abeja anterior' : `Panal número ${number}`}>
                   {number === 1 ? <img className="Panal-imagen" src={beeData.image} alt={currentBee.commonName} /> : number <= 7 ? <><span className="Panal-texto">{cellContent.label}</span><small>{cellContent.value}</small></> : null}
                 </button>
               )
