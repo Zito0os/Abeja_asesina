@@ -12,6 +12,7 @@ import Carrusel from './Carrusel'
 import Guia from './Guia'
 import Panal from './Panal_movil'
 import NoticiaAmpliada from './NoticiaAmpliada'
+import funfactbee from './assets/funfactbee.png'
 
 const honeycombData = [
   {
