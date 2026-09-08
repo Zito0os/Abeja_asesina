@@ -12,6 +12,7 @@ import Carrusel from './Carrusel'
 import Guia from './Guia'
 import Panal from './Panal_movil'
 import NoticiaAmpliada from './NoticiaAmpliada'
+import funfactbee from './assets/funfactbee.png'
 
 const honeycombData = [
   {
@@ -209,10 +210,9 @@ function App() {
             </p>
 
 
-            {/* Fun Fact */}
+           {/* Fun Fact */}
             <section
-              className={`bee-fun-fact ${showFunFact ? 'open' : 'closed'
-                }`}
+              className={`bee-fun-fact ${showFunFact ? 'open' : 'closed'}`}
               style={{ '--fun-fact-gif': `url("${beeGif}")` }}
             >
               {!showFunFact ? (
@@ -221,7 +221,11 @@ function App() {
                   onClick={() => setShowFunFact(true)}
                   aria-label="Mostrar fun fact"
                 >
-                  🐝
+                  <img
+                    src={funfactbee}
+                    alt="Bee"
+                    className="fun-fact-bee-image"
+                  />
                 </button>
               ) : (
                 <div className="fun-fact-content">
@@ -250,6 +254,7 @@ function App() {
                 </div>
               )}
             </section>
+
 
           </section>
           <HoneycombCluster
