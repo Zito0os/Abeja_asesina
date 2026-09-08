@@ -172,7 +172,7 @@
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: 20px;
-  padding: 28px;
+  padding: 30px;
   border-bottom: 4px solid #17120d;
 }
 .bee-ad {
@@ -180,7 +180,7 @@
   top: 30px;
 
   padding: 20px;
-  border: 2px solid #222;
+  border-top: 2px solid #222;
   background: #f4e7bd;
 
   text-align: center;
@@ -686,8 +686,9 @@
 }
 
 .bee-fun-fact {
+  position: relative;
   width: 350px;
-  min-height: 55px;
+  height: 65px;
 
   margin: 20px 0 20px 20px;
 
@@ -695,13 +696,19 @@
   border: 2px solid #171717;
   box-shadow: 4px 4px 0 #171717;
 
-  color: #171717;
-
   display: flex;
   align-items: center;
   justify-content: center;
 
-  transition: all 0.3s ease;
+  transition:
+    width 0.25s ease,
+    height 0.25s ease,
+    border-radius 0.25s ease;
+}
+
+
+.fun-fact-container {
+  position: relative;
 }
 
 /* =========================
@@ -777,16 +784,28 @@
 ========================= */
 
 .bee-fun-fact.open {
-  position: relative;
+  width: 75%;
+  min-height: 10px;
+  height: 150px;
   padding: 14px 18px;
   border-radius: 0;
-  width: 75%;
 }
 
 .fun-fact-content {
   position: relative;
   width: 100%;
 }
+
+.fun-fact-wrapper {
+  position: relative;
+  height: 90px;
+  transition: height 0.25s ease;
+}
+
+.fun-fact-wrapper.is-open {
+  height: 165px;
+}
+
 
 .fun-fact-label {
   display: block;
