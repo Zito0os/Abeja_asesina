@@ -284,7 +284,6 @@ function App() {
                   }
                 }}
               >
-                <p className="meta">Investigación</p>
                 <h3>{item.title}</h3>
               </motion.article>
             )
