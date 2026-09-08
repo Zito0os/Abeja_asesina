@@ -23,10 +23,11 @@
   position: absolute;
   top: 14px;
   right: 16px;
-  width: 32px;
-  height: 32px;
-  border: 2px solid rgba(23, 18, 13, 0.9);
-  background: rgba(248, 240, 216, 0.35);
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(23, 18, 13, 0.9);
+  border-radius: 50%;
+  background: #f0c11d;
   color: #17120d;
   padding: 0;
   display: grid;
@@ -35,6 +36,7 @@
   box-sizing: border-box;
   transform-origin: center;
   transition: transform 0.15s ease, background 0.15s ease;
+  overflow: hidden;
 }
 
 .noticia-ampliada-close::before,
@@ -56,7 +58,7 @@
 }
 
 .noticia-ampliada-close:hover {
-  background: #f0c11d;
+  background: rgba(248, 240, 216, 0.35);
   transform: scale(1.08);
 }
 
