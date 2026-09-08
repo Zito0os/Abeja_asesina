@@ -209,8 +209,8 @@ function App() {
               Las abejas melíferas no son originarias de Norteamérica. Fueron importadas de Europa en el siglo XVII. Actualmente, las abejas melíferas ayudan a polinizar muchos cultivos estadounidenses, como frutas y frutos secos. En un solo año, una colonia de abejas puede recolectar alrededor de 18 kilogramos de polen y 120 kilogramos de néctar. Las abejas melíferas incrementan el valor de los cultivos de nuestro país en más de 15 mil millones de dólares cada año.
             </p>
 
-
-           {/* Fun Fact */}
+          <div className={`fun-fact-wrapper ${showFunFact ? 'is-open' : ''}`}>
+            {/* Fun Fact */}
             <section
               className={`bee-fun-fact ${showFunFact ? 'open' : 'closed'}`}
               style={{ '--fun-fact-gif': `url("${beeGif}")` }}
@@ -255,6 +255,8 @@ function App() {
               )}
             </section>
 
+            </div>
+          
 
           </section>
           <HoneycombCluster
@@ -296,7 +298,7 @@ function App() {
 
         {/* PUBLICIDAD */}
         <aside className="bee-ad">
-          <span className="bee-ad-label">PUBLICIDAD</span>
+          <span className="bee-ad-label"></span>
 
           <img
             src={loneBee}
