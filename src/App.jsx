@@ -11,6 +11,7 @@ import './App.css'
 import Carrusel from './Carrusel'
 import Guia from './Guia'
 import Panal from './Panal_movil'
+import NoticiaAmpliada from './NoticiaAmpliada'
 
 const honeycombData = [
   {
@@ -147,7 +148,7 @@ function App() {
   const [selectedCell, setSelectedCell] = useState(null)
   const [selectedBee, setSelectedBee] = useState(null)
   const [activeBeeId, setActiveBeeId] = useState(3)
-  const [openHighlights, setOpenHighlights] = useState(new Set())
+  const [noticiaAmpliada, setNoticiaAmpliada] = useState(null)
   const [isScrolled, setIsScrolled] = useState(false)
   const pageRef = useRef(null)
 
@@ -260,56 +261,27 @@ function App() {
 
         <section className="highlights-grid">
           {highlights.map((item, index) => {
-            const isOpen = openHighlights.has(index)
-            const detailsId = `highlight-details-${index}`
-
-            const toggleHighlight = () => {
-              setOpenHighlights((current) => {
-                const next = new Set(current)
-                if (next.has(index)) {
-                  next.delete(index)
-                } else {
-                  next.add(index)
-                }
-                return next
-              })
-            }
+            const openStory = () => setNoticiaAmpliada(item)
 
             return (
-              <article
+              <motion.article
                 key={item.title}
-                className={`story-card ${isOpen ? 'is-open' : ''}`}
+                layoutId={`story-${item.title}`}
+                className="story-card"
                 style={{ '--story-image': `url("${item.image}")` }}
                 role="button"
                 tabIndex="0"
-                aria-expanded={isOpen}
-                aria-controls={detailsId}
-                onClick={toggleHighlight}
+                onClick={openStory}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault()
-                    toggleHighlight()
+                    openStory()
                   }
                 }}
               >
                 <p className="meta">Investigación</p>
                 <h3>{item.title}</h3>
-
-
-                {isOpen && (
-                  <div id={detailsId} className="story-details">
-                    <h4 className="story-subtitle">{item.subtitulo}</h4>
-                    <p>{item.text}</p>
-                    {item.image && (
-                      <div className="story-media">
-                        <img src={item.image} alt={item.subtitulo} />
-                        <p>{item.text}</p>
-                      </div>
-                    )}
-                    <p>{item.details}</p>
-                  </div>
-                )}
-              </article>
+              </motion.article>
             )
           })}
         </section>
@@ -413,6 +385,8 @@ function App() {
         )}
 
       </AnimatePresence>
+
+      <NoticiaAmpliada noticia={noticiaAmpliada} onClose={() => setNoticiaAmpliada(null)} />
 
       <AnimatePresence>
         {selectedBee && (

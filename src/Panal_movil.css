@@ -51,10 +51,9 @@
 .Panal-imagen { width: 72%; height: 58%; object-fit: contain; border-radius: 6px; }
 .Panal-celda .Panal-texto { display: block; align-self: center; width: 90%; max-width: 90%; font: 1000 var(--tamano-titulo-hexagono)/1.1 Arial, sans-serif; text-align: center; text-transform: uppercase; }
 .Panal-celda small { display: block; align-self: center; width: 90%; max-width: 90%; max-height: 60%; overflow: hidden; margin-top: 5px; font: var(--tamano-info-hexagono)/1.2 Arial, sans-serif; text-align: center; }
-.Panal-numero { font: 500 4vw Georgia, serif; }
 .Panal-texto,
 .Panal-celda small,
-.Panal-numero { width: 100%; text-align: center; }
+.Panal-celda small { width: 100%; text-align: center; }
 .Panal-celda .Panal-texto { line-height: 1; }
 .Panal-celda small { margin-top: 4%; }
 .Panal-celda span { font: 500 4vw Georgia, serif; }
