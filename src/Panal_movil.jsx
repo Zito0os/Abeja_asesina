@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion } from 'motion/react'
+import { motion, useAnimation } from 'motion/react'
 import './Panal_movil.css'
 import { panalPorCapas } from './panalPorCapas'
 import orchidBeeImage from './assets/AbejadelasOrquIdeas.png'
@@ -59,6 +59,8 @@ const beeInformation = {
 }
 
 const beeIds = Object.keys(beeInformation).map(Number)
+const PANAL_REACTION_SPEED = 0.55
+const PANAL_REACTION_DISTANCE = 28
 
 function Panal({ bee, onClose }) {
   const initialBeeId = beeInformation[bee.id] ? Number(bee.id) : beeIds[0]
@@ -66,6 +68,7 @@ function Panal({ bee, onClose }) {
   const [offset, setOffset] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const currentBee = { ...beeInformation[activeBeeId] }
+  const gridAnimation = useAnimation()
   const panalRef = useRef(null)
   const gridRef = useRef(null)
   const dragRef = useRef({ x: 0, y: 0, offsetX: 0, offsetY: 0, pressed: false, dragging: false, moved: false })
@@ -109,10 +112,12 @@ function Panal({ bee, onClose }) {
       const nextX = horizontalDirection * panLimit
       const nextY = verticalDirection * panLimit
 
-      setOffset({
+      const nextOffset = {
         x: Math.max(-panLimit, Math.min(panLimit, nextX)),
         y: Math.max(-panLimit, Math.min(panLimit, nextY)),
-      })
+      }
+      setOffset(nextOffset)
+      gridAnimation.set(nextOffset)
       return
     }
 
@@ -130,10 +135,12 @@ function Panal({ bee, onClose }) {
     const nextX = dragRef.current.offsetX + event.clientX - dragRef.current.x
     const nextY = dragRef.current.offsetY + event.clientY - dragRef.current.y
 
-    setOffset({
+    const nextOffset = {
       x: Math.max(-panLimit, Math.min(panLimit, nextX)),
       y: Math.max(-panLimit, Math.min(panLimit, nextY)),
-    })
+    }
+    setOffset(nextOffset)
+    gridAnimation.set(nextOffset)
   }
 
   const handlePointerUp = (event) => {
@@ -160,20 +167,27 @@ function Panal({ bee, onClose }) {
       const direction = number === 19 ? 1 : -1
       return beeIds[(currentIndex + direction + beeIds.length) % beeIds.length]
     })
+
+    gridAnimation.start({
+      x: [offset.x, offset.x + PANAL_REACTION_DISTANCE, offset.x - PANAL_REACTION_DISTANCE, offset.x],
+      y: offset.y,
+      transition: {
+        duration: PANAL_REACTION_SPEED,
+        ease: 'easeInOut',
+      },
+    })
   }
 
 
   return (
     <motion.section className="Panal-movil" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} role="dialog" aria-modal="true" aria-label="Explorador del panal">
-      <button className="Panal-cerrar" type="button" onClick={onClose} aria-label="Cerrar panal">×</button>
+      <button className="Panal-cerrar" type="button" onClick={onClose} aria-label="Cerrar panal">X</button>
       <header className="Panal-encabezado">
-        <span className="Panal-indicador">EXPLORACIÓN {String(activeBeeId).padStart(2, '0')}</span>
-        <h2>{currentBee.commonName}</h2>
-        <p>{currentBee.importance}</p>
+    
       </header>
       <div className={`Panal-visor ${isDragging ? 'arrastrando' : ''}`} ref={panalRef} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerCancel={handlePointerUp}>
         <div className="Panal-centro">
-          <motion.div ref={gridRef} className="Panal-grid" animate={{ x: offset.x, y: offset.y }} transition={isDragging ? { duration: 0 } : { type: 'spring', stiffness: 100, damping: 24, mass: 0.7 }}>
+          <motion.div ref={gridRef} className="Panal-grid" animate={gridAnimation} initial={{ x: offset.x, y: offset.y }} transition={isDragging ? { duration: 0 } : { type: 'spring', stiffness: 100, damping: 24, mass: 0.7 }}>
             {cells.map((cell, index) => {
               const number = index === 0 ? 1 : index + 1
               const beeData = currentBee
