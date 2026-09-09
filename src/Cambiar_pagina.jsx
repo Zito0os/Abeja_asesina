@@ -1,14 +1,15 @@
 import { useEffect, useRef } from 'react'
 import './Cambiar_pagina.css'
+import PlanSelector from './components/PlanSelector'
 
-const PAGE_FLIP_THRESHOLD = 0.64
 const PAGE_FLIP_RELEASE_MS = 520
-const PAGE_FLIP_HANDLE_HEIGHT = 150
+const PAGE_FLIP_HANDLE_SIZE = 0.1
 
 const clamp = (value, minimum, maximum) => Math.min(Math.max(value, minimum), maximum)
 
 function CambiarPagina({ targetRef, onComplete }) {
   const backRef = useRef(null)
+  const foldRef = useRef(null)
   const dragRef = useRef(null)
   const completeRef = useRef(onComplete)
 
@@ -22,30 +23,50 @@ function CambiarPagina({ targetRef, onComplete }) {
 
     const syncBackBounds = () => {
       const back = backRef.current
-      if (!back) return
+      const fold = foldRef.current
+      if (!back || !fold) return
       const bounds = page.getBoundingClientRect()
       back.style.left = `${bounds.left}px`
       back.style.top = `${bounds.top}px`
       back.style.width = `${bounds.width}px`
-      back.style.height = `${page.offsetHeight}px`
+      back.style.height = `${bounds.height}px`
+      fold.style.left = `${bounds.left}px`
+      fold.style.top = `${bounds.top}px`
+      fold.style.width = `${bounds.width}px`
+      fold.style.height = `${page.offsetHeight}px`
     }
 
-    const setPageProgress = (progress, pointerX) => {
+    const setPageProgress = (progress, pointerX, pointerY) => {
       const boundedProgress = clamp(progress, 0, 1)
+      const width = Math.max(page.offsetWidth, 1)
+      const height = Math.max(page.offsetHeight, 1)
+
       page.style.setProperty('--page-flip-progress', boundedProgress)
-      page.style.setProperty('--page-flip-pointer-x', `${pointerX}px`)
+      page.style.setProperty('--page-flip-fold-x', `${clamp(pointerX / width, 0, 1) * 100}%`)
+      page.style.setProperty('--page-flip-fold-y', `${clamp(pointerY / height, 0, 1) * 100}%`)
       page.classList.add('page-flip-active')
+      foldRef.current?.classList.add('page-flip-fold-active')
+      foldRef.current?.style.setProperty('--page-flip-fold-x', `${clamp(pointerX / width, 0, 1) * 100}%`)
+      foldRef.current?.style.setProperty('--page-flip-fold-y', `${clamp(pointerY / height, 0, 1) * 100}%`)
     }
 
     const finishRelease = (shouldComplete) => {
       page.classList.add('page-flip-settling')
-      setPageProgress(shouldComplete ? 1 : 0, shouldComplete ? -page.offsetWidth : page.offsetWidth)
+      setPageProgress(
+        shouldComplete ? 1 : 0,
+        shouldComplete ? -page.offsetWidth : page.clientWidth,
+        shouldComplete ? page.offsetHeight : 0,
+      )
 
       window.setTimeout(() => {
         page.classList.remove('page-flip-settling')
         page.classList.remove('page-flip-active')
         page.style.removeProperty('--page-flip-progress')
-        page.style.removeProperty('--page-flip-pointer-x')
+        page.style.removeProperty('--page-flip-fold-x')
+        page.style.removeProperty('--page-flip-fold-y')
+        foldRef.current?.classList.remove('page-flip-fold-active')
+        foldRef.current?.style.removeProperty('--page-flip-fold-x')
+        foldRef.current?.style.removeProperty('--page-flip-fold-y')
 
         if (shouldComplete) {
           page.classList.add('page-flip-complete')
@@ -68,9 +89,13 @@ function CambiarPagina({ targetRef, onComplete }) {
       if (page.classList.contains('page-flip-complete') || dragRef.current) return
 
       const pointer = getLocalPointer(event)
-      const isTopHandle = pointer.y <= PAGE_FLIP_HANDLE_HEIGHT
-      const isRightHandle = pointer.x >= page.clientWidth * 0.58
-      if (!isTopHandle || !isRightHandle) return
+      const normalizedX = pointer.x / Math.max(page.offsetWidth, 1)
+      const normalizedY = pointer.y / Math.max(page.offsetHeight, 1)
+      const isHandleTriangle =
+        normalizedX >= 1 - PAGE_FLIP_HANDLE_SIZE &&
+        normalizedY <= PAGE_FLIP_HANDLE_SIZE &&
+        (1 - normalizedX) / PAGE_FLIP_HANDLE_SIZE + normalizedY / PAGE_FLIP_HANDLE_SIZE <= 1
+      if (!isHandleTriangle) return
 
       event.preventDefault()
       page.setPointerCapture?.(event.pointerId)
@@ -78,10 +103,13 @@ function CambiarPagina({ targetRef, onComplete }) {
         pointerId: event.pointerId,
         bounds: page.getBoundingClientRect(),
         startX: pointer.x,
+        startY: pointer.y,
         width: Math.max(page.clientWidth, 1),
+        height: Math.max(page.offsetHeight, 1),
       }
       page.classList.add('page-flip-dragging')
-      setPageProgress(0, pointer.x)
+      foldRef.current?.classList.add('page-flip-fold-dragging')
+      setPageProgress(0, page.clientWidth, 0)
     }
 
     const onPointerMove = (event) => {
@@ -89,9 +117,12 @@ function CambiarPagina({ targetRef, onComplete }) {
       if (!drag || event.pointerId !== drag.pointerId) return
 
       const pointer = getLocalPointer(event, drag.bounds)
-      const displacement = Math.max(drag.startX - pointer.x, 0)
-      const progress = displacement / (drag.width * 0.72)
-      setPageProgress(progress, pointer.x)
+      const displacement = Math.hypot(
+        Math.max(drag.startX - pointer.x, 0),
+        Math.max(pointer.y - drag.startY, 0),
+      )
+      const progress = displacement / Math.hypot(drag.width, drag.height)
+      setPageProgress(progress, pointer.x, pointer.y)
     }
 
     const onPointerUp = (event) => {
@@ -99,11 +130,11 @@ function CambiarPagina({ targetRef, onComplete }) {
       if (!drag || event.pointerId !== drag.pointerId) return
 
       const pointer = getLocalPointer(event, drag.bounds)
-      const progress = clamp((drag.startX - pointer.x) / (drag.width * 0.72), 0, 1)
       dragRef.current = null
       page.releasePointerCapture?.(event.pointerId)
       page.classList.remove('page-flip-dragging')
-      finishRelease(progress >= PAGE_FLIP_THRESHOLD)
+      foldRef.current?.classList.remove('page-flip-fold-dragging')
+      finishRelease(pointer.x <= drag.width * 0.5)
     }
 
     const onPointerCancel = (event) => {
@@ -111,6 +142,7 @@ function CambiarPagina({ targetRef, onComplete }) {
       dragRef.current = null
       page.releasePointerCapture?.(event.pointerId)
       page.classList.remove('page-flip-dragging')
+      foldRef.current?.classList.remove('page-flip-fold-dragging')
       finishRelease(false)
     }
 
@@ -133,12 +165,12 @@ function CambiarPagina({ targetRef, onComplete }) {
   }, [targetRef])
 
   return (
-    <div ref={backRef} className="page-flip-back" aria-hidden="true">
-      <div className="page-flip-back-content">
-        <p>EDICION ESPECIAL</p>
-        <h2>Proximamente</h2>
+    <>
+      <div ref={foldRef} className="page-flip-fold" aria-hidden="true" />
+      <div ref={backRef} className="page-flip-back" aria-hidden="true">
+        <PlanSelector />
       </div>
-    </div>
+    </>
   )
 }
 
