@@ -401,6 +401,7 @@
   line-height: 1.15;
   pointer-events: none;
   z-index: 2; 
+  padding: 0.5rem;
 }
 
 /* Central anchor position */
@@ -443,6 +444,19 @@
   align-items: center;
   justify-content: center;
   padding: 16px;
+}
+
+.hex-modal-wrapper {
+  position: relative;
+  width: min(520px, 92vw);
+  min-height: 520px;
+  background: #17120d; /* Border color */
+  clip-path: polygon(50% 0%, 100% 20%, 100% 80%, 50% 100%, 0% 80%, 0% 20%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px; /* Border thickness */
+  filter: drop-shadow(0 25px 20px rgba(0, 0, 0, 0.45)); /* Drop-shadow follows clip-path */
 }
 
 .hex-modal-card {
