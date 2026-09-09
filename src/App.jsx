@@ -14,6 +14,7 @@ import Guia from './Guia'
 import Panal from './Panal_movil'
 import NoticiaAmpliada from './NoticiaAmpliada'
 import funfactbee from './assets/funfactbee.png'
+import CambiarPagina from './Cambiar_pagina'
 
 const honeycombData = [
   {
@@ -323,6 +324,8 @@ function App() {
         </aside>
 
       </div>
+
+      {!showIntro && <CambiarPagina targetRef={pageRef} />}
 
       <AnimatePresence>
         {selectedCell && (

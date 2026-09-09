@@ -1,0 +1,102 @@
+.page-flip-back {
+  position: fixed;
+  z-index: 0;
+  border: 3px solid #1a1a1a;
+  background: #f8f1df;
+  color: #17120d;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+}
+
+.page-flip-back::before,
+.page-flip-back::after {
+  content: '';
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  height: 8px;
+  background: #dca10d;
+}
+
+.page-flip-back::before {
+  top: 15%;
+}
+
+.page-flip-back::after {
+  bottom: 15%;
+}
+
+.page-flip-back-visible {
+  opacity: 1;
+}
+
+.page-flip-back-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.page-flip-back-content p {
+  margin: 0 0 28px;
+  font: 700 0.8rem/1 Georgia, 'Times New Roman', serif;
+  letter-spacing: 0.2em;
+}
+
+.page-flip-back-content h2 {
+  margin: 0;
+  font: 900 clamp(2.5rem, 7vw, 6rem)/0.95 Georgia, 'Times New Roman', serif;
+  letter-spacing: -0.04em;
+}
+
+.newspaper-page.page-flip-active {
+  z-index: 2;
+  transform-origin: 100% 0;
+  clip-path: polygon(
+    0 0,
+    calc(100% - (var(--page-flip-progress) * 100%)) var(--page-flip-progress),
+    calc(100% - (var(--page-flip-progress) * 100%)) 100%,
+    0 100%
+  );
+  transform: perspective(1500px)
+    translateX(calc(var(--page-flip-progress) * -12%))
+    rotateY(calc(var(--page-flip-progress) * -18deg))
+    rotateX(calc(var(--page-flip-progress) * 5deg))
+    skewY(calc(var(--page-flip-progress) * -2deg));
+  filter: drop-shadow(calc(var(--page-flip-progress) * -14px) calc(var(--page-flip-progress) * 16px) 18px rgba(23, 18, 13, 0.3));
+  transition: none;
+}
+
+.newspaper-page.page-flip-active::after {
+  content: '';
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: 0;
+  width: clamp(50px, 12vw, 160px);
+  height: 100%;
+  pointer-events: none;
+  opacity: var(--page-flip-progress);
+  background: linear-gradient(105deg, transparent 10%, rgba(255, 255, 255, 0.22) 46%, rgba(23, 18, 13, 0.18) 100%);
+  transform-origin: 100% 0;
+  transform: skewY(calc(var(--page-flip-progress) * -8deg));
+}
+
+.newspaper-page.page-flip-settling {
+  transition: clip-path var(--page-flip-release-ms, 520ms) cubic-bezier(0.22, 0.61, 0.36, 1), transform var(--page-flip-release-ms, 520ms) cubic-bezier(0.22, 0.61, 0.36, 1), filter var(--page-flip-release-ms, 520ms) ease;
+}
+
+.newspaper-page.page-flip-complete {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .page-flip-back {
+    min-height: 520px;
+  }
+}
