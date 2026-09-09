@@ -47,7 +47,6 @@ function NoticiaAmpliada({ noticia, onClose }) {
             </button>
 
             <div className="noticia-ampliada-header">
-              <span className="noticia-ampliada-kicker">Investigación</span>
               <h2>{noticia.title}</h2>
             </div>
 

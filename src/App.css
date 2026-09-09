@@ -401,6 +401,7 @@
   line-height: 1.15;
   pointer-events: none;
   z-index: 2; 
+  padding: 0.5rem;
 }
 
 /* Central anchor position */
@@ -445,6 +446,19 @@
   padding: 16px;
 }
 
+.hex-modal-wrapper {
+  position: relative;
+  width: min(520px, 92vw);
+  min-height: 520px;
+  background: #17120d; 
+  clip-path: polygon(50% 0%, 100% 20%, 100% 80%, 50% 100%, 0% 80%, 0% 20%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  filter: drop-shadow(0 25px 20px rgba(0, 0, 0, 0.45));
+}
+
 .hex-modal-card {
   position: relative;
   width: min(520px, 92vw);
@@ -460,17 +474,23 @@
 
 .hex-close-btn {
   position: absolute;
-  top: 48px;
-  background: #17120d;
-  color: #f8f1df;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10%; 
+  background: #fac638; /* Contrasting light yellow/cream */
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%); /* Perfect downward triangle */
   border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
   cursor: pointer;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+  font-size: 1.4rem;
   font-weight: bold;
-  font-size: 0.9rem;
+  color: #17120d;
   z-index: 10;
+  transition: background 0.2s ease;
 }
 
 .hex-modal-inner {
