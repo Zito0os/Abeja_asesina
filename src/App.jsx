@@ -156,10 +156,13 @@ function App() {
   const finishIntro = () => {
     const root = document.documentElement
     const previousScrollBehavior = root.style.scrollBehavior
-    const startLink = document.querySelector('a[href="#pagina-inicio"]')
 
     root.style.scrollBehavior = 'auto'
-    startLink?.click()
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    window.scroll(0, 0)
+    if (window.history.replaceState) {
+      window.history.replaceState(null, '', window.location.pathname)
+    }
     root.style.scrollBehavior = previousScrollBehavior
     setShowIntro(false)
   }
