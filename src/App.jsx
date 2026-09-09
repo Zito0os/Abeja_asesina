@@ -8,6 +8,7 @@ import invasiveBeeDraw from './assets/AbejaDibujo1.png'
 import africa from './assets/Africa.png'
 import beeGif from './assets/beeGif.gif'
 import './App.css'
+import Header from './components/Header'
 import Carrusel from './Carrusel'
 import Guia from './Guia'
 import Panal from './Panal_movil'
@@ -150,7 +151,6 @@ function App() {
   const [selectedBee, setSelectedBee] = useState(null)
   const [activeBeeId, setActiveBeeId] = useState(3)
   const [noticiaAmpliada, setNoticiaAmpliada] = useState(null)
-  const [isScrolled, setIsScrolled] = useState(false)
   const pageRef = useRef(null)
 
   const finishIntro = () => {
@@ -164,18 +164,6 @@ function App() {
     setShowIntro(false)
   }
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!showIntro) {
-        setIsScrolled(window.scrollY > 0)
-      }
-    }
-
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [showIntro])
-
   return (
     <>
       <a id="pagina-inicio" className="page-anchor" href="#pagina-inicio" aria-hidden="true" tabIndex={-1} />
@@ -184,21 +172,7 @@ function App() {
       </div>
 
       <div ref={pageRef} className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'} ${selectedBee ? 'content-blurred' : ''}`}>
-        <header className={`masthead ${isScrolled ? 'is-compact' : ''}`}>
-          <div className="masthead-main">
-            <p className="edition">Edición especial · 01 de septiembre</p>
-            <h1>
-              <button
-                className="headline-button"
-                type="button"
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              >
-                ¿No verdad?
-              </button>
-            </h1>
-            <div className="tagline">El periódico que escucha a la naturaleza</div>
-          </div>
-        </header>
+        <Header onBackToTop={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
 
         <main className="hero-section">
           <section className="headline-panel">
