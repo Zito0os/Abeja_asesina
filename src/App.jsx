@@ -13,6 +13,7 @@ import Carrusel from './Carrusel'
 import Guia from './Guia'
 import Panal from './Panal_movil'
 import NoticiaAmpliada from './NoticiaAmpliada'
+import { PianoTiles } from './PianoTiles'
 import funfactbee from './assets/funfactbee.png'
 
 const honeycombData = [
@@ -151,6 +152,7 @@ function App() {
   const [selectedBee, setSelectedBee] = useState(null)
   const [activeBeeId, setActiveBeeId] = useState(3)
   const [noticiaAmpliada, setNoticiaAmpliada] = useState(null)
+  const [showPianoGame, setShowPianoGame] = useState(false)
   const pageRef = useRef(null)
 
   const finishIntro = () => {
@@ -368,6 +370,27 @@ function App() {
       </AnimatePresence>
 
       <NoticiaAmpliada noticia={noticiaAmpliada} onClose={() => setNoticiaAmpliada(null)} />
+
+      <section className="piano-footer">
+        <div className="piano-footer-copy">
+          <span className="piano-footer-label">Mini juego</span>
+          <h3>¿Te animas a jugar?</h3>
+        </div>
+
+        <button
+          type="button"
+          className="piano-toggle-button"
+          onClick={() => setShowPianoGame((current) => !current)}
+        >
+          {showPianoGame ? 'Ocultar Piano Tiles' : 'Jugar Piano Tiles'}
+        </button>
+      </section>
+
+      {showPianoGame && (
+        <div className="piano-game-wrap">
+          <PianoTiles />
+        </div>
+      )}
 
       <AnimatePresence>
         {selectedBee && (
