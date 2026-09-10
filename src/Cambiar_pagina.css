@@ -709,8 +709,9 @@
 }
 
 .payment-button {
-  min-height: 50px;
-  margin-top: 8px;
+   min-height: 50px;
+  padding: 0 22px;
+  margin-top: 0;
   border: 2px solid #17120d;
   background: #17120d;
   color: #f8f1df;
@@ -743,6 +744,67 @@
   outline-offset: 4px;
 }
 
+.payment-actions {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.payment-cancel-button {
+   min-height: 50px;
+  padding: 0 22px;
+  border: 2px solid #17120d;
+  background: transparent;
+  color: #17120d;
+  font: 800 0.72rem/1 Arial, sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.payment-cancel-button:hover {
+  background: #17120d;
+  color: #f8f1df;
+  transform: translateY(-2px);
+}
+
+.payment-close-button {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border: 2px solid #17120d;
+  background: transparent;
+  color: #17120d;
+  font: 700 1.4rem/1 Arial, sans-serif;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.payment-close-button:hover {
+  background: #17120d;
+  color: #f8f1df;
+  transform: rotate(5deg);
+}
+
+
+@media (max-width: 600px) {
+  .payment-actions {
+    flex-direction: column;
+  }
+
+  .payment-button,
+  .payment-cancel-button {
+    width: 100%;
+  }
+}
+
+
 @keyframes payment-reveal {
   from {
     opacity: 0;
@@ -759,6 +821,7 @@
 
 @media (max-width: 600px) {
   .payment-section {
+    position: relative;
     padding: 22px 16px;
   }
 
@@ -859,3 +922,4 @@
     transform: translateY(0) rotate(0deg);
   }
 }
+

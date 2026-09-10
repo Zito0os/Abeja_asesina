@@ -34,8 +34,16 @@ const plans = [
 function PlanSelector() {
   const navigate = useNavigate()
   const [selectedPlanId, setSelectedPlanId] = useState(null)
+  const [showPlanInfo, setShowPlanInfo] = useState(false);
   const [paymentComplete, setPaymentComplete] = useState(false)
   const [showSuccessBees, setShowSuccessBees] = useState(false);
+  const handleSelectPlan = (plan) => {
+  setSelectedPlan(plan);
+  setShowPlanInfo(true);
+  };
+  const handleCancelPlan = () => {
+  setShowPlanInfo(false);
+};
 
   return (
     <div className="page-flip-back-content page-flip-back-content--plans">
@@ -97,102 +105,166 @@ function PlanSelector() {
                 ))}
               </ul>
 
-              <button
-                type="button"
-                className="page-flip-plan-button"
-                onClick={() => setSelectedPlanId(plan.id)}
-              >
-                {isSelected ? 'Plan seleccionado' : `Escoger ${plan.name}`}
-              </button>
+         <button
+          type="button"
+          className="page-flip-plan-button"
+          onClick={() => {
+            setSelectedPlanId(plan.id)
+            setShowPlanInfo(true)
+          }}
+        >
+          {isSelected ? 'Plan seleccionado' : `Escoger ${plan.name}`}
+        </button>
             </article>
           )
         })}
       </div>
 
-           {selectedPlanId && (
-        <section className="payment-section">
-          <h2>Completa tu compra</h2>
+{selectedPlanId && (
+  <section className="payment-section">
+    <button
+      type="button"
+      className="payment-close-button"
+      onClick={() => setSelectedPlanId(null)}
+      aria-label="Cerrar"
+    >
+      ×
+    </button>
 
-          <p>
-            Has seleccionado el plan{' '}
-            <strong>
-              {plans.find((plan) => plan.id === selectedPlanId)?.name}
-            </strong>
-          </p>
+    <h2>Completa tu compra</h2>
 
-          <form
-            className="payment-form"
-            onSubmit={(e) => {
-              e.preventDefault()
+    <p>
+      Has seleccionado el plan{' '}
+      <strong>
+        {plans.find((plan) => plan.id === selectedPlanId)?.name}
+      </strong>
+    </p>
 
-             setPaymentComplete(true);
-            setShowSuccessBees(true);
+    <form
+      className="payment-form"
+      onSubmit={(e) => {
+        e.preventDefault()
+        
+        setSelectedPlanId(null)
 
-            setTimeout(() => {
-              setShowSuccessBees(false);
-            }, 7500);
-            }}
-          >
-            <label>
-              Nombre completo
-              <input
-                type="text"
-                name="name"
-                placeholder="Tu nombre"
-                required
-              />
-            </label>
+        setPaymentComplete(true)
+        setShowSuccessBees(true)
 
-            <label>
-              Correo electrónico
-              <input
-                type="email"
-                name="email"
-                placeholder="correo@ejemplo.com"
-                required
-              />
-            </label>
+        setTimeout(() => {
+          setShowSuccessBees(false)
+        }, 7500)
 
-            <label>
-              Número de tarjeta
-              <input
-                type="text"
-                name="card"
-                placeholder="1234 1234 1234 1234"
-                maxLength="19"
-                required
-              />
-            </label>
+        setTimeout(() => {
+        setPaymentComplete(false)
+        }, 5000)
 
-            <div className="payment-row">
-              <label>
-                Expiración
-                <input
-                  type="text"
-                  name="expiration"
-                  placeholder="MM/AA"
-                  required
-                />
-              </label>
+        // Cierra la ventana después de pagar
+        setSelectedPlanId(null)
+      }}
+    >
+      <label>
+        Nombre completo
+        <input
+          type="text"
+          name="name"
+          placeholder="Tu nombre"
+          required
+        />
+      </label>
 
-              <label>
-                CVV
-                <input
-                  type="password"
-                  name="cvv"
-                  placeholder="123"
-                  maxLength="4"
-                  required
-                />
-              </label>
-            </div>
+      <label>
+        Correo electrónico
+        <input
+          type="email"
+          name="email"
+          placeholder="correo@ejemplo.com"
+          required
+        />
+      </label>
 
-            <button type="submit" className="payment-button">
-              Comprar {plans.find((plan) => plan.id === selectedPlanId)?.name}
-            </button>
-          </form>
-        </section>
-      )}
+      <label>
+        Número de tarjeta
+        <input
+          type="text"
+          name="card"
+          placeholder="1234 1234 1234 1234"
+          maxLength="19"
+          required
+        />
+      </label>
+
+      <div className="payment-row">
+        <label>
+          Expiración
+          <input
+            type="text"
+            name="expiration"
+            placeholder="MM/AA"
+            required
+          />
+        </label>
+
+        <label>
+          CVV
+          <input
+            type="password"
+            name="cvv"
+            placeholder="123"
+            maxLength="4"
+            required
+          />
+        </label>
+      </div>
+
+      {/* BOTONES */}
+      <div className="payment-actions">
+
+        <button
+          type="submit"
+          className="payment-button"
+        >
+          Pagar{' '}
+          {plans.find(
+            (plan) => plan.id === selectedPlanId
+          )?.name}
+        </button>
+
+        <button
+          type="button"
+          className="payment-cancel-button"
+          onClick={() => setSelectedPlanId(null)}
+        >
+          Cancelar
+        </button>
+
+      </div>
+    </form>
+  </section>
+)}
+
+    {paymentComplete && (
+      <div className="payment-success-message">
+        <div className="payment-success-check">
+          ✓
+        </div>
+
+        <h2>¡Pago exitoso!</h2>
+
+        <p>
+          Tu pago ha sido realizado correctamente.
+        </p>
+
+        <span>
+          Tu plan{' '}
+          <strong>
+            {plans.find(
+              (plan) => plan.id === selectedPlanId
+            )?.name}
+          </strong>{' '}
+          ha sido activado.
+        </span>
+      </div>
+    )}
 
 {showSuccessBees && (
   <div className="payment-success-bees">
