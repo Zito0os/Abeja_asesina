@@ -9,6 +9,7 @@ export function HexModal({ cell, onClose }) {
             <motion.div
                 layoutId={`hexagon-${cell.id}`}
                 className="hex-modal-wrapper"
+                style={{ '--story-image': `url("${cell.img}")` }}
                 onClick={(e) => e.stopPropagation()}
                 transition={{ type: 'spring', stiffness: 260, damping: 25 }}
             >
@@ -27,14 +28,6 @@ export function HexModal({ cell, onClose }) {
                     <div className="hex-modal-inner">
                         <h2>{cell.title}</h2>
                         <p className="hex-desc">{cell.text}</p>
-
-                        {cell.img && (
-                            <img
-                                src={cell.img}
-                                alt={cell.title}
-                                className="hex-image"
-                            />
-                        )}
 
                         {cell.stats && (
                             <div className="hex-stat-box">
