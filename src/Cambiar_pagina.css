@@ -8,14 +8,13 @@
   place-items: center;
   opacity: 0;
   pointer-events: none;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
 }
 
 .plans-page {
   min-height: 100vh;
   padding: 1px 0;
-  overflow-x: hidden;
   background: #121212;
 }
 
@@ -620,5 +619,243 @@
 @media (max-width: 700px) {
   .page-flip-back {
     min-height: 520px;
+  }
+}
+
+/* ================================
+   PAYMENT / CHECKOUT
+================================ */
+
+.payment-section {
+  width: min(100%, 980px);
+  margin-top: 10px;
+  padding: clamp(24px, 3vw, 38px);
+  border-top: 3px double #17120d;
+  border-bottom: 3px double #17120d;
+  background: rgba(255, 255, 255, 0.25);
+  text-align: left;
+  animation: payment-reveal 0.45s ease-out both;
+}
+
+.payment-section h2 {
+  margin: 0 0 8px;
+  font: 900 clamp(1.8rem, 3vw, 2.8rem)/1 Georgia, 'Times New Roman', serif;
+  text-transform: uppercase;
+}
+
+.payment-section > p {
+  margin: 0 0 24px;
+  color: rgba(23, 18, 13, 0.75);
+  font: 500 0.95rem/1.5 Arial, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.payment-section > p strong {
+  color: #17120d;
+}
+
+/* Form */
+
+.payment-form {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  display: grid;
+  gap: 18px;
+}
+
+.payment-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: #17120d;
+  font: 800 0.72rem/1 Arial, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.payment-form input {
+  width: 100%;
+  min-height: 46px;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 2px solid rgba(23, 18, 13, 0.55);
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.65);
+  color: #17120d;
+  font: 500 0.95rem/1 Arial, sans-serif;
+  outline: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.payment-form input::placeholder {
+  color: rgba(23, 18, 13, 0.42);
+}
+
+.payment-form input:focus {
+  border-color: #b17a00;
+  background: #fffdf5;
+  box-shadow: 0 0 0 3px rgba(177, 122, 0, 0.15);
+}
+
+.payment-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.payment-button {
+  min-height: 50px;
+  margin-top: 8px;
+  border: 2px solid #17120d;
+  background: #17120d;
+  color: #f8f1df;
+  font: 800 0.75rem/1 Arial, sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.payment-button:hover,
+.payment-button:focus-visible {
+  background: #f0c11d;
+  color: #17120d;
+  border-color: #f0c11d;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(23, 18, 13, 0.14);
+}
+
+.payment-button:active {
+  transform: translateY(1px);
+}
+
+.payment-button:focus-visible {
+  outline: 3px solid #b17a00;
+  outline-offset: 4px;
+}
+
+@keyframes payment-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .payment-section {
+    padding: 22px 16px;
+  }
+
+  .payment-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .payment-section {
+    animation: none;
+  }
+}
+
+/* =========================
+   ABEJITAS DESPUÉS DEL PAGO
+========================= */
+
+.payment-success-bees {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+
+  /* IMPORTANT: don't clip the bees */
+  overflow: visible;
+}
+
+.success-bee {
+  position: fixed;
+  left: -120px;
+  width: 90px;
+  height: auto;
+
+  animation-name: bee-fly-across;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+/* Abeja 1 */
+.bee-1 {
+  top: 35%;
+  animation-duration: 4s;
+  animation-delay: 0s;
+}
+
+/* Abeja 2 */
+.bee-2 {
+  top: 45%;
+  animation-duration: 5s;
+  animation-delay: 0.7s;
+}
+
+/* Abeja 3 */
+.bee-3 {
+  top: 55%;
+  animation-duration: 3.5s;
+  animation-delay: 1.4s;
+}
+
+/* Abeja 4 */
+.bee-4 {
+  top: 65%;
+  animation-duration: 4.7s;
+  animation-delay: 2s;
+}
+
+
+@keyframes bee-fly-across {
+
+  /* Start completely outside the left */
+  0% {
+    left: -120px;
+    transform: translateY(0) rotate(0deg);
+  }
+
+  /* Enter the screen */
+  20% {
+    left: 20vw;
+    transform: translateY(-40px) rotate(-5deg);
+  }
+
+  /* Middle */
+  50% {
+    left: 50vw;
+    transform: translateY(30px) rotate(5deg);
+  }
+
+  /* Near the right */
+  80% {
+    left: 80vw;
+    transform: translateY(-25px) rotate(-3deg);
+  }
+
+  /* Completely outside the right */
+  100% {
+    left: calc(100vw + 120px);
+    transform: translateY(0) rotate(0deg);
   }
 }
