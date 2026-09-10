@@ -153,6 +153,7 @@ function App() {
   const [activeBeeId, setActiveBeeId] = useState(3)
   const [noticiaAmpliada, setNoticiaAmpliada] = useState(null)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [introProgress, setIntroProgress] = useState(0)
   const pageRef = useRef(null)
 
   const finishIntro = () => {
@@ -182,7 +183,23 @@ function App() {
     <>
       <a id="pagina-inicio" className="page-anchor" href="#pagina-inicio" aria-hidden="true" tabIndex={-1} />
       <div className={`paper-intro ${showIntro ? 'visible' : 'hidden'}`} aria-hidden={!showIntro}>
-        {showIntro && <PaperUnfold targetRef={pageRef} onComplete={finishIntro} />}
+        {showIntro && (
+          <>
+            <PaperUnfold
+              targetRef={pageRef}
+              onComplete={finishIntro}
+              onProgress={setIntroProgress}
+            />
+            <div
+              className="paper-intro-hint"
+              style={{ opacity: Math.max(0, 1 - introProgress * 1.35) }}
+              aria-hidden="true"
+            >
+              <span>Desliza</span>
+              <span className="paper-intro-arrow">↓</span>
+            </div>
+          </>
+        )}
       </div>
 
       <div ref={pageRef} className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'} ${selectedBee ? 'content-blurred' : ''}`}>
@@ -325,7 +342,9 @@ function App() {
 
       </div>
 
-      {!showIntro && <CambiarPagina targetRef={pageRef} />}
+      {!showIntro && (
+        <CambiarPagina targetRef={pageRef} />
+      )}
 
       <AnimatePresence>
         {selectedCell && (

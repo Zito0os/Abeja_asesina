@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const plans = [
   {
@@ -31,10 +32,27 @@ const plans = [
 ]
 
 function PlanSelector() {
-  const [selectedPlanId, setSelectedPlanId] = useState('premium')
+  const navigate = useNavigate()
+  const [selectedPlanId, setSelectedPlanId] = useState(null)
 
   return (
     <div className="page-flip-back-content page-flip-back-content--plans">
+      <button
+        type="button"
+        className="plans-back-button"
+        onClick={() => navigate('/')}
+      >
+        Volver al periódico
+      </button>
+
+      <header className="masthead plans-masthead">
+        <div className="masthead-main">
+          <p className="edition">Edición especial · 01 de septiembre</p>
+          <h1>¿No verdad?</h1>
+          <div className="tagline">El periódico que escucha a la naturaleza</div>
+        </div>
+      </header>
+
       <div className="page-flip-plans-header">
         <div className="page-flip-pill-group">
           <span className="page-flip-pill">NUEVA EDICIÓN</span>
@@ -66,10 +84,10 @@ function PlanSelector() {
                   <span>{plan.price}</span>
                   <small>/mes</small>
                 </div>
-                <span className="page-flip-plan-subtitle">{plan.subtitle}</span>
+                
               </div>
 
-              <p className="page-flip-plan-description">{plan.description}</p>
+              
 
               <ul className="page-flip-plan-features">
                 {plan.features.map((feature) => (
@@ -89,6 +107,33 @@ function PlanSelector() {
           )
         })}
       </div>
+
+      <section className="page-flip-plans-note">
+        <div className="page-flip-plans-note-copy">
+          <p className="page-flip-plans-note-kicker">Nota de edición</p>
+          <h3>Una experiencia que crece contigo</h3>
+          <p>
+            Todos los planes están pensados para que avances a tu propio ritmo.
+            Comienza con lo esencial y cambia de nivel cuando quieras, sin perder
+            tu acceso ni tus beneficios.
+          </p>
+        </div>
+
+        <ul className="page-flip-plans-facts">
+          <li>
+            <strong>01</strong>
+            <span>Acceso desde cualquier dispositivo</span>
+          </li>
+          <li>
+            <strong>02</strong>
+            <span>Beneficios activos desde el primer día</span>
+          </li>
+          <li>
+            <strong>03</strong>
+            <span>Sin permanencia obligatoria</span>
+          </li>
+        </ul>
+      </section>
     </div>
   )
 }
