@@ -13,6 +13,7 @@ import Carrusel from './Carrusel'
 import Guia from './Guia'
 import Panal from './Panal_movil'
 import NoticiaAmpliada from './NoticiaAmpliada'
+import BeeMap from './Components/BeeMap'
 import funfactbee from './assets/funfactbee.png'
 import CambiarPagina from './Cambiar_pagina'
 
@@ -282,7 +283,7 @@ function App() {
             </div>
 
 
-          </section>
+            </section>
           <HoneycombCluster
             data={honeycombData}
             onSelectCell={setSelectedCell}
@@ -318,6 +319,7 @@ function App() {
 
         <Carrusel onBeeSelect={setSelectedBee} onActiveBeeChange={setActiveBeeId} />
         <Guia activeBeeId={activeBeeId} />
+        <BeeMap/>
 
         {/* PUBLICIDAD */}
         <aside className="bee-ad">
