@@ -32,6 +32,7 @@ export function PianoTiles() {
   const [flashId, setFlashId] = useState(0)
   const [scoreFlashId, setScoreFlashId] = useState(0)
   const [showHitboxes, setShowHitboxes] = useState(false)
+  const [showInstructions, setShowInstructions] = useState(false)
 
   const speedRef = useRef(2)
   const animFrameRef = useRef(null)
@@ -363,30 +364,79 @@ export function PianoTiles() {
   return (
     <div className="piano-container">
       <div className="piano-header">
-        <p className="keyboard-hint">
-          Usa ← → A D para navegar · F G J K para carriles directos · Toca para jugar en móvil
-        </p>
+       
 
-        {!gameStarted && (
-          <button onClick={startGame}>
-            Iniciar Juego
+        <div className="piano-header-controls">
+          {!gameStarted && (
+            <button onClick={startGame} className="piano-start-button">
+              Iniciar Juego
+            </button>
+          )}
+
+          <button
+            type="button"
+            className="piano-instructions-button"
+            onClick={() => setShowInstructions(!showInstructions)}
+            aria-label="Ver instrucciones del juego"
+          >
+            ?
           </button>
+
+          {/* 
+          <button
+            type="button"
+            className="hitbox-toggle-button"
+            onClick={() =>
+              setShowHitboxes(
+                (value) => !value
+              )
+            }
+          >
+            {showHitboxes
+              ? 'Ocultar cajas de colisión'
+              : 'Ver cajas de colisión'}
+          </button>
+          */}
+        </div>
+
+        {showInstructions && (
+          <div className="piano-instructions-modal">
+            <div className="piano-instructions-content">
+              <button
+                className="piano-instructions-close"
+                onClick={() => setShowInstructions(false)}
+                aria-label="Cerrar instrucciones"
+              >
+                ×
+              </button>
+              
+              <h3>¿Cómo Jugar?</h3>
+              
+              <div className="piano-instructions-text">
+                <p><strong>Objetivo:</strong> Recoge todas las flores sin ser atrapado por las arañas.</p>
+                
+                <p><strong>Controles:</strong></p>
+                <ul>
+                  <li><code>←</code> <code>→</code> - Mover izquierda/derecha</li>
+                  <li><code>A</code> <code>D</code> - Mover izquierda/derecha</li>
+                  <li><code>F</code> <code>G</code> <code>J</code> <code>K</code> - Ir directamente a ese carril</li>
+                  <li>Toca la pantalla en móvil para moverte</li>
+                </ul>
+
+                <p><strong>Reglas:</strong></p>
+                <ul>
+                  <li>Recolecta flores (amarillas) para ganar puntos</li>
+                  <li>Evita las arañas (negras) - son tus enemigos</li>
+                  <li>Pierdes una vida si una araña te toca</li>
+                  <li>Pierdes una vida si una flor cruza la línea roja de muerte</li>
+                  <li>3 vidas y es GAME OVER</li>
+                </ul>
+
+                <p><strong>¡Buena suerte!</strong></p>
+              </div>
+            </div>
+          </div>
         )}
-        {/* 
-        <button
-          type="button"
-          className="hitbox-toggle-button"
-          onClick={() =>
-            setShowHitboxes(
-              (value) => !value
-            )
-          }
-        >
-          {showHitboxes
-            ? 'Ocultar cajas de colisión'
-            : 'Ver cajas de colisión'}
-        </button>
-        */}
       </div>
 
       <div

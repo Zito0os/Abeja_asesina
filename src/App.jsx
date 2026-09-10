@@ -327,7 +327,37 @@ function App() {
         </section>
         <BeeMap/>
 
-        <PianoTiles />
+        <section className="piano-section-wrapper">
+          <div className="piano-content-container">
+            <div className="piano-game-column">
+              <PianoTiles />
+            </div>
+            <div className="piano-info-column">
+              <div className="spider-fact-card">
+                <h3 className="spider-fact-title">Depredadores Invisibles</h3>
+                <h4 className="spider-fact-subtitle">Las Arañas Cangrejo y sus Emboscadas Ultravioletas</h4>
+                
+                <div className="spider-fact-content">
+                  <p>
+                    Las <strong>arañas cangrejo</strong> (<em>Thomisidae</em>) practican una emboscada casi invisible cambiando de color para camuflarse en los pétalos de las flores.
+                  </p>
+                  
+                  <p className="highlight">
+                    <strong>El verdadero peligro:</strong> Estas arañas reflejan o absorben la luz ultravioleta (UV) para simular los patrones de "guía de néctar" que las plantas usan naturalmente para atraer polinizadores.
+                  </p>
+                  
+                  <p>
+                    Las abejas ven la luz UV, un espectro invisible para los humanos. Sin saberlo, aterrizan directamente en las mandíbulas de la araña pensando que van directo al néctar.
+                  </p>
+                  
+                  <p className="danger-note">
+                    Esta sofisticada técnica de depredación demuestra la guerra evolutiva entre polinizadores y sus enemigos naturales.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* PUBLICIDAD */}
         <aside className="bee-ad">
