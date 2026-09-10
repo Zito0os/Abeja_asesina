@@ -19,6 +19,7 @@ const PLAYER_BOTTOM = PLAYER_TOP + PLAYER_HEIGHT
 const TILE_HEIGHT = 76
 const MISS_LINE_MARGIN = 5
 const MISS_LINE_Y = PLAYER_BOTTOM + MISS_LINE_MARGIN
+const OBSTACLE_OVERLAP_THRESHOLD = 0.65 // Ajusta esto entre 0 y 1 (0.65 = 65%)
 
 export function PianoTiles() {
   const [tiles, setTiles] = useState([])
@@ -36,6 +37,21 @@ export function PianoTiles() {
   const animFrameRef = useRef(null)
   const processedHitsRef = useRef(new Set())
   const shakeTimeoutRef = useRef(null)
+
+  // Calcula el porcentaje de superposición vertical entre dos rectángulos
+  const calculateOverlapPercentage = (
+    tileTop,
+    tileBottom,
+    playerTop,
+    playerBottom
+  ) => {
+    const overlapStart = Math.max(tileTop, playerTop)
+    const overlapEnd = Math.min(tileBottom, playerBottom)
+    const overlapHeight = Math.max(0, overlapEnd - overlapStart)
+    const tileHeight = tileBottom - tileTop
+    
+    return tileHeight > 0 ? overlapHeight / tileHeight : 0
+  }
 
   const triggerHitFeedback = () => {
     setFlashId((id) => id + 1)
@@ -106,8 +122,21 @@ export function PianoTiles() {
           const alreadyProcessed =
             processedHitsRef.current.has(tile.id)
 
+          // Para notas: solo requiere superposición simple
+          // Para obstáculos: requiere al menos 65% de superposición
+          const isValidHit =
+            tile.type === 'note'
+              ? overlapsPlayer
+              : overlapsPlayer &&
+                calculateOverlapPercentage(
+                  tileTop,
+                  tileBottom,
+                  PLAYER_TOP,
+                  PLAYER_BOTTOM
+                ) >= OBSTACLE_OVERLAP_THRESHOLD
+
           if (
-            overlapsPlayer &&
+            isValidHit &&
             inPlayerLane &&
             !alreadyProcessed &&
             !tile.hit
@@ -343,7 +372,7 @@ export function PianoTiles() {
             Iniciar Juego
           </button>
         )}
-
+        {/* 
         <button
           type="button"
           className="hitbox-toggle-button"
@@ -357,6 +386,7 @@ export function PianoTiles() {
             ? 'Ocultar cajas de colisión'
             : 'Ver cajas de colisión'}
         </button>
+        */}
       </div>
 
       <div
