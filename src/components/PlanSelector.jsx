@@ -34,6 +34,8 @@ const plans = [
 function PlanSelector() {
   const navigate = useNavigate()
   const [selectedPlanId, setSelectedPlanId] = useState(null)
+  const [paymentComplete, setPaymentComplete] = useState(false)
+  const [showSuccessBees, setShowSuccessBees] = useState(false);
 
   return (
     <div className="page-flip-back-content page-flip-back-content--plans">
@@ -107,77 +109,114 @@ function PlanSelector() {
         })}
       </div>
 
-      {selectedPlanId && (
-  <section className="payment-section">
-    <h2>Completa tu compra</h2>
+           {selectedPlanId && (
+        <section className="payment-section">
+          <h2>Completa tu compra</h2>
 
-    <p>
-      Has seleccionado el plan{' '}
-      <strong>
-        {plans.find((plan) => plan.id === selectedPlanId)?.name}
-      </strong>
-    </p>
+          <p>
+            Has seleccionado el plan{' '}
+            <strong>
+              {plans.find((plan) => plan.id === selectedPlanId)?.name}
+            </strong>
+          </p>
 
-    <form className="payment-form">
-      <label>
-        Nombre completo
-        <input
-          type="text"
-          name="name"
-          placeholder="Tu nombre"
-          required
-        />
-      </label>
+          <form
+            className="payment-form"
+            onSubmit={(e) => {
+              e.preventDefault()
 
-      <label>
-        Correo electrónico
-        <input
-          type="email"
-          name="email"
-          placeholder="correo@ejemplo.com"
-          required
-        />
-      </label>
+             setPaymentComplete(true);
+            setShowSuccessBees(true);
 
-      <label>
-        Número de tarjeta
-        <input
-          type="text"
-          name="card"
-          placeholder="1234 1234 1234 1234"
-          maxLength="19"
-          required
-        />
-      </label>
+            setTimeout(() => {
+              setShowSuccessBees(false);
+            }, 7500);
+            }}
+          >
+            <label>
+              Nombre completo
+              <input
+                type="text"
+                name="name"
+                placeholder="Tu nombre"
+                required
+              />
+            </label>
 
-      <div className="payment-row">
-        <label>
-          Expiración
-          <input
-            type="text"
-            name="expiration"
-            placeholder="MM/AA"
-            required
-          />
-        </label>
+            <label>
+              Correo electrónico
+              <input
+                type="email"
+                name="email"
+                placeholder="correo@ejemplo.com"
+                required
+              />
+            </label>
 
-        <label>
-          CVV
-          <input
-            type="password"
-            name="cvv"
-            placeholder="123"
-            maxLength="4"
-            required
-          />
-        </label>
-      </div>
+            <label>
+              Número de tarjeta
+              <input
+                type="text"
+                name="card"
+                placeholder="1234 1234 1234 1234"
+                maxLength="19"
+                required
+              />
+            </label>
 
-      <button type="submit" className="payment-button">
-        Comprar {plans.find((plan) => plan.id === selectedPlanId)?.name}
-      </button>
-    </form>
-  </section>
+            <div className="payment-row">
+              <label>
+                Expiración
+                <input
+                  type="text"
+                  name="expiration"
+                  placeholder="MM/AA"
+                  required
+                />
+              </label>
+
+              <label>
+                CVV
+                <input
+                  type="password"
+                  name="cvv"
+                  placeholder="123"
+                  maxLength="4"
+                  required
+                />
+              </label>
+            </div>
+
+            <button type="submit" className="payment-button">
+              Comprar {plans.find((plan) => plan.id === selectedPlanId)?.name}
+            </button>
+          </form>
+        </section>
+      )}
+
+{showSuccessBees && (
+  <div className="payment-success-bees">
+    <img
+      className="success-bee bee-1"
+      src="/src/assets/funfactbee.png"
+      alt=""
+    />
+    <img
+      className="success-bee bee-2"
+      src="/src/assets/funfactbee.png"
+      alt=""
+    />
+    <img
+      className="success-bee bee-3"
+      src="/src/assets/funfactbee.png"
+      alt=""
+    />
+    <img
+      className="success-bee bee-4"
+      src="/src/assets/funfactbee.png"
+      alt=""
+    />
+  </div>
 )}
 
       <section className="page-flip-plans-note">
