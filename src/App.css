@@ -286,6 +286,47 @@
   padding: 30px;
   border-bottom: 4px solid #17120d;
 }
+.bee-map-title {
+  width: min(1200px, calc(100% - 56px));
+  margin: 46px auto 12px;
+  color: #17120d;
+  text-align: center;
+}
+
+.bee-map-title p {
+  margin: 0 0 10px;
+  color: #b1780c;
+  font: 700 1.58rem/1 Arial, sans-serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.bee-map-title h2 {
+  margin: 0;
+  font: 900 clamp(2.2rem, 3.5vw, 5rem)/0.9 Georgia, 'Times New Roman', serif;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.bee-map-title span {
+  display: block;
+  width: min(260px, 42vw);
+  height: 5px;
+  margin: 18px auto 0;
+  background: #dca10d;
+}
+
+@media (max-width: 600px) {
+  .bee-map-title {
+    width: calc(100% - 32px);
+    margin-top: 34px;
+  }
+
+  .bee-map-title h2 {
+    font-size: clamp(1.8rem, 8vw, 3.1rem);
+  }
+}
+
 .bee-ad {
   position: sticky;
   top: 30px;

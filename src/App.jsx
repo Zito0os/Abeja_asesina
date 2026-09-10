@@ -319,6 +319,11 @@ function App() {
 
         <Carrusel onBeeSelect={setSelectedBee} onActiveBeeChange={setActiveBeeId} />
         <Guia activeBeeId={activeBeeId} />
+        <section className="bee-map-title" aria-labelledby="bee-map-heading">
+          <p>Explorador local</p>
+          <h2 id="bee-map-heading">Mira las abejas en tu zona</h2>
+          <span aria-hidden="true" />
+        </section>
         <BeeMap/>
 
         {/* PUBLICIDAD */}
