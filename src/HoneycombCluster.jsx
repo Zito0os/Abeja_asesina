@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, useMotionValue, useAnimationFrame, useTransform } from 'motion/react';
 import hexImage from './assets/HexagonoPanalMiel.png';
+import funfactbee from './assets/funfactbee.png'; 
 import './App.css';
 
 const polarPoint = (distance, angle) => {
@@ -17,14 +18,13 @@ const BeeParticles = () => {
   const bees = Array.from({ length: numBees }).map((_, i) => {
     const angle = Math.random() * 360;
 
-    const dist = Math.random() * 120 + 100; 
+    const dist = Math.random() * 120 + 100;
     const target = polarPoint(dist, angle);
 
-    // cfly curve
+    // fly curve
     const curveAmount = (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 100 + 50);
     const midX = (target.x / 2) - (target.y / dist) * curveAmount;
     const midY = (target.y / 2) + (target.x / dist) * curveAmount;
-
 
     const pathX = [];
     const pathY = [];
@@ -45,15 +45,18 @@ const BeeParticles = () => {
           rotate: [0, curveAmount > 0 ? 45 : -45, 0]
         }}
         transition={{
-
           duration: Math.random() * 3.5 + 3,
-          ease: 'linear', 
+          ease: 'linear',
           repeat: Infinity,
           repeatDelay: Math.random() * 1.5
         }}
-        style={{ position: 'absolute', zIndex: 10, fontSize: '25px', pointerEvents: 'none' }}
+        style={{ position: 'absolute', zIndex: 10, width: '30px', height: '30px', pointerEvents: 'none' }}
       >
-        🐝
+        <img
+          src={funfactbee}
+          alt="Flying bee"
+          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+        />
       </motion.div>
     );
   });
@@ -63,7 +66,7 @@ const BeeParticles = () => {
 // Sub-component that reads the motion values
 const OrbitingNode = ({ item, index, rotation, orbitRadius, onSelectCell, setHoveredCell, hoveredCell }) => {
   const baseAngle = index * 60 - 90;
-  
+
   // Transform the shared rotation value into unique X and Y coordinates natively
   const x = useTransform(rotation, (val) => polarPoint(orbitRadius, baseAngle + val).x);
   const y = useTransform(rotation, (val) => polarPoint(orbitRadius, baseAngle + val).y);
@@ -103,7 +106,6 @@ export function HoneycombCluster({ data, onSelectCell, selectedCellId }) {
   const [hoveredCell, setHoveredCell] = useState(null);
 
   const rotation = useMotionValue(0);
-
 
   useAnimationFrame((time, delta) => {
     if (!hoveredCell && !selectedCellId) {
