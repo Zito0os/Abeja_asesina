@@ -98,7 +98,6 @@ function PlanSelector() {
               <button
                 type="button"
                 className="page-flip-plan-button"
-                aria-pressed={isSelected}
                 onClick={() => setSelectedPlanId(plan.id)}
               >
                 {isSelected ? 'Plan seleccionado' : `Escoger ${plan.name}`}
@@ -107,6 +106,79 @@ function PlanSelector() {
           )
         })}
       </div>
+
+      {selectedPlanId && (
+  <section className="payment-section">
+    <h2>Completa tu compra</h2>
+
+    <p>
+      Has seleccionado el plan{' '}
+      <strong>
+        {plans.find((plan) => plan.id === selectedPlanId)?.name}
+      </strong>
+    </p>
+
+    <form className="payment-form">
+      <label>
+        Nombre completo
+        <input
+          type="text"
+          name="name"
+          placeholder="Tu nombre"
+          required
+        />
+      </label>
+
+      <label>
+        Correo electrónico
+        <input
+          type="email"
+          name="email"
+          placeholder="correo@ejemplo.com"
+          required
+        />
+      </label>
+
+      <label>
+        Número de tarjeta
+        <input
+          type="text"
+          name="card"
+          placeholder="1234 1234 1234 1234"
+          maxLength="19"
+          required
+        />
+      </label>
+
+      <div className="payment-row">
+        <label>
+          Expiración
+          <input
+            type="text"
+            name="expiration"
+            placeholder="MM/AA"
+            required
+          />
+        </label>
+
+        <label>
+          CVV
+          <input
+            type="password"
+            name="cvv"
+            placeholder="123"
+            maxLength="4"
+            required
+          />
+        </label>
+      </div>
+
+      <button type="submit" className="payment-button">
+        Comprar {plans.find((plan) => plan.id === selectedPlanId)?.name}
+      </button>
+    </form>
+  </section>
+)}
 
       <section className="page-flip-plans-note">
         <div className="page-flip-plans-note-copy">
