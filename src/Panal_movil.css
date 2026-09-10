@@ -24,6 +24,7 @@
 .Panal-grid { position: absolute; inset: 0; width: 100vw; height: 100vh; }
 .Panal-celda 
 {
+	--cell-color: #d99e25;
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -40,13 +41,28 @@
     /*porcentaje de la pantalla sobre el panel*/
     border: 0; clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0 50%); 
     color: #17231f; 
-    background: #d99e25;
+    background:
+		repeating-linear-gradient(
+			0deg,
+			rgba(70, 45, 15, 0.08) 0px,
+			rgba(70, 45, 15, 0.08) 1px,
+			transparent 5px,
+			transparent 4px
+		),
+		repeating-linear-gradient(
+			90deg,
+			rgba(12, 12, 4, 0.06) 0px,
+			rgba(70, 45, 15, 0.06) 1px,
+			transparent 1px,
+			transparent 6px
+		),
+		var(--cell-color);
     cursor: pointer; 
     transition: filter .2s ease, 
     transform .2s ease; 
 }
 
-.Panal-celda:nth-child(odd) { background: #efbd37; }
+.Panal-celda:nth-child(odd) { --cell-color: #efbd37; }
 .Panal-celda:hover, .Panal-celda.activa { filter: brightness(1.25); transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.08); }
 .Panal-imagen { width: 72%; height: 58%; object-fit: contain; border-radius: 6px; }
 .Panal-celda .Panal-texto { display: block; align-self: center; width: 90%; max-width: 90%; font: 1000 var(--tamano-titulo-hexagono)/1.1 Arial, sans-serif; text-align: center; text-transform: uppercase; }

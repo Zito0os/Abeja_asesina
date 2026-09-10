@@ -45,14 +45,10 @@ const fragmentShader = `
   }
 
   void main() {
-    float grain = random(vUv * 180.0) * 0.045;
-    float crease = smoothstep(0.47, 0.5, abs(sin(vUv.x * 25.0) * sin(vUv.y * 19.0))) * vFold * 0.08;
-    float edge = smoothstep(0.0, 0.08, min(min(vUv.x, 1.0 - vUv.x), min(vUv.y, 1.0 - vUv.y)));
-    vec3 paper = vec3(0.95, 0.9, 0.77) + grain - crease;
-    paper *= mix(0.92, 1.0, edge);
     vec4 landing = texture2D(uTexture, vUv);
-    vec3 color = mix(paper, landing.rgb, uHasTexture);
-    color -= crease;
+    vec3 paper = vec3(0.95, 0.9, 0.77);
+    vec3 landingColor = pow(max(landing.rgb, vec3(0.0)), vec3(0.55));
+    vec3 color = mix(paper, landingColor, uHasTexture);
     gl_FragColor = vec4(color, mix(0.98, landing.a, uHasTexture));
   }
 `
@@ -77,6 +73,7 @@ export function PaperScene({ progress, textureCanvas, paperSize }) {
     camera.position.z = 5.5
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
+    renderer.outputColorSpace = THREE.SRGBColorSpace
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setClearColor(0x000000, 0)
 
@@ -85,7 +82,7 @@ export function PaperScene({ progress, textureCanvas, paperSize }) {
       uniforms: {
         uProgress: { value: progressRef.current },
         uTime: { value: 0 },
-        uTexture: { value: textureRef.current ? new THREE.CanvasTexture(textureRef.current) : null },
+        uTexture: { value: null },
         uHasTexture: { value: textureRef.current ? 1 : 0 },
       },
       vertexShader,

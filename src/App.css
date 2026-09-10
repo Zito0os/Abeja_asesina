@@ -103,6 +103,42 @@
   overflow: hidden;
 }
 
+.page-corner-hint {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  z-index: 25;
+  pointer-events: none;
+  color: rgba(23, 18, 13, 0.72);
+  font: 400 2rem/1 Georgia, 'Times New Roman', serif;
+  opacity: 0.72;
+  transform: rotate(-8deg);
+  animation: page-corner-hint-move 1.8s ease-in-out infinite;
+  transition: opacity 160ms ease;
+}
+
+.newspaper-page.page-flip-active .page-corner-hint {
+  opacity: 0;
+  animation-play-state: paused;
+}
+
+@keyframes page-corner-hint-move {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-8deg);
+  }
+
+  50% {
+    transform: translate(-18px, 18px) rotate(-8deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-corner-hint {
+    animation: none;
+  }
+}
+
 .newspaper-page::before {
   content: "";
   position: absolute;

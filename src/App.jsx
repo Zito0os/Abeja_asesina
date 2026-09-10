@@ -203,6 +203,11 @@ function App() {
       </div>
 
       <div ref={pageRef} className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'} ${selectedBee ? 'content-blurred' : ''}`}>
+        {!showIntro && (
+          <div className="page-corner-hint" aria-hidden="true">
+            ↙
+          </div>
+        )}
         <header className={`masthead ${isScrolled ? 'is-compact' : ''}`}>
           <div className="masthead-main">
             <p className="edition">Edición especial · 01 de septiembre</p>
