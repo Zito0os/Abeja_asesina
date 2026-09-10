@@ -203,7 +203,7 @@ function Panal({ bee, onClose }) {
 
               return (
                 <button className={`Panal-celda ${index === 0 ? 'activa' : ''} ${number === 13 || number === 19 ? 'navegacion' : ''}`} key={`${cell.layer}-${index}`} type="button" style={{ '--x': `${cell.x}vw`, '--y': `${cell.y}vw` }} onPointerDown={(event) => { if (number === 13 || number === 19) event.stopPropagation() }} onClick={(event) => { event.stopPropagation(); handleCellClick(number) }} aria-label={number === 19 ? 'Siguiente abeja' : number === 13 ? 'Abeja anterior' : `Panal número ${number}`}>
-                  {number === 1 ? <img className="Panal-imagen" src={beeData.image} alt={currentBee.commonName} /> : number <= 7 ? <><span className="Panal-texto">{cellContent.label}</span><small>{cellContent.value}</small></> : null}
+                  {number === 1 ? <img className="Panal-imagen" src={beeData.image} alt={currentBee.commonName} /> : number <= 7 ? <><span className="Panal-texto">{cellContent.label}</span><small>{cellContent.value}</small></> : number === 13 ? <span className="Panal-flecha" aria-hidden="true">‹</span> : number === 19 ? <span className="Panal-flecha" aria-hidden="true">›</span> : null}
                 </button>
               )
             })}

@@ -73,6 +73,7 @@
 .Panal-celda .Panal-texto { line-height: 1; }
 .Panal-celda small { margin-top: 4%; }
 .Panal-celda span { font: 500 4vw Georgia, serif; }
+.Panal-celda .Panal-flecha { position: absolute; top: 50%; left: 50%; display: block; width: auto; margin: 0; color: #17231f; font: 700 clamp(5rem, 18vw, 12rem)/1 Arial Black, Arial, sans-serif; transform: translate(-45%, -61%) scaleX(1.2); }
 .Panal-pista { justify-self: center; padding-top: 16px; color: rgba(248, 240, 216, .48); font: 11px/1 Arial, sans-serif; letter-spacing: 1.5px; text-transform: uppercase; }
 
 @media (max-width: 600px) {
