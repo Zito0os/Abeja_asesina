@@ -88,17 +88,50 @@
 .newspaper-page {
   position: relative;
   z-index: 1;
+
   width: min(1200px, calc(100% - 32px));
   margin: 28px auto;
+
   background: #f8f1df;
+
   border: 3px solid #1a1a1a;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+
   color: #17120d;
   font-family: Georgia, 'Times New Roman', serif;
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.75s ease, transform 0.75s ease;
+
+  overflow: hidden;
 }
+
+.newspaper-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+  z-index: 20;
+
+  opacity: 0.45;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(70, 45, 15, 0.035) 0px,
+      rgba(70, 45, 15, 0.035) 1px,
+      transparent 5px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(12, 12, 4, 0.025) 0px,
+      rgba(70, 45, 15, 0.025) 1px,
+      transparent 1px,
+      transparent 6px
+    );
+
+  mix-blend-mode: multiply;
+}
+
 
 .content-visible {
   opacity: 1;
@@ -119,7 +152,7 @@
   top: 0;
   z-index: 10;
   border-bottom: 4px solid #17120d;
-  background: linear-gradient(180deg, #fef9ef 0%, #f2e7c9 100%);
+  background: linear-gradient(180deg, #fdda78 0%, #fae1af 100%);
 }
 
 .top-bar {
@@ -223,7 +256,7 @@
 
   padding: 20px;
   border-top: 2px solid #222;
-  background: #f4e7bd;
+  background: #fdda78;
 
   text-align: center;
   box-shadow: 5px 5px 0 #222;
@@ -259,7 +292,7 @@
 
 .bee-ad button {
   border: 1px solid #222;
-  background: #222;
+  background: #200c05;
   color: white;
   padding: 10px 15px;
   cursor: pointer;
@@ -635,7 +668,7 @@
 }
 
 .story-card {
-  background: #f2ead0;
+  background: #fae1af;
   min-height: 225px;
   border: 2px solid rgba(23, 18, 13, 0.8);
   padding: 18px 18px 20px;
@@ -754,7 +787,7 @@
 
   margin: 20px 0 20px 20px;
 
-  background: #f3d158;
+  background: #fdda78;
   border: 2px solid #171717;
   box-shadow: 4px 4px 0 #171717;
 
