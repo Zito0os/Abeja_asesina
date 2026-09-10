@@ -4,7 +4,7 @@ import { PaperScene } from './PaperScene'
 
 const clamp = (value, minimum, maximum) => Math.min(Math.max(value, minimum), maximum)
 
-export function PaperUnfoldEffect({ targetRef, onComplete }) {
+export function PaperUnfoldEffect({ targetRef, onComplete, onProgress }) {
   const [progress, setProgress] = useState(0)
   const [textureCanvas, setTextureCanvas] = useState(null)
   const [paperSize, setPaperSize] = useState(null)
@@ -12,6 +12,7 @@ export function PaperUnfoldEffect({ targetRef, onComplete }) {
   const currentProgress = useRef(0)
   const completed = useRef(false)
   const onCompleteRef = useRef(onComplete)
+  const onProgressRef = useRef(onProgress)
 
   useEffect(() => {
     let active = true
@@ -59,6 +60,10 @@ export function PaperUnfoldEffect({ targetRef, onComplete }) {
   useEffect(() => {
     onCompleteRef.current = onComplete
   }, [onComplete])
+
+  useEffect(() => {
+    onProgressRef.current = onProgress
+  }, [onProgress])
 
   useEffect(() => {
     document.documentElement.scrollTop = 0
@@ -121,6 +126,7 @@ export function PaperUnfoldEffect({ targetRef, onComplete }) {
       }
 
       setProgress(currentProgress.current)
+      onProgressRef.current?.(currentProgress.current)
 
       if (targetProgress.current >= 1 && !completed.current) {
         currentProgress.current = 1

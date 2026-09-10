@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { PaperUnfold } from './components/animation'
 import { HoneycombCluster } from './HoneycombCluster'
+import { HexModal } from './components/HexModal'
 import loneBee from './assets/lone.jpg'
 import invasiveBeeImage from './assets/Abeja Invasora.png'
 import invasiveBeeDraw from './assets/AbejaDibujo1.png'
@@ -13,6 +14,7 @@ import Guia from './Guia'
 import Panal from './Panal_movil'
 import NoticiaAmpliada from './NoticiaAmpliada'
 import funfactbee from './assets/funfactbee.png'
+import CambiarPagina from './Cambiar_pagina'
 
 const honeycombData = [
   {
@@ -151,6 +153,7 @@ function App() {
   const [activeBeeId, setActiveBeeId] = useState(3)
   const [noticiaAmpliada, setNoticiaAmpliada] = useState(null)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [introProgress, setIntroProgress] = useState(0)
   const pageRef = useRef(null)
 
   const finishIntro = () => {
@@ -180,7 +183,23 @@ function App() {
     <>
       <a id="pagina-inicio" className="page-anchor" href="#pagina-inicio" aria-hidden="true" tabIndex={-1} />
       <div className={`paper-intro ${showIntro ? 'visible' : 'hidden'}`} aria-hidden={!showIntro}>
-        {showIntro && <PaperUnfold targetRef={pageRef} onComplete={finishIntro} />}
+        {showIntro && (
+          <>
+            <PaperUnfold
+              targetRef={pageRef}
+              onComplete={finishIntro}
+              onProgress={setIntroProgress}
+            />
+            <div
+              className="paper-intro-hint"
+              style={{ opacity: Math.max(0, 1 - introProgress * 1.35) }}
+              aria-hidden="true"
+            >
+              <span>Desliza</span>
+              <span className="paper-intro-arrow">↓</span>
+            </div>
+          </>
+        )}
       </div>
 
       <div ref={pageRef} className={`newspaper-page ${showIntro ? 'content-hidden' : 'content-visible'} ${selectedBee ? 'content-blurred' : ''}`}>
@@ -209,54 +228,54 @@ function App() {
               Las abejas melíferas no son originarias de Norteamérica. Fueron importadas de Europa en el siglo XVII. Actualmente, las abejas melíferas ayudan a polinizar muchos cultivos estadounidenses, como frutas y frutos secos. En un solo año, una colonia de abejas puede recolectar alrededor de 18 kilogramos de polen y 120 kilogramos de néctar. Las abejas melíferas incrementan el valor de los cultivos de nuestro país en más de 15 mil millones de dólares cada año.
             </p>
 
-          <div className={`fun-fact-wrapper ${showFunFact ? 'is-open' : ''}`}>
-            {/* Fun Fact */}
-            <section
-              className={`bee-fun-fact ${showFunFact ? 'open' : 'closed'}`}
-              style={{ '--fun-fact-gif': `url("${beeGif}")` }}
-            >
-              {!showFunFact ? (
-                <button
-                  className="fun-fact-bee"
-                  onClick={() => setShowFunFact(true)}
-                  aria-label="Mostrar fun fact"
-                >
-                  <img
-                    src={funfactbee}
-                    alt="Bee"
-                    className="fun-fact-bee-image"
-                  />
-                </button>
-              ) : (
-                <div className="fun-fact-content">
+            <div className={`fun-fact-wrapper ${showFunFact ? 'is-open' : ''}`}>
+              {/* Fun Fact */}
+              <section
+                className={`bee-fun-fact ${showFunFact ? 'open' : 'closed'}`}
+                style={{ '--fun-fact-gif': `url("${beeGif}")` }}
+              >
+                {!showFunFact ? (
                   <button
-                    className="fun-fact-close"
-                    onClick={() => setShowFunFact(false)}
-                    aria-label="Cerrar fun fact"
+                    className="fun-fact-bee"
+                    onClick={() => setShowFunFact(true)}
+                    aria-label="Mostrar fun fact"
                   >
-                    ×
+                    <img
+                      src={funfactbee}
+                      alt="Bee"
+                      className="fun-fact-bee-image"
+                    />
                   </button>
+                ) : (
+                  <div className="fun-fact-content">
+                    <button
+                      className="fun-fact-close"
+                      onClick={() => setShowFunFact(false)}
+                      aria-label="Cerrar fun fact"
+                    >
+                      ×
+                    </button>
 
-                  <span className="fun-fact-label">
-                    FUN FACT
-                  </span>
+                    <span className="fun-fact-label">
+                      FUN FACT
+                    </span>
 
-                  <h3>
-                    ¿Sabías que las abejas pueden reconocer rostros?
-                  </h3>
+                    <h3>
+                      ¿Sabías que las abejas pueden reconocer rostros?
+                    </h3>
 
-                  <p>
-                    Las abejas pueden aprender a distinguir patrones
-                    que se parecen a rostros humanos. ¡Su pequeño
-                    cerebro tiene una capacidad de reconocimiento
-                    sorprendente!
-                  </p>
-                </div>
-              )}
-            </section>
+                    <p>
+                      Las abejas pueden aprender a distinguir patrones
+                      que se parecen a rostros humanos. ¡Su pequeño
+                      cerebro tiene una capacidad de reconocimiento
+                      sorprendente!
+                    </p>
+                  </div>
+                )}
+              </section>
 
             </div>
-          
+
 
           </section>
           <HoneycombCluster
@@ -286,7 +305,6 @@ function App() {
                   }
                 }}
               >
-                <p className="meta">Investigación</p>
                 <h3>{item.title}</h3>
               </motion.article>
             )
@@ -324,73 +342,17 @@ function App() {
 
       </div>
 
-
+      {!showIntro && (
+        <CambiarPagina targetRef={pageRef} />
+      )}
 
       <AnimatePresence>
         {selectedCell && (
-          <div className="hex-modal-backdrop" onClick={() => setSelectedCell(null)}>
-            <motion.div
-              layoutId={`hexagon-${selectedCell.id}`}
-              className="hex-modal-card"
-              onClick={(e) => e.stopPropagation()}
-              transition={{ type: 'spring', stiffness: 260, damping: 25 }}
-            >
-              <button
-                type="button"
-                className="hex-close-btn"
-                onClick={() => setSelectedCell(null)}
-                aria-label="Cerrar"
-              >
-                ✕
-              </button>
-
-              <div className="hex-modal-inner">
-                <h2>{selectedCell.title}</h2>
-                <p className="hex-desc">{selectedCell.text}</p>
-
-                {selectedCell.img && (
-                  <img
-                    src={selectedCell.img}
-                    alt={selectedCell.title}
-                    className="hex-image"
-                  />
-                )}
-
-                {selectedCell.stats && (
-                  <div className="hex-stat-box">
-                    <span className="stat-label">{selectedCell.stats.label}</span>
-
-                    {selectedCell.stats.nativeShare !== undefined ? (
-                      <div className="stat-bar-group">
-                        <div className="stat-bar-track">
-                          <div
-                            className="stat-bar-fill native"
-                            style={{ width: `${selectedCell.stats.nativeShare}%` }}
-                          />
-                          <div
-                            className="stat-bar-fill invasive"
-                            style={{ width: `${selectedCell.stats.invasiveShare}%` }}
-                          />
-                        </div>
-                        <div className="stat-legend">
-                          <span>Nativas: {selectedCell.stats.nativeShare}%</span>
-                          <span>Invasoras: {selectedCell.stats.invasiveShare}%</span>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="stat-metric">
-                        <span className="metric-number">{selectedCell.stats.value}</span>
-                        <span className="metric-unit">{selectedCell.stats.unit}</span>
-                      </div>
-                    )}
-                  </div>
-
-                )}
-              </div>
-            </motion.div>
-          </div>
+          <HexModal
+            cell={selectedCell}
+            onClose={() => setSelectedCell(null)}
+          />
         )}
-
       </AnimatePresence>
 
       <NoticiaAmpliada noticia={noticiaAmpliada} onClose={() => setNoticiaAmpliada(null)} />

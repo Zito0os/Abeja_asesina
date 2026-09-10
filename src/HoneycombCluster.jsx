@@ -60,7 +60,7 @@ const BeeParticles = () => {
   return <>{bees}</>;
 };
 
-// Sub-component that reads the high-performance motion values
+// Sub-component that reads the motion values
 const OrbitingNode = ({ item, index, rotation, orbitRadius, onSelectCell, setHoveredCell, hoveredCell }) => {
   const baseAngle = index * 60 - 90;
   
@@ -112,7 +112,7 @@ export function HoneycombCluster({ data, onSelectCell, selectedCellId }) {
     }
   });
 
-  const orbitRadius = 105;
+  const orbitRadius = 125;
 
   return (
     <aside className="bee-visual" aria-label="Bee-themed illustration">
