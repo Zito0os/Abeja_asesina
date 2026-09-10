@@ -69,7 +69,22 @@
   z-index: 3;
   pointer-events: none;
   opacity: 0;
-  background: #f8f1df;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(70, 45, 15, 0.035) 0px,
+      rgba(70, 45, 15, 0.035) 1px,
+      transparent 5px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(12, 12, 4, 0.025) 0px,
+      rgba(70, 45, 15, 0.025) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    #f8f1df;
   clip-path: polygon(
     var(--page-flip-fold-x) 0,
     100% var(--page-flip-fold-y),
