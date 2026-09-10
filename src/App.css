@@ -476,6 +476,56 @@
   padding: 24px 28px 30px;
 }
 
+.piano-game-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(18, 14, 10, 0.72);
+  backdrop-filter: blur(6px);
+}
+
+.piano-game-modal {
+  position: relative;
+  width: min(440px, 92vw);
+  max-height: min(90vh, 700px);
+  overflow: auto;
+  background: rgba(248, 241, 223, 0.98);
+  border: 3px solid #17120d;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.28);
+  padding: 18px 18px 12px;
+}
+
+.piano-game-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px 16px;
+  border: 2px solid #17120d;
+  background: #17120d;
+  color: #f8f1df;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.piano-game-close:hover {
+  background: #f8f1df;
+  color: #17120d;
+}
+
+.piano-game-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .story-card {
   background: #f2ead0;
   min-height: 225px;

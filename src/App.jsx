@@ -382,15 +382,42 @@ function App() {
           className="piano-toggle-button"
           onClick={() => setShowPianoGame((current) => !current)}
         >
-          {showPianoGame ? 'Ocultar Piano Tiles' : 'Jugar Piano Tiles'}
+          {showPianoGame ? 'Ocultar Polinizador Tiles' : 'Jugar Polinizador Tiles'}
         </button>
       </section>
 
-      {showPianoGame && (
-        <div className="piano-game-wrap">
-          <PianoTiles />
-        </div>
-      )}
+      <AnimatePresence>
+        {showPianoGame && (
+          <motion.div
+            className="piano-game-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowPianoGame(false)}
+          >
+            <motion.div
+              className="piano-game-modal"
+              initial={{ scale: 0.92, opacity: 0, y: 18 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.96, opacity: 0, y: 8 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                className="piano-game-close"
+                onClick={() => setShowPianoGame(false)}
+              >
+                Ocultar Polinizador Tiles
+              </button>
+
+              <div className="piano-game-body">
+                <PianoTiles />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {selectedBee && (
