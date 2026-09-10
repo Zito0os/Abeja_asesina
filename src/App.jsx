@@ -16,6 +16,7 @@ import NoticiaAmpliada from './NoticiaAmpliada'
 import BeeMap from './Components/BeeMap'
 import funfactbee from './assets/funfactbee.png'
 import CambiarPagina from './Cambiar_pagina'
+import { PianoTiles } from './PianoTiles'
 
 const honeycombData = [
   {
@@ -325,6 +326,8 @@ function App() {
           <span aria-hidden="true" />
         </section>
         <BeeMap/>
+
+        <PianoTiles />
 
         {/* PUBLICIDAD */}
         <aside className="bee-ad">

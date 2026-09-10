@@ -1,11 +1,24 @@
 import { useState, useEffect, useRef } from 'react'
+
 import PastoBackground from './assets/PastoBackground.png'
+import Backround from './assets/fondo_amarillo.jpeg'
 import AbejaJugador from './assets/AbejaJugador.png'
 import FlorPolen from './assets/FlorPolen.png'
+import Araña_a from './assets/araña_animada.png'
+import Abeja_player from './assets/abeja_simple.png'
+import Flor_cartoon from './assets/flor_cartoon.png'
 import DepredadoraObstaculo from './assets/DepredadoraObstaculo.png'
 import './PianoTiles.css'
 
 const NUM_COLS = 4
+const BOARD_HEIGHT = 600
+const PLAYER_HEIGHT = 54
+const PLAYER_BOTTOM_OFFSET = 14
+const PLAYER_TOP = BOARD_HEIGHT - PLAYER_BOTTOM_OFFSET - PLAYER_HEIGHT
+const PLAYER_BOTTOM = PLAYER_TOP + PLAYER_HEIGHT
+const TILE_HEIGHT = 76
+const MISS_LINE_MARGIN = 5
+const MISS_LINE_Y = PLAYER_BOTTOM + MISS_LINE_MARGIN
 
 export function PianoTiles() {
   const [tiles, setTiles] = useState([])
@@ -14,18 +27,52 @@ export function PianoTiles() {
   const [gameOver, setGameOver] = useState(false)
   const [gameStarted, setGameStarted] = useState(false)
   const [playerLane, setPlayerLane] = useState(0)
-  const speedRef = useRef(3)
+  const [isShaking, setIsShaking] = useState(false)
+  const [flashId, setFlashId] = useState(0)
+  const [scoreFlashId, setScoreFlashId] = useState(0)
+  const [showHitboxes, setShowHitboxes] = useState(false)
+
+  const speedRef = useRef(2)
   const animFrameRef = useRef(null)
   const processedHitsRef = useRef(new Set())
+  const shakeTimeoutRef = useRef(null)
+
+  const triggerHitFeedback = () => {
+    setFlashId((id) => id + 1)
+    setIsShaking(true)
+
+    if (shakeTimeoutRef.current) {
+      clearTimeout(shakeTimeoutRef.current)
+    }
+
+    shakeTimeoutRef.current = setTimeout(() => {
+      setIsShaking(false)
+    }, 400)
+  }
+
+  const triggerScoreFeedback = () => {
+    setScoreFlashId((id) => id + 1)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (shakeTimeoutRef.current) {
+        clearTimeout(shakeTimeoutRef.current)
+      }
+    }
+  }, [])
 
   const startGame = () => {
     processedHitsRef.current.clear()
+
     setScore(0)
     setObstacleHits(0)
     setGameOver(false)
     setGameStarted(true)
     setPlayerLane(0)
-    speedRef.current = 3
+    setIsShaking(false)
+
+    speedRef.current = 2
 
     const initialTiles = Array.from({ length: 6 }, (_, index) => ({
       id: Date.now() + index,
@@ -33,7 +80,7 @@ export function PianoTiles() {
       y: index * -110 - 80,
       hit: false,
       hitAt: null,
-      type: Math.random() < 0.2 ? 'obstacle' : 'note',
+      type: Math.random() < 0.2 ? 'obstacle' : 'note'
     }))
 
     setTiles(initialTiles)
@@ -46,159 +93,329 @@ export function PianoTiles() {
       const now = performance.now()
 
       setTiles((prevTiles) => {
-        const nextTiles = []
-
-        for (const tile of prevTiles) {
+        const movedTiles = prevTiles.map((tile) => {
           const nextY = tile.y + speedRef.current
-          const updatedTile = { ...tile, y: nextY }
+          const tileTop = nextY
+          const tileBottom = nextY + TILE_HEIGHT
 
-          // Detección de colisión con la bola
-          if (updatedTile.y > 395 && updatedTile.y < 470 && updatedTile.lane === playerLane) {
-            const tileWasAlreadyProcessed = processedHitsRef.current.has(updatedTile.id)
+          const overlapsPlayer =
+            tileTop < PLAYER_BOTTOM &&
+            tileBottom > PLAYER_TOP
 
-            if (!tileWasAlreadyProcessed) {
-              processedHitsRef.current.add(updatedTile.id)
-              updatedTile.hit = true
-              updatedTile.hitAt = now
+          const inPlayerLane = tile.lane === playerLane
+          const alreadyProcessed =
+            processedHitsRef.current.has(tile.id)
 
-              if (updatedTile.type === 'note') {
-                setScore((currentScore) => currentScore + 1)
-                speedRef.current += 0.04
-              } else {
-                setObstacleHits((currentHits) => {
-                  const nextHits = currentHits + 1
-                  if (nextHits >= 3) {
-                    setGameOver(true)
-                  }
-                  return nextHits
-                })
-              }
+          if (
+            overlapsPlayer &&
+            inPlayerLane &&
+            !alreadyProcessed &&
+            !tile.hit
+          ) {
+            processedHitsRef.current.add(tile.id)
+
+            if (tile.type === 'note') {
+              setScore((currentScore) => currentScore + 1)
+              speedRef.current += 0.02
+              triggerScoreFeedback()
+            } else {
+              setObstacleHits((currentHits) => {
+                const nextHits = currentHits + 1
+
+                if (nextHits >= 3) {
+                  setGameOver(true)
+                }
+
+                return nextHits
+              })
+
+              triggerHitFeedback()
+            }
+
+            return {
+              ...tile,
+              y: nextY,
+              hit: true,
+              hitAt: now
             }
           }
 
-          // Procesamiento de piezas colisionadas (animaciones de salida)
-          if (updatedTile.hit) {
-            const hitDuration = updatedTile.hitAt ? now - updatedTile.hitAt : 0
+          const prevTileBottom = tile.y + TILE_HEIGHT
+          const crossedMissLine =
+            prevTileBottom < MISS_LINE_Y &&
+            tileBottom >= MISS_LINE_Y
 
-            if (updatedTile.type === 'note') {
-              if (hitDuration < 90 && updatedTile.y < 620) {
-                nextTiles.push(updatedTile)
-              }
-              continue
-            }
+          if (
+            tile.type === 'note' &&
+            !tile.hit &&
+            !alreadyProcessed &&
+            crossedMissLine
+          ) {
+            processedHitsRef.current.add(tile.id)
 
-            if (updatedTile.type === 'obstacle') {
-              if (hitDuration < 350 && updatedTile.y < 620) {
-                nextTiles.push(updatedTile)
+            setObstacleHits((currentHits) => {
+              const nextHits = currentHits + 1
+
+              if (nextHits >= 3) {
+                setGameOver(true)
               }
-              continue
+
+              return nextHits
+            })
+
+            triggerHitFeedback()
+
+            return {
+              ...tile,
+              y: nextY,
+              hit: true,
+              hitAt: now
             }
           }
 
-          // Piezas no tocadas que aún están dentro del canvas
-          if (!updatedTile.hit && updatedTile.y < 620) {
-            nextTiles.push(updatedTile)
+          return {
+            ...tile,
+            y: nextY
           }
-        }
+        })
 
-        // Mantiene una densidad constante de 5 o más piezas
+        const nextTiles = movedTiles.filter((tile) => {
+          if (tile.type === 'note' && tile.hit) {
+            return false
+          }
+
+          if (tile.type === 'obstacle' && tile.hit) {
+            const hitDuration = tile.hitAt
+              ? now - tile.hitAt
+              : 0
+
+            return hitDuration < 350 && tile.y < 620
+          }
+
+          return tile.y < 620
+        })
+
+        const MIN_LANE_GAP = 160
+        const SPAWN_Y = -130
+
         if (nextTiles.length < 5) {
-          const nextLane = Math.floor(Math.random() * NUM_COLS)
-          const nextType = Math.random() < 0.2 ? 'obstacle' : 'note'
+          const laneCandidates = Array.from(
+            { length: NUM_COLS },
+            (_, lane) => lane
+          ).filter((lane) => {
+            const topmostYInLane = nextTiles
+              .filter((t) => t.lane === lane)
+              .reduce(
+                (minY, t) => Math.min(minY, t.y),
+                Infinity
+              )
 
-          nextTiles.push({
-            id: Date.now() + Math.random(),
-            lane: nextLane,
-            y: -130,
-            hit: false,
-            hitAt: null,
-            type: nextType,
+            return (
+              topmostYInLane >
+              SPAWN_Y + MIN_LANE_GAP
+            )
           })
+
+          if (laneCandidates.length > 0) {
+            const nextLane =
+              laneCandidates[
+                Math.floor(
+                  Math.random() * laneCandidates.length
+                )
+              ]
+
+            const nextType =
+              Math.random() < 0.2
+                ? 'obstacle'
+                : 'note'
+
+            nextTiles.push({
+              id: Date.now() + Math.random(),
+              lane: nextLane,
+              y: SPAWN_Y,
+              hit: false,
+              hitAt: null,
+              type: nextType
+            })
+          }
         }
 
         return nextTiles
       })
 
-      animFrameRef.current = requestAnimationFrame(updateGame)
+      animFrameRef.current =
+        requestAnimationFrame(updateGame)
     }
 
-    animFrameRef.current = requestAnimationFrame(updateGame)
-    return () => cancelAnimationFrame(animFrameRef.current)
+    animFrameRef.current =
+      requestAnimationFrame(updateGame)
+
+    return () =>
+      cancelAnimationFrame(animFrameRef.current)
   }, [gameStarted, gameOver, playerLane])
 
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (!gameStarted || gameOver) return
 
-      const keyToLane = {
-        d: 0,
-        f: 1,
+      const key = event.key.toLowerCase()
+      let newLane = playerLane
+
+      const directLaneMap = {
+        f: 0,
+        g: 1,
         j: 2,
-        k: 3,
+        k: 3
       }
 
-      const laneIndex = keyToLane[event.key.toLowerCase()]
-      if (laneIndex === undefined) return
+      if (directLaneMap[key] !== undefined) {
+        newLane = directLaneMap[key]
+        event.preventDefault()
+      } else if (
+        key === 'arrowleft' ||
+        key === 'a'
+      ) {
+        newLane = Math.max(
+          0,
+          playerLane - 1
+        )
 
-      event.preventDefault()
-      setPlayerLane(laneIndex)
+        event.preventDefault()
+      } else if (
+        key === 'arrowright' ||
+        key === 'd'
+      ) {
+        newLane = Math.min(
+          NUM_COLS - 1,
+          playerLane + 1
+        )
+
+        event.preventDefault()
+      } else {
+        return
+      }
+
+      setPlayerLane(newLane)
     }
 
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [gameStarted, gameOver])
+    window.addEventListener(
+      'keydown',
+      handleKeyDown
+    )
+
+    return () =>
+      window.removeEventListener(
+        'keydown',
+        handleKeyDown
+      )
+  }, [gameStarted, gameOver, playerLane])
 
   const handleBoardClick = (event) => {
     if (!gameStarted || gameOver) return
 
-    const rect = event.currentTarget.getBoundingClientRect()
+    const rect =
+      event.currentTarget.getBoundingClientRect()
+
     const x = event.clientX - rect.left
-    const laneIndex = Math.min(NUM_COLS - 1, Math.max(0, Math.floor((x / rect.width) * NUM_COLS)))
+
+    const laneIndex = Math.min(
+      NUM_COLS - 1,
+      Math.max(
+        0,
+        Math.floor(
+          (x / rect.width) * NUM_COLS
+        )
+      )
+    )
+
     setPlayerLane(laneIndex)
   }
 
   return (
     <div className="piano-container">
       <div className="piano-header">
-        <p className="keyboard-hint">Usa D, F, J y K para mover la abeja</p>
-        {!gameStarted && <button onClick={startGame}>Iniciar Juego</button>}
+        <p className="keyboard-hint">
+          Usa ← → A D para navegar · F G J K para carriles directos · Toca para jugar en móvil
+        </p>
+
+        {!gameStarted && (
+          <button onClick={startGame}>
+            Iniciar Juego
+          </button>
+        )}
+
+        <button
+          type="button"
+          className="hitbox-toggle-button"
+          onClick={() =>
+            setShowHitboxes(
+              (value) => !value
+            )
+          }
+        >
+          {showHitboxes
+            ? 'Ocultar cajas de colisión'
+            : 'Ver cajas de colisión'}
+        </button>
       </div>
 
       <div
-  className="tile-board"
-  onClick={handleBoardClick}
-  style={{
-    backgroundImage: `url(${PastoBackground})`,
-  }}
->
+        className={`tile-board ${
+          isShaking ? 'shaking' : ''
+        }`}
+        onClick={handleBoardClick}
+        style={{
+          backgroundImage:
+            `url(${Backround})`
+        }}
+      >
         {[0, 1, 2, 3].map((colIndex) => (
-          <div key={colIndex} className="tile-col" />
+          <div
+            key={colIndex}
+            className="tile-col"
+          />
         ))}
 
         {tiles.map((tile) => (
           <div
             key={tile.id}
-            className={`tile-item ${tile.type === 'obstacle' ? 'obstacle' : ''} ${tile.type === 'obstacle' && tile.hit ? 'obstacle-hit' : ''} ${tile.type === 'note' && tile.hit ? 'note-hit' : ''}`}
+            className={`tile-item ${
+              tile.type === 'obstacle'
+                ? 'obstacle'
+                : ''
+            } ${
+              tile.type === 'obstacle' &&
+              tile.hit
+                ? 'obstacle-hit'
+                : ''
+            } ${
+              tile.type === 'note' &&
+              tile.hit
+                ? 'note-hit'
+                : ''
+            }`}
             style={{
               top: `${tile.y}px`,
               left: `${(tile.lane + 0.5) * 25}%`,
               ...(tile.type === 'note'
                 ? {
-                    backgroundImage: `url(${FlorPolen})`,
+                    backgroundImage:
+                      `url(${Flor_cartoon})`,
                     backgroundSize: 'contain',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
-                    backgroundColor: 'transparent',
+                    backgroundColor: 'transparent'
                   }
                 : tile.type === 'obstacle'
                   ? {
-                      backgroundImage: `url(${DepredadoraObstaculo})`,
+                      backgroundImage:
+                        `url(${Araña_a})`,
                       backgroundSize: 'contain',
                       backgroundPosition: 'center',
                       backgroundRepeat: 'no-repeat',
-                      backgroundColor: 'transparent',
+                      backgroundColor: 'transparent'
                     }
-                  : {}),
+                  : {})
             }}
           />
         ))}
@@ -206,26 +423,100 @@ export function PianoTiles() {
         <div
           className="player-ball"
           style={{
-            left: `${(playerLane + 0.5) * 25}%`,
-            backgroundImage: `url(${AbejaJugador})`,
+            left:
+              `${(playerLane + 0.5) * 25}%`,
+            backgroundImage:
+              `url(${Abeja_player})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             border: 'none',
-            boxShadow: 'none',
+            boxShadow: 'none'
           }}
         />
 
+        {gameStarted && (
+          <div
+            className="miss-line"
+            style={{
+              top: `${MISS_LINE_Y}px`
+            }}
+          >
+            <span className="miss-line-label">
+              Si cruza aquí, pierdes vida
+            </span>
+          </div>
+        )}
+
+        {showHitboxes && (
+          <div
+            className="hitbox-debug hitbox-debug-player"
+            style={{
+              left:
+                `${playerLane * 25}%`,
+              top:
+                `${PLAYER_TOP}px`,
+              height:
+                `${PLAYER_BOTTOM - PLAYER_TOP}px`
+            }}
+          />
+        )}
+
+        {showHitboxes &&
+          tiles.map((tile) => (
+            <div
+              key={`hitbox-${tile.id}`}
+              className="hitbox-debug hitbox-debug-tile"
+              style={{
+                left:
+                  `${tile.lane * 25}%`,
+                top:
+                  `${tile.y}px`,
+                height:
+                  `${TILE_HEIGHT}px`
+              }}
+            />
+          ))}
+
+        {flashId > 0 && (
+          <div
+            key={flashId}
+            className="hit-flash-overlay"
+          />
+        )}
+
+        {scoreFlashId > 0 && (
+          <div
+            key={scoreFlashId}
+            className="score-flash-overlay"
+          />
+        )}
+
         <div className="game-status">
-          <span className="status-pill status-obstacle">Obstáculos: {obstacleHits}/3</span>
-          <span className="status-pill status-score">Puntos: {score}</span>
+          <span className="status-pill status-obstacle">
+            Vidas perdidas: {obstacleHits}/3
+          </span>
+
+          <span className="status-pill status-score">
+            Puntos: {score}
+          </span>
         </div>
 
         {gameOver && (
           <div className="game-over-overlay">
-            <h3>{score >= 50 ? '¡Felicidades! Eres una super abeja polinizadora' : 'Sigue polinizando'}</h3>
-            <p>Puntaje final: {score}</p>
-            <button onClick={startGame}>Reintentar</button>
+            <h3>
+              {score >= 50
+                ? '¡Felicidades! Eres una super abeja polinizadora'
+                : 'Sigue polinizando'}
+            </h3>
+
+            <p>
+              Puntaje final: {score}
+            </p>
+
+            <button onClick={startGame}>
+              Reintentar
+            </button>
           </div>
         )}
       </div>
