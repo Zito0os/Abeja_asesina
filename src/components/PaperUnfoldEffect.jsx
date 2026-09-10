@@ -69,21 +69,29 @@ export function PaperUnfoldEffect({ targetRef, onComplete, onProgress }) {
     document.documentElement.scrollTop = 0
     document.body.scrollTop = 0
 
-    const baseViewportHeight = window.innerHeight
-    const baseScrollDistance = Math.max(
-      document.documentElement.scrollHeight - window.innerHeight,
-      0,
-    )
-    const baseHasScrollRoom = baseScrollDistance > 1
-    const revealDistance = Math.max(baseScrollDistance * 0.99, 1)
+    const viewportHeight = window.innerHeight
+    const revealDistance = Math.max(viewportHeight * 1.2, 180)
 
-    const updateTarget = () => {
+    const complete = () => {
       if (completed.current) {
         return
       }
 
+      completed.current = true
+      setProgress(1)
+      onCompleteRef.current?.()
+    }
+
+    const updateTarget = () => {
+      if (completed.current) 
+        return
+
       const nextProgress = clamp(window.scrollY / revealDistance, 0, 1)
       targetProgress.current = nextProgress
+
+      if (nextProgress >= 0.96 || window.scrollY > revealDistance * 0.8) {
+        complete()
+      }
     }
 
     const updateFromWheel = (event) => {
@@ -91,16 +99,17 @@ export function PaperUnfoldEffect({ targetRef, onComplete, onProgress }) {
         return
       }
 
-      if (baseHasScrollRoom) {
-        return
-      }
-
-      const animationDistance = Math.max(baseViewportHeight * 1.5, 1)
-      targetProgress.current = clamp(
-        targetProgress.current + event.deltaY / animationDistance,
+      const nextProgress = clamp(
+        targetProgress.current + Math.abs(event.deltaY) / (viewportHeight * 1.4),
         0,
         1,
       )
+
+      targetProgress.current = nextProgress
+
+      if (nextProgress >= 0.96) {
+        complete()
+      }
     }
 
     updateTarget()
@@ -108,18 +117,9 @@ export function PaperUnfoldEffect({ targetRef, onComplete, onProgress }) {
     window.addEventListener('wheel', updateFromWheel, { passive: true })
 
     let animationFrame
-    const complete = () => {
-      completed.current = true
-      window.removeEventListener('scroll', updateTarget)
-      window.removeEventListener('wheel', updateFromWheel)
-      window.cancelAnimationFrame(animationFrame)
-      setProgress(1)
-      onCompleteRef.current?.()
-    }
-
     const smoothProgress = () => {
       const difference = targetProgress.current - currentProgress.current
-      currentProgress.current += difference * 0.14
+      currentProgress.current += difference * 0.18
 
       if (Math.abs(difference) < 0.001) {
         currentProgress.current = targetProgress.current
@@ -128,8 +128,7 @@ export function PaperUnfoldEffect({ targetRef, onComplete, onProgress }) {
       setProgress(currentProgress.current)
       onProgressRef.current?.(currentProgress.current)
 
-      if (targetProgress.current >= 1 && !completed.current) {
-        currentProgress.current = 1
+      if (currentProgress.current >= 0.96 && !completed.current) {
         complete()
         return
       }
