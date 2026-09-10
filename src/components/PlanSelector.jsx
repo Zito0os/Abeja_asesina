@@ -47,16 +47,15 @@ function PlanSelector() {
 
   return (
     <div className="page-flip-back-content page-flip-back-content--plans">
-      <button
-        type="button"
-        className="plans-back-button"
-        onClick={() => navigate('/')}
-      >
-        Volver al periódico
-      </button>
-
       <header className="masthead plans-masthead">
         <div className="masthead-main">
+          <button
+            type="button"
+            className="plans-back-button"
+            onClick={() => navigate('/')}
+          >
+            Volver al periódico
+          </button>
           <p className="edition">Edición especial · 01 de septiembre</p>
           <h1>¿No verdad?</h1>
           <div className="tagline">El periódico que escucha a la naturaleza</div>

@@ -1093,3 +1093,42 @@
     touch-action: none;
   }
 }
+
+/* ==========================================
+   ESTILOS PARA LA SECCIÓN DE PLANES
+   ========================================== */
+
+.plans-masthead {
+  position: relative;
+}
+
+.plans-masthead .masthead-main {
+  position: relative;
+}
+
+.plans-back-button {
+  position: absolute;
+  left: 28px;
+  top: 12px;
+  
+  background: white;
+  border: none;
+  color: #17120d;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 8px 0;
+  
+  transition: opacity 0.2s ease;
+}
+
+.plans-back-button:hover {
+  opacity: 0.7;
+}
+
+.plans-back-button:focus-visible {
+  outline: 3px solid #dca10d;
+  outline-offset: 4px;
+}
