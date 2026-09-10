@@ -405,55 +405,58 @@
 }
 
 .piano-start-button {
-  padding: 8px 18px;
+  padding: 10px 20px;
   font-size: 0.9rem;
-  font-weight: 700;
-  background-color: #2e7d32;
-  color: #fff;
-  border: 2px solid #1b5e20;
-  border-radius: 4px;
+  font-weight: 800;
+  background-color: #dca10d;
+  color: #17120d;
+  border: 2px solid #17120d;
+  border-radius: 0;
   cursor: pointer;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   transition: all 0.2s ease;
+  box-shadow: 4px 4px 0 #17120d;
 }
 
 .piano-start-button:hover {
-  background-color: #1b5e20;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #fae1af;
+  transform: translateY(-2px) translateX(-2px);
+  box-shadow: 6px 6px 0 #17120d;
 }
 
 .piano-start-button:active {
-  transform: translateY(0);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translateY(0) translateX(0);
+  box-shadow: 2px 2px 0 #17120d;
 }
 
 .piano-instructions-button {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border: 2px solid #17120d;
   background: #dca10d;
   color: #17120d;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 900;
-  border-radius: 50%;
+  border-radius: 0;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
   transition: all 0.2s ease;
+  box-shadow: 4px 4px 0 #17120d;
 }
 
 .piano-instructions-button:hover {
   background: #fae1af;
-  transform: scale(1.08);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px) translateX(-2px);
+  box-shadow: 6px 6px 0 #17120d;
 }
 
 .piano-instructions-button:active {
-  transform: scale(0.96);
+  transform: translateY(0) translateX(0);
+  box-shadow: 2px 2px 0 #17120d;
 }
 
 /* Modal de instrucciones */
@@ -592,13 +595,23 @@
   }
 
   .piano-start-button {
-    padding: 6px 14px;
+    padding: 8px 16px;
     font-size: 0.8rem;
+    box-shadow: 3px 3px 0 #17120d;
+  }
+
+  .piano-start-button:hover {
+    box-shadow: 4px 4px 0 #17120d;
   }
 
   .piano-instructions-button {
-    width: 32px;
-    height: 32px;
-    font-size: 1.5rem;
+    width: 34px;
+    height: 34px;
+    font-size: 1.4rem;
+    box-shadow: 3px 3px 0 #17120d;
+  }
+
+  .piano-instructions-button:hover {
+    box-shadow: 4px 4px 0 #17120d;
   }
 }
