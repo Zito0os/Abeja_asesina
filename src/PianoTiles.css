@@ -157,7 +157,7 @@
   /* Ajustes para el fondo */
   background-size: cover;
   background-repeat: repeat-y;
-  animation: grass-scroll 1.5s linear infinite;
+  animation: grass-scroll 3s linear infinite;
 }
 
 @keyframes grass-scroll {

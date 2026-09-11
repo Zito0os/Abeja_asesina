@@ -146,7 +146,7 @@ export function PianoTiles() {
 
             if (tile.type === 'note') {
               setScore((currentScore) => currentScore + 1)
-              speedRef.current += 0.02
+              speedRef.current += 0.07
               triggerScoreFeedback()
             } else {
               setObstacleHits((currentHits) => {
